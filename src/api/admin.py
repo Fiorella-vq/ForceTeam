@@ -1,4 +1,5 @@
   
+  
 import os
 from flask_admin import Admin
 from .models import db, User
@@ -9,9 +10,14 @@ def setup_admin(app):
     app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
     admin = Admin(app, name='4Geeks Admin', template_mode='bootstrap3')
 
-    
-    # Add your models here, for example this is how we add a the User model to the admin
+   
     admin.add_view(ModelView(User, db.session))
+  
 
-    # You can duplicate that line to add mew models
-    # admin.add_view(ModelView(YourModelName, db.session))
+
+# def check_admin_login(email, password):
+#     admin_email = os.getenv("ADMIN_EMAIL")
+#     admin_password = os.getenv("ADMIN_PASSWORD")
+#     return email == admin_email and password == admin_password
+    
+  

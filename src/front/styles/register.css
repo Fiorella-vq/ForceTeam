@@ -1,0 +1,126 @@
+/* Estilos globales para fondo oscuro y fuente */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #121212;
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3);
+}
+
+/* Contenedor principal */
+.register-container {
+  max-width: 420px;
+  margin: 50px auto;
+  padding: 35px 30px;
+  background: #121212;
+  border-radius: 15px;
+ 
+  color: #eee;
+  text-align: center;
+}
+
+/* Título */
+.register-container h2 {
+  margin-bottom: 35px;
+  font-weight: 700;
+  color: #ff6f61;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* Formulario */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Inputs */
+.register-form input[type='text'],
+.register-form input[type='email'],
+.register-form input[type='password'] {
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  border: 2px solid #444;
+  border-radius: 10px;
+  background-color: #222;
+  color: #eee;
+  font-weight: 600;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.register-form input[type='text']:focus,
+.register-form input[type='email']:focus,
+.register-form input[type='password']:focus {
+  border-color: #ff6f61;
+  box-shadow: 0 0 8px #ff6f61aa;
+  outline: none;
+  background-color: #331f1c;
+}
+
+/* Botón */
+.register-form button {
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ff6f61, #ff9472);
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 111, 97, 0.5);
+  transition: background 0.4s ease, box-shadow 0.3s ease;
+}
+
+.register-form button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ff9472, #ff6f61);
+  box-shadow: 0 6px 16px rgba(255, 111, 97, 0.7);
+}
+
+.register-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* SweetAlert2 personalizado */
+
+.swal-popup {
+  background-color: #121212 !important;
+  color: #eee !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  border-radius: 15px !important;
+  box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3) !important;
+}
+
+.swal-title {
+  color: #ff6f61 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.2px !important;
+  font-size: 1.8rem !important;
+}
+
+.swal-content {
+  color: #eee !important;
+  font-size: 1.1rem !important;
+  margin-top: 12px !important;
+}
+
+.swal-button {
+  background: linear-gradient(135deg, #ff6f61, #ff9472) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  padding: 10px 30px !important;
+  box-shadow: 0 4px 10px rgba(255, 111, 97, 0.5) !important;
+  transition: background 0.4s ease !important;
+}
+
+.swal-button:hover {
+  background: linear-gradient(135deg, #ff9472, #ff6f61) !important;
+  box-shadow: 0 6px 16px rgba(255, 111, 97, 0.7) !important;
+}

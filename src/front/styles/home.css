@@ -1,7 +1,117 @@
-/*
-    home.css: This website contains selectors only used in home.css
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #121212; 
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3);
+}
 
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+.home-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px 25px;
+  background: #121212;
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+.logo-wrapper {
+  margin-bottom: 25px;
+}
+
+.logo-image {
+  max-width: 150px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(255,111,97,0.4);
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+
+.logo-image:hover {
+  transform: scale(1.05);
+}
+
+h2 {
+  margin-bottom: 30px;
+  font-weight: 700;
+  color: #ff6f61;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.home-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.home-form input[type="email"],
+.home-form input[type="password"] {
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  border: 2px solid #444;
+  border-radius: 10px;
+  background-color: #222;
+  color: #eee;
+  font-weight: 600;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-form input[type="email"]:focus,
+.home-form input[type="password"]:focus {
+  border-color: #ff6f61;
+  box-shadow: 0 0 8px #ff6f61aa;
+  outline: none;
+  background-color: #331f1c;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.login-button,
+.register-button {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(255,111,97,0.5);
+  transition: background 0.4s ease, box-shadow 0.3s ease;
+}
+
+.login-button {
+  background: linear-gradient(135deg, #ff6f61, #ff9472);
+  color: white;
+}
+
+.login-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ff9472, #ff6f61);
+  box-shadow: 0 6px 16px rgba(255,111,97,0.7);
+}
+
+.register-button {
+  background: #444;
+  color: #eee;
+  box-shadow: 0 4px 10px rgba(68, 68, 68, 0.6);
+}
+
+.register-button:hover:not(:disabled) {
+  background: #666;
+  box-shadow: 0 6px 16px rgba(102, 102, 102, 0.8);
+}
+
+.login-button:disabled,
+.register-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
