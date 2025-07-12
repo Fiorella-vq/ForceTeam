@@ -1,0 +1,100 @@
+/* Base y contenedor principal */
+.plani-viewer-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px 25px;
+  background: #121212;
+  color: #eee;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3);
+  border-radius: 15px;
+  text-align: center;
+}
+
+/* Títulos */
+.plani-viewer-container h2 {
+  margin-bottom: 30px;
+  font-weight: 700;
+  color: #ff6f61;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.plani-viewer-container h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #ff6f61;
+  font-weight: 700;
+}
+
+/* Labels y inputs */
+.plani-viewer-container label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #eee;
+  text-align: left;
+}
+
+.plani-viewer-container input[type="week"],
+.plani-viewer-container select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid #444;
+  border-radius: 10px;
+  background-color: #222;
+  color: #eee;
+  font-weight: 600;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plani-viewer-container input[type="week"]:focus,
+.plani-viewer-container select:focus {
+  border-color: #ff6f61;
+  box-shadow: 0 0 8px #ff6f61aa;
+  outline: none;
+  background-color: #331f1c;
+  color: #fff;
+}
+
+/* Error message */
+.plani-viewer-container p {
+  color: #ff6f61;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+/* Contenedor del plan */
+.plan-content {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #444;
+  border-radius: 12px;
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 12px rgba(255, 111, 97, 0.3);
+  text-align: left;
+}
+
+.plan-content ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.plan-content li {
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #eee;
+}
+
+.plan-content strong {
+  color: #ff6f61;
+}
+
+/* Mensaje "No hay planificación" */
+.plani-viewer-container > p:not(.error) {
+  margin-top: 1rem;
+  color: #ccc;
+  font-style: italic;
+}

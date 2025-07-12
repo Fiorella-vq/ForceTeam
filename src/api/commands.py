@@ -18,9 +18,15 @@ def setup_commands(app):
         print("All test users created")
 
     @app.cli.command("create-admin")
-    @click.argument("email")
-    @click.argument("password")
-    def create_admin(email, password):
+    def create_admin():
+        email = click.prompt("Ingrese el email del admin")
+        password = click.prompt("Ingrese la contraseña", hide_input=True, confirmation_prompt=True)
+        
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            print(f"Ya existe un usuario con email {email}")
+            return
+
         print("Creando usuario admin...")
         admin_user = User(
             name="Coach",

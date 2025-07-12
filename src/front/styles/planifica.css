@@ -91,3 +91,25 @@ button[type="submit"]:hover {
     font-size: 1.2rem;
   }
 }
+button.btn-eliminar {
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #dc3545, #e57373);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+button.btn-eliminar:hover {
+  background: linear-gradient(135deg, #e57373, #dc3545);
+  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.6);
+}
+
+button.btn-eliminar:disabled {
+  background: #b55058;
+  cursor: not-allowed;
+  box-shadow: none;
+}

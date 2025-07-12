@@ -177,7 +177,10 @@ def crear_o_actualizar_planificacion():
     if not semana or not dia or not plan:
         return jsonify({"error": "Datos incompletos: semana, dia y plan son requeridos"}), 400
 
-    # Buscar planificación existente
+    # Validar que plan tiene las claves esperadas
+    if not all(k in plan for k in ("A", "B", "C", "D")):
+        return jsonify({"error": "El plan debe contener bloques A, B, C y D"}), 400
+
     planificacion = Planificacion.query.filter_by(semana=semana, dia=dia).first()
 
     if not planificacion:
@@ -202,7 +205,7 @@ def crear_o_actualizar_planificacion():
 
 
 @api.route('/planificacion', methods=['GET'])
-@admin_required
+
 def obtener_planificacion():
     semana = request.args.get('semana')
     dia = request.args.get('dia', type=int)
@@ -212,6 +215,32 @@ def obtener_planificacion():
 
     planificacion = Planificacion.query.filter_by(semana=semana, dia=dia).first()
     if not planificacion:
-        return jsonify({"plan": None}), 200
+        return jsonify({"plan": {"A": "", "B": "", "C": "", "D": ""}}), 200
 
-    return jsonify(planificacion.serialize()), 200
+    return jsonify({
+        "plan": {
+            "A": planificacion.bloque_a,
+            "B": planificacion.bloque_b,
+            "C": planificacion.bloque_c,
+            "D": planificacion.bloque_d,
+        }
+    }), 200
+
+@api.route('/planificacion', methods=['DELETE'])
+@admin_required
+def eliminar_planificacion():
+    semana = request.args.get('semana')
+    dia = request.args.get('dia', type=int)
+
+    if not semana or not dia:
+        return jsonify({"error": "Parámetros semana y día son requeridos"}), 400
+
+    planificacion = Planificacion.query.filter_by(semana=semana, dia=dia).first()
+
+    if not planificacion:
+        return jsonify({"error": "Planificación no encontrada"}), 404
+
+    db.session.delete(planificacion)
+    db.session.commit()
+
+    return jsonify({"message": "Planificación eliminada exitosamente"}), 200

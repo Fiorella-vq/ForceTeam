@@ -41,7 +41,7 @@ export const Home = () => {
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
 
-      <h2>Bienvenido a la planificación de Force Team</h2>
+      <h2>PLANIFICACIÓN FORCE</h2>
 
       <form
         className="home-form"

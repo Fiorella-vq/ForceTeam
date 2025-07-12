@@ -2,7 +2,7 @@
   
 import os
 from flask_admin import Admin
-from .models import db, User
+from .models import db, User, Planificacion
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -12,6 +12,7 @@ def setup_admin(app):
 
    
     admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Planificacion, db.session))
   
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { useNavigate, Link } from "react-router-dom";
 import "../../styles/planifica.css";
-
 
 const getWeekNumber = (date = new Date()) => {
   const year = date.getFullYear();
@@ -12,19 +12,24 @@ const getWeekNumber = (date = new Date()) => {
 };
 
 export const PlanificacionCoach = () => {
+  const navigate = useNavigate();
+
   const [semana, setSemana] = useState(getWeekNumber());
   const [dia, setDia] = useState(1);
   const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "" });
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem("token");
+
+  const token = localStorage.getItem("token")?.trim();
+  console.log("Token para enviar:", token);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPlan({ ...plan, [name]: value });
+    setPlan((prevPlan) => ({ ...prevPlan, [name]: value }));
   };
 
   const fetchPlanificacion = async () => {
-    if (!semana || !dia) return;
+    if (!semana || !dia || !token) return;
+
     try {
       const res = await fetch(
         `http://localhost:3001/api/planificacion?semana=${semana}&dia=${dia}`,
@@ -32,20 +37,30 @@ export const PlanificacionCoach = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      const data = await res.json();
-      if (res.ok && data.plan) {
-        setPlan(data.plan);
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Planificación recibida:", data);
+        setPlan(data.plan || { A: "", B: "", C: "", D: "" });
       } else {
         setPlan({ A: "", B: "", C: "", D: "" });
       }
     } catch (err) {
       console.error("Error al cargar planificación", err);
+      Swal.fire("Error", "No se pudo cargar la planificación", "error");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!token) {
+      Swal.fire("Error", "No estás autenticado", "error");
+      return;
+    }
+
     setLoading(true);
+    console.log("Enviando planificación:", { semana, dia, plan });
 
     try {
       const res = await fetch("http://localhost:3001/api/planificacion", {
@@ -58,6 +73,7 @@ export const PlanificacionCoach = () => {
       });
 
       const data = await res.json();
+      console.log("Respuesta del backend:", data);
 
       if (res.ok) {
         Swal.fire("¡Guardado!", "Planificación registrada.", "success");
@@ -71,9 +87,59 @@ export const PlanificacionCoach = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!token) {
+      Swal.fire("Error", "No estás autenticado", "error");
+      return;
+    }
+
+    const confirm = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: `Se eliminará la planificación de la semana ${semana} día ${dia}.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/planificacion?semana=${semana}&dia=${dia}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        Swal.fire(
+          "Eliminado",
+          "Planificación eliminada correctamente.",
+          "success"
+        );
+
+        setPlan({ A: "", B: "", C: "", D: "" });
+      } else {
+        Swal.fire("Error", data.error || "No se pudo eliminar", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "No se pudo conectar al servidor", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPlanificacion();
-  }, [semana, dia]);
+  }, [semana, dia, token]);
 
   return (
     <div className="planificacion-container">
@@ -87,7 +153,11 @@ export const PlanificacionCoach = () => {
             onChange={(e) => setSemana(e.target.value)}
             required
           />
-          <select value={dia} onChange={(e) => setDia(parseInt(e.target.value))}>
+          <select
+            value={dia}
+            onChange={(e) => setDia(parseInt(e.target.value, 10))}
+            required
+          >
             {[1, 2, 3, 4, 5, 6, 7].map((d) => (
               <option key={d} value={d}>
                 Día {d}
@@ -97,41 +167,35 @@ export const PlanificacionCoach = () => {
         </div>
 
         <label>Bloque A</label>
-        <textarea
-          name="A"
-          value={plan.A}
-          onChange={handleChange}
-          rows={4}
-        />
+        <textarea name="A" value={plan.A} onChange={handleChange} rows={4} />
 
         <label>Bloque B</label>
-        <textarea
-          name="B"
-          value={plan.B}
-          onChange={handleChange}
-          rows={4}
-        />
+        <textarea name="B" value={plan.B} onChange={handleChange} rows={4} />
 
         <label>Bloque C</label>
-        <textarea
-          name="C"
-          value={plan.C}
-          onChange={handleChange}
-          rows={4}
-        />
+        <textarea name="C" value={plan.C} onChange={handleChange} rows={4} />
 
         <label>Bloque D</label>
-        <textarea
-          name="D"
-          value={plan.D}
-          onChange={handleChange}
-          rows={4}
-        />
+        <textarea name="D" value={plan.D} onChange={handleChange} rows={4} />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Guardando..." : "Guardar Planificación"}
-        </button>
+        <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+          <button type="submit" disabled={loading}>
+            {loading ? "Guardando..." : "Guardar Planificación"}
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={loading}
+            className="btn-eliminar"
+          >
+            {loading ? "Eliminando..." : "Eliminar Planificación"}
+          </button>
+        </div>
       </form>
+
+      <div style={{ marginTop: "20px" }}>
+        <Link to="/usuarioPages">← Volver al inicio</Link>
+      </div>
     </div>
   );
 };
