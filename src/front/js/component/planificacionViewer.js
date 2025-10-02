@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import "../../styles/planiViewer.css";
 
 export const PlanificacionViewer = () => {
   const location = useLocation();
 
-  // Traer token y posible planificación inicial desde location.state
+  // Traer token desde state o localStorage
   const token = location.state?.token || localStorage.getItem("token")?.trim();
+
+  // Traer usuario desde state o localStorage
+  const user =
+    location.state?.user ||
+    JSON.parse(localStorage.getItem("usuario") || "null");
+
+  // Guardar usuario en localStorage si viene desde state
+  useEffect(() => {
+    if (location.state?.user) {
+      localStorage.setItem("usuario", JSON.stringify(location.state.user));
+    }
+  }, [location.state?.user]);
+
   const initialSemana = location.state?.semana || "2025-W28";
   const initialDia = location.state?.dia || 1;
 
@@ -54,7 +67,7 @@ export const PlanificacionViewer = () => {
           setError(null);
         } else {
           setPlanificacion(null);
-          setError(null); // No es error, simplemente no hay plan
+          setError(null);
         }
       } catch (err) {
         setError(err.message || "Error desconocido");
@@ -114,6 +127,13 @@ export const PlanificacionViewer = () => {
       ) : (
         !error && <p>No hay planificación para esta fecha.</p>
       )}
+
+      {/* Link de regreso a Usuario con estilo respetando tu CSS */}
+      <div className="link-coach">
+        <Link to="/usuarioPages" state={{ user: user || null }}>
+          Volver a usuario
+        </Link>
+      </div>
     </div>
   );
 };
