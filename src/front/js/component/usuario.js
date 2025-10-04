@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext";
 import "../../styles/usuario.css";
 
 export const Usuario = ({ user }) => {
-  if (!user) {
-    return <div>Cargando usuario...</div>;
-  }
+  const { actions } = useContext(Context);
+
+  if (!user) return <div>Cargando usuario...</div>;
 
   // --- Estados inicializados con localStorage ---
   const [logs, setLogs] = useState(() => {
@@ -74,26 +75,25 @@ export const Usuario = ({ user }) => {
     setWodSentimiento("");
   };
 
-  // --- Funciones para eliminar ---
+  // --- Funciones para eliminar y editar ---
   const eliminarLog = (index) => {
-    const nuevosLogs = [...logs];
-    nuevosLogs.splice(index, 1);
-    setLogs(nuevosLogs);
+    const nuevos = [...logs];
+    nuevos.splice(index, 1);
+    setLogs(nuevos);
   };
 
   const eliminarWod = (index) => {
-    const nuevosWods = [...wods];
-    nuevosWods.splice(index, 1);
-    setWods(nuevosWods);
+    const nuevos = [...wods];
+    nuevos.splice(index, 1);
+    setWods(nuevos);
   };
 
-  // --- Funciones para editar ---
   const editarLog = (index) => {
     const log = logs[index];
     setFecha(log.fecha);
     setEjercicio(log.ejercicio);
     setPeso(log.peso !== null ? log.peso : "");
-    eliminarLog(index); // eliminamos el registro original mientras editamos
+    eliminarLog(index);
   };
 
   const editarWod = (index) => {
@@ -102,14 +102,27 @@ export const Usuario = ({ user }) => {
     setWodDescripcion(wod.wodDescripcion);
     setWodComoRealizo(wod.wodComoRealizo);
     setWodSentimiento(wod.wodSentimiento);
-    eliminarWod(index); // eliminamos mientras editamos
+    eliminarWod(index);
+  };
+
+  // --- Cerrar sesión usando Context ---
+  const cerrarSesion = () => {
+    actions.logoutUser();
   };
 
   return (
     <div className="usuario-container">
-      <h2>
-        Atleta: {user.name} {user.last_name}
-      </h2>
+      {/* --- Encabezado del usuario --- */}
+      <div className="usuario-header">
+        <h2>
+          <i className="fa-solid fa-user"></i>{" "}
+          Atleta: {user.name} {user.last_name}
+        </h2>
+
+        <button className="logout-btn" onClick={cerrarSesion}>
+    Cerrar sesión
+        </button>
+      </div>
 
       {/* --- Logs de levantamientos --- */}
       <section className="entrenamientos-section">
@@ -117,20 +130,17 @@ export const Usuario = ({ user }) => {
         <div className="inputs-entrenamientos">
           <input
             type="date"
-            name="fecha"
             value={fecha}
             onChange={(e) => setFecha(e.target.value)}
           />
           <input
             type="text"
-            name="ejercicio"
             placeholder="Ejercicio"
             value={ejercicio}
             onChange={(e) => setEjercicio(e.target.value)}
           />
           <input
             type="number"
-            name="peso"
             placeholder="Peso (kg)"
             value={peso}
             onChange={(e) => setPeso(e.target.value)}
@@ -139,6 +149,7 @@ export const Usuario = ({ user }) => {
           />
           <button onClick={agregarLog}>Agregar</button>
         </div>
+
         <table className="tabla-entrenamientos">
           <thead>
             <tr>
@@ -177,26 +188,22 @@ export const Usuario = ({ user }) => {
         <div className="inputs-wods">
           <input
             type="date"
-            name="wodFecha"
             value={wodFecha}
             onChange={(e) => setWodFecha(e.target.value)}
           />
           <textarea
-            name="wodDescripcion"
             placeholder="Descripción del WOD"
             value={wodDescripcion}
             onChange={(e) => setWodDescripcion(e.target.value)}
             rows={3}
           />
           <textarea
-            name="wodComoRealizo"
             placeholder="Cómo realizaste el WOD"
             value={wodComoRealizo}
             onChange={(e) => setWodComoRealizo(e.target.value)}
             rows={3}
           />
           <textarea
-            name="wodSentimiento"
             placeholder="Cómo te sentiste / Lograste el objetivo?"
             value={wodSentimiento}
             onChange={(e) => setWodSentimiento(e.target.value)}
@@ -211,38 +218,35 @@ export const Usuario = ({ user }) => {
               <strong>{wod.wodFecha}</strong> - {wod.wodDescripcion} <br />
               Cómo: {wod.wodComoRealizo} <br />
               Sentimiento: {wod.wodSentimiento} <br />
-              <button className="button-icon" onClick={() => editarLog(i)}>
-                    <i className="fa-solid fa-pencil"></i>
-                  </button>
-                  <button
-                    className="button-icon"
-                    onClick={() => eliminarLog(i)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button>
+              <button className="button-icon" onClick={() => editarWod(i)}>
+                <i className="fa-solid fa-pencil"></i>
+              </button>
+              <button className="button-icon" onClick={() => eliminarWod(i)}>
+                <i className="fa-solid fa-trash"></i>
+              </button>
             </li>
           ))}
         </ul>
       </section>
 
+      {/* --- Enlaces finales --- */}
       <section className="link-coach">
-  {user.role === "admin" ? (
-    <>
-      <a href="/planificaCoach">Ir a planificaciones diarias del coach</a>
-      <a href="/cronometroWod" style={{ marginLeft: "20px" }}>
-        Ir a cronómetro
-      </a>
-    </>
-  ) : (
-    <>
-      <a href="/planificacionViewer">Ir a planificaciones</a>
-      <a href="/cronometro" style={{ marginLeft: "20px" }}>
-        Ir a cronómetro
-      </a>
-    </>
-  )}
-</section>
-
+        {user.role === "admin" ? (
+          <>
+            <a href="/planificaCoach">Ir a planificaciones diarias del coach</a>
+            <a href="/cronometroWod" style={{ marginLeft: "20px" }}>
+              Ir a cronómetro
+            </a>
+          </>
+        ) : (
+          <>
+            <a href="/planificacionViewer">Ir a planificaciones</a>
+            <a href="/cronometro" style={{ marginLeft: "20px" }}>
+              Ir a cronómetro
+            </a>
+          </>
+        )}
+      </section>
     </div>
   );
 };

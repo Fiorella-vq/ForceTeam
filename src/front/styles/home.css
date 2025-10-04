@@ -25,7 +25,7 @@ html, body {
 .logo-image {
   max-width: 150px;
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(255,111,97,0.4);
+  box-shadow: 0 4px 12px rgba(247, 246, 246, 0.4);
   transition: transform 0.3s ease;
   cursor: default;
 }
@@ -38,7 +38,7 @@ html, body {
 h2 {
   margin-bottom: 30px;
   font-weight: 700;
-  color: #ff6f61;
+  color: white;
   letter-spacing: 1.2px;
   text-transform: uppercase;
 }
@@ -49,8 +49,7 @@ h2 {
   gap: 18px;
 }
 
-.home-form input[type="email"],
-.home-form input[type="password"] {
+.home-form input {
   padding: 14px 16px;
   font-size: 1.1rem;
   border: 2px solid #444;
@@ -61,13 +60,13 @@ h2 {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.home-form input[type="email"]:focus,
-.home-form input[type="password"]:focus {
-  border-color: #ff6f61;
-  box-shadow: 0 0 8px #ff6f61aa;
+.home-form input:focus {
+  border-color: #ada8a8;
+  box-shadow: 0 0 8px white;
   outline: none;
-  background-color: #331f1c;
+  background-color: black;
 }
+
 
 .button-group {
   display: flex;
@@ -114,4 +113,29 @@ h2 {
 .register-button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: #000;
 }

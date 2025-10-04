@@ -6,6 +6,7 @@ import "../../styles/home.css";
 export const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -41,7 +42,8 @@ export const Home = () => {
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
 
-      <h2>PLANIFICACIÓN FORCE</h2>
+      <h2>FORCE</h2>
+      <h4>Planificación Tincho Soria</h4>
 
       <form
         className="home-form"
@@ -57,13 +59,21 @@ export const Home = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <i
+            className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
+            onClick={() => setShowPassword(!showPassword)}
+          ></i>
+        </div>
 
         <div className="button-group">
           <button type="submit" disabled={loading} className="login-button">
