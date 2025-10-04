@@ -5,26 +5,22 @@ import "../../styles/planiViewer.css";
 export const PlanificacionViewer = () => {
   const location = useLocation();
 
-  // Traer token desde state o localStorage
   const token = location.state?.token || localStorage.getItem("token")?.trim();
-
-  // Traer usuario desde state o localStorage
   const user =
     location.state?.user ||
     JSON.parse(localStorage.getItem("usuario") || "null");
 
-  // Guardar usuario en localStorage si viene desde state
   useEffect(() => {
     if (location.state?.user) {
       localStorage.setItem("usuario", JSON.stringify(location.state.user));
     }
   }, [location.state?.user]);
 
-  const initialSemana = location.state?.semana || "2025-W28";
-  const initialDia = location.state?.dia || 1;
+  // Fecha inicial: hoy
+  const today = new Date();
+  const initialFecha = location.state?.fecha || today.toISOString().split("T")[0];
 
-  const [semana, setSemana] = useState(initialSemana);
-  const [dia, setDia] = useState(initialDia);
+  const [fecha, setFecha] = useState(initialFecha);
   const [planificacion, setPlanificacion] = useState(null);
   const [error, setError] = useState(null);
 
@@ -38,6 +34,21 @@ export const PlanificacionViewer = () => {
     { id: 7, nombre: "Domingo" },
   ];
 
+  // Función para obtener número de semana a partir de una fecha
+  const getWeekNumber = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    const dayNum = d.getDay() || 7; // Domingo = 7
+    d.setDate(d.getDate() + 4 - dayNum);
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNum = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+    return `${d.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+  };
+
+  // Calcular semana y día según fecha
+  const semana = getWeekNumber(fecha);
+  const dia = new Date(fecha).getDay() === 0 ? 7 : new Date(fecha).getDay();
+
   useEffect(() => {
     if (!token) {
       setPlanificacion(null);
@@ -50,9 +61,7 @@ export const PlanificacionViewer = () => {
         const response = await fetch(
           `http://localhost:3001/api/planificacion?semana=${semana}&dia=${dia}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -78,33 +87,41 @@ export const PlanificacionViewer = () => {
     fetchPlanificacion();
   }, [token, semana, dia]);
 
+  const renderContenido = (texto) => {
+    if (!texto) return "Sin plan";
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const partes = texto.split(urlRegex);
+
+    return partes.map((parte, i) =>
+      urlRegex.test(parte) ? (
+        <a
+          key={i}
+          href={parte}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "blue" }}
+        >
+          {parte}
+        </a>
+      ) : (
+        <span key={i}>{parte}</span>
+      )
+    );
+  };
+
   return (
     <div className="plani-viewer-container">
       <h2>Planificación semanal</h2>
 
       <label>
-        Semana:
+        Fecha:
         <input
-          type="week"
-          value={semana}
-          onChange={(e) => setSemana(e.target.value)}
+          type="date"
+          value={fecha}
+          onChange={(e) => setFecha(e.target.value)}
           className="plani-input"
         />
-      </label>
-
-      <label>
-        Día:
-        <select
-          value={dia}
-          onChange={(e) => setDia(parseInt(e.target.value, 10))}
-          className="plani-input"
-        >
-          {diasSemana.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.nombre}
-            </option>
-          ))}
-        </select>
       </label>
 
       {error && <p className="plani-error">{error}</p>}
@@ -112,14 +129,14 @@ export const PlanificacionViewer = () => {
       {!error && planificacion && planificacion.plan ? (
         <div className="plan-content">
           <h3>
-            {`Planificación para ${semana} - ${
+            {`Planificación para ${fecha} - ${
               diasSemana.find((d) => d.id === dia)?.nombre || ""
             }`}
           </h3>
           <ul>
             {Object.entries(planificacion.plan).map(([bloque, contenido]) => (
               <li key={bloque}>
-                <strong>Bloque {bloque}:</strong> {contenido || "Sin plan"}
+                <strong>Bloque {bloque}:</strong> {renderContenido(contenido)}
               </li>
             ))}
           </ul>
@@ -128,7 +145,6 @@ export const PlanificacionViewer = () => {
         !error && <p>No hay planificación para esta fecha.</p>
       )}
 
-      {/* Link de regreso a Usuario con estilo respetando tu CSS */}
       <div className="link-coach">
         <Link to="/usuarioPages" state={{ user: user || null }}>
           Volver a usuario

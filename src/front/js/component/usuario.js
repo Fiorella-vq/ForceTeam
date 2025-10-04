@@ -5,11 +5,9 @@ import "../../styles/usuario.css";
 export const Usuario = ({ user }) => {
   const { actions } = useContext(Context);
 
-  if (!user) return <div>Cargando usuario...</div>;
-
   // --- Estados inicializados con localStorage ---
   const [logs, setLogs] = useState(() => {
-    const saved = localStorage.getItem(`logs_${user.id}`);
+    const saved = user ? localStorage.getItem(`logs_${user.id}`) : null;
     return saved ? JSON.parse(saved) : [];
   });
   const [fecha, setFecha] = useState("");
@@ -17,7 +15,7 @@ export const Usuario = ({ user }) => {
   const [peso, setPeso] = useState("");
 
   const [wods, setWods] = useState(() => {
-    const saved = localStorage.getItem(`wods_${user.id}`);
+    const saved = user ? localStorage.getItem(`wods_${user.id}`) : null;
     return saved ? JSON.parse(saved) : [];
   });
   const [wodFecha, setWodFecha] = useState("");
@@ -25,14 +23,28 @@ export const Usuario = ({ user }) => {
   const [wodComoRealizo, setWodComoRealizo] = useState("");
   const [wodSentimiento, setWodSentimiento] = useState("");
 
-  // --- Guardar logs y wods en localStorage ---
+  // --- Guardar logs y wods en localStorage de manera segura ---
   useEffect(() => {
-    localStorage.setItem(`logs_${user.id}`, JSON.stringify(logs));
-  }, [logs, user.id]);
+    let isMounted = true;
+    if (isMounted && user) {
+      localStorage.setItem(`logs_${user.id}`, JSON.stringify(logs));
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [logs, user]);
 
   useEffect(() => {
-    localStorage.setItem(`wods_${user.id}`, JSON.stringify(wods));
-  }, [wods, user.id]);
+    let isMounted = true;
+    if (isMounted && user) {
+      localStorage.setItem(`wods_${user.id}`, JSON.stringify(wods));
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [wods, user]);
+
+  if (!user) return <div>Cargando usuario...</div>;
 
   // --- Funciones para agregar ---
   const agregarLog = () => {
@@ -115,12 +127,10 @@ export const Usuario = ({ user }) => {
       {/* --- Encabezado del usuario --- */}
       <div className="usuario-header">
         <h2>
-          <i className="fa-solid fa-user"></i>{" "}
-          Atleta: {user.name} {user.last_name}
+          <i className="fa-solid fa-user"></i> Atleta: {user.name} {user.last_name}
         </h2>
-
         <button className="logout-btn" onClick={cerrarSesion}>
-    Cerrar sesión
+          Cerrar sesión
         </button>
       </div>
 
@@ -128,11 +138,7 @@ export const Usuario = ({ user }) => {
       <section className="entrenamientos-section">
         <h3>Control de Levantamientos</h3>
         <div className="inputs-entrenamientos">
-          <input
-            type="date"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-          />
+          <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} />
           <input
             type="text"
             placeholder="Ejercicio"
@@ -169,10 +175,7 @@ export const Usuario = ({ user }) => {
                   <button className="button-icon" onClick={() => editarLog(i)}>
                     <i className="fa-solid fa-pencil"></i>
                   </button>
-                  <button
-                    className="button-icon"
-                    onClick={() => eliminarLog(i)}
-                  >
+                  <button className="button-icon" onClick={() => eliminarLog(i)}>
                     <i className="fa-solid fa-trash"></i>
                   </button>
                 </td>
@@ -186,11 +189,7 @@ export const Usuario = ({ user }) => {
       <section className="wods-section">
         <h3>Registro de WODs</h3>
         <div className="inputs-wods">
-          <input
-            type="date"
-            value={wodFecha}
-            onChange={(e) => setWodFecha(e.target.value)}
-          />
+          <input type="date" value={wodFecha} onChange={(e) => setWodFecha(e.target.value)} />
           <textarea
             placeholder="Descripción del WOD"
             value={wodDescripcion}

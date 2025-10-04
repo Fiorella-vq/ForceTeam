@@ -84,6 +84,7 @@ def enviar_email_smtp(destino, asunto, mensaje):
 
 # ---- RUTAS ----
 
+# Registro de usuario
 @api.route('/register', methods=['POST'])
 def register():
     try:
@@ -93,15 +94,12 @@ def register():
         email = data.get('email')
         password = data.get('password')
 
-        # Validar campos requeridos
         if not all([name, last_name, email, password]):
             return jsonify({"error": "Todos los campos (name, last_name, email, password) son requeridos"}), 400
 
-        # Verificar si ya existe el usuario
         if User.query.filter_by(email=email).first():
             return jsonify({"error": "El usuario ya existe"}), 409
 
-        # Crear nuevo usuario
         new_user = User(name=name, last_name=last_name, email=email)
         new_user.set_password(password)
 
@@ -113,12 +111,11 @@ def register():
         current_app.logger.error(f"Error en register: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
-
+# Login
 @api.route('/login', methods=['POST'])
 def login():
     try:
         data = request.get_json() or {}
-
         email = data.get('email')
         password = data.get('password')
 
@@ -126,25 +123,23 @@ def login():
             return jsonify({"error": "Email y contraseña son requeridos"}), 400
 
         user = User.query.filter_by(email=email).first()
-
         if not user or not user.check_password(password):
             return jsonify({"error": "Credenciales inválidas"}), 401
 
         payload = {
             'user_id': user.id,
             'email': user.email,
-            'role': getattr(user, 'role', 'user')  
+            'role': getattr(user, 'role', 'user')
         }
 
-        token = generar_jwt(payload, expiracion_minutos=1440)  
-
+        token = generar_jwt(payload, expiracion_minutos=1440)
         return jsonify({"token": token}), 200
 
     except Exception as e:
         current_app.logger.error(f"Error en login: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
-
+# Obtener datos del usuario logueado
 @api.route('/usuario', methods=['GET'])
 def usuario():
     auth_header = request.headers.get('Authorization', '')
@@ -166,27 +161,27 @@ def usuario():
 
     return jsonify({'user': user.serialize()}), 200
 
+# Crear o actualizar planificación
 @api.route('/planificacion', methods=['POST'])
 @admin_required
 def crear_o_actualizar_planificacion():
     data = request.get_json() or {}
-    semana = data.get("semana")
-    dia = data.get("dia")
+    fecha = data.get("fecha")
+    dia = data.get("dia")  # opcional
     plan = data.get("plan")
 
-    if not semana or not dia or not plan:
-        return jsonify({"error": "Datos incompletos: semana, dia y plan son requeridos"}), 400
+    if not fecha or not plan:
+        return jsonify({"error": "Datos incompletos: fecha y plan son requeridos"}), 400
 
-    # Validar que plan tiene las claves esperadas
     if not all(k in plan for k in ("A", "B", "C", "D")):
         return jsonify({"error": "El plan debe contener bloques A, B, C y D"}), 400
 
-    planificacion = Planificacion.query.filter_by(semana=semana, dia=dia).first()
+    planificacion = Planificacion.query.filter_by(fecha=fecha).first()
 
     if not planificacion:
         planificacion = Planificacion(
-            semana=semana,
-            dia=dia,
+            fecha=fecha,
+            dia=dia or datetime.strptime(fecha, "%Y-%m-%d").isoweekday(),
             bloque_a=plan.get("A"),
             bloque_b=plan.get("B"),
             bloque_c=plan.get("C"),
@@ -200,47 +195,33 @@ def crear_o_actualizar_planificacion():
         planificacion.bloque_d = plan.get("D")
 
     db.session.commit()
-
     return jsonify({"message": "Planificación guardada exitosamente"}), 200
 
-
+# Obtener planificación
 @api.route('/planificacion', methods=['GET'])
-
 def obtener_planificacion():
-    semana = request.args.get('semana')
-    dia = request.args.get('dia', type=int)
+    fecha = request.args.get('fecha')
+    if not fecha:
+        return jsonify({"error": "Parámetro 'fecha' es requerido"}), 400
 
-    if not semana or not dia:
-        return jsonify({"error": "Parámetros semana y día son requeridos"}), 400
-
-    planificacion = Planificacion.query.filter_by(semana=semana, dia=dia).first()
+    planificacion = Planificacion.query.filter_by(fecha=fecha).first()
     if not planificacion:
         return jsonify({"plan": {"A": "", "B": "", "C": "", "D": ""}}), 200
 
-    return jsonify({
-        "plan": {
-            "A": planificacion.bloque_a,
-            "B": planificacion.bloque_b,
-            "C": planificacion.bloque_c,
-            "D": planificacion.bloque_d,
-        }
-    }), 200
+    return jsonify(planificacion.serialize()), 200
 
+# Eliminar planificación
 @api.route('/planificacion', methods=['DELETE'])
 @admin_required
 def eliminar_planificacion():
-    semana = request.args.get('semana')
-    dia = request.args.get('dia', type=int)
+    fecha = request.args.get('fecha')
+    if not fecha:
+        return jsonify({"error": "Parámetro 'fecha' es requerido"}), 400
 
-    if not semana or not dia:
-        return jsonify({"error": "Parámetros semana y día son requeridos"}), 400
-
-    planificacion = Planificacion.query.filter_by(semana=semana, dia=dia).first()
-
+    planificacion = Planificacion.query.filter_by(fecha=fecha).first()
     if not planificacion:
         return jsonify({"error": "Planificación no encontrada"}), 404
 
     db.session.delete(planificacion)
     db.session.commit()
-
     return jsonify({"message": "Planificación eliminada exitosamente"}), 200

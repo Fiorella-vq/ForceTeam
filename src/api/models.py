@@ -37,18 +37,18 @@ class Planificacion(db.Model):
     __tablename__ = 'planificacion'
 
     id = db.Column(db.Integer, primary_key=True)
-    semana = db.Column(db.String(10), nullable=False)
-    dia = db.Column(db.Integer, nullable=False)
-    bloque_a = db.Column(db.String(255))
-    bloque_b = db.Column(db.String(255))
-    bloque_c = db.Column(db.String(255))
-    bloque_d = db.Column(db.String(255))
+    fecha = db.Column(db.String(10), nullable=False)  # YYYY-MM-DD
+    dia = db.Column(db.Integer, nullable=False)       # 1 = lunes ... 7 = domingo
+    bloque_a = db.Column(db.Text, default="")
+    bloque_b = db.Column(db.Text, default="")
+    bloque_c = db.Column(db.Text, default="")
+    bloque_d = db.Column(db.Text, default="")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def serialize(self):
         return {
-            "semana": self.semana,
+            "fecha": self.fecha,
             "dia": self.dia,
             "plan": {
                 "A": self.bloque_a,

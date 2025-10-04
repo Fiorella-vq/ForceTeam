@@ -19,8 +19,9 @@ def setup_commands(app):
 
     @app.cli.command("create-admin")
     def create_admin():
-        email = click.prompt("Ingrese el email del admin")
-        password = click.prompt("Ingrese la contraseña", hide_input=True, confirmation_prompt=True)
+        # Datos fijos del admin
+        email = "fiorellaviscardi.2412@gmail.com"
+        password = "123456789"
         
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:

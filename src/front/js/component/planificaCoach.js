@@ -1,67 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../styles/planifica.css";
 
-const getWeekNumber = (date = new Date()) => {
-  const year = date.getFullYear();
-  const jan1 = new Date(year, 0, 1);
-  const days = Math.floor((date - jan1) / (24 * 60 * 60 * 1000));
-  const week = Math.ceil((days + jan1.getDay() + 1) / 7);
-  return `${year}-W${String(week).padStart(2, "0")}`;
+const extractUrls = (text) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.match(urlRegex) || [];
 };
 
 export const PlanificacionCoach = () => {
-  const navigate = useNavigate();
-
-  const [semana, setSemana] = useState(getWeekNumber());
+  const [fecha, setFecha] = useState("2025-10-04");
   const [dia, setDia] = useState(1);
   const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "" });
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token")?.trim();
-  console.log("Token para enviar:", token);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPlan((prevPlan) => ({ ...prevPlan, [name]: value }));
+    setPlan((prev) => ({ ...prev, [name]: value }));
   };
 
-  const fetchPlanificacion = async () => {
-    if (!semana || !dia || !token) return;
+  const fetchPlanificacion = async (fechaParam, diaParam) => {
+    if (!fechaParam || !token) return;
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?semana=${semana}&dia=${dia}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        `http://localhost:3001/api/planificacion?fecha=${fechaParam}&dia=${diaParam}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
       if (res.ok) {
         const data = await res.json();
-        console.log("Planificación recibida:", data);
         setPlan(data.plan || { A: "", B: "", C: "", D: "" });
       } else {
         setPlan({ A: "", B: "", C: "", D: "" });
       }
-    } catch (err) {
-      console.error("Error al cargar planificación", err);
+    } catch {
       Swal.fire("Error", "No se pudo cargar la planificación", "error");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!token) {
-      Swal.fire("Error", "No estás autenticado", "error");
-      return;
-    }
+    if (!token) return Swal.fire("Error", "No estás autenticado", "error");
 
     setLoading(true);
-    console.log("Enviando planificación:", { semana, dia, plan });
-
     try {
       const res = await fetch("http://localhost:3001/api/planificacion", {
         method: "POST",
@@ -69,18 +52,29 @@ export const PlanificacionCoach = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ semana, dia, plan }),
+        body: JSON.stringify({ fecha, dia, plan }),
       });
-
       const data = await res.json();
-      console.log("Respuesta del backend:", data);
 
       if (res.ok) {
         Swal.fire("¡Guardado!", "Planificación registrada.", "success");
+
+        // Avanzar al siguiente día
+        const fechaObj = new Date(fecha);
+        fechaObj.setDate(fechaObj.getDate() + 1);
+        const yyyy = fechaObj.getFullYear();
+        const mm = String(fechaObj.getMonth() + 1).padStart(2, "0");
+        const dd = String(fechaObj.getDate()).padStart(2, "0");
+        setFecha(`${yyyy}-${mm}-${dd}`);
+
+        setDia(dia + 1); // actualizar select de día
+
+        // Limpiar bloques
+        setPlan({ A: "", B: "", C: "", D: "" });
       } else {
         Swal.fire("Error", data.error || "Algo salió mal", "error");
       }
-    } catch (err) {
+    } catch {
       Swal.fire("Error", "No se pudo conectar al servidor", "error");
     } finally {
       setLoading(false);
@@ -88,14 +82,11 @@ export const PlanificacionCoach = () => {
   };
 
   const handleDelete = async () => {
-    if (!token) {
-      Swal.fire("Error", "No estás autenticado", "error");
-      return;
-    }
+    if (!token) return Swal.fire("Error", "No estás autenticado", "error");
 
     const confirm = await Swal.fire({
       title: "¿Estás seguro?",
-      text: `Se eliminará la planificación de la semana ${semana} día ${dia}.`,
+      text: `Se eliminará la planificación del día ${dia} (${fecha}).`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
@@ -105,59 +96,50 @@ export const PlanificacionCoach = () => {
     if (!confirm.isConfirmed) return;
 
     setLoading(true);
-
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?semana=${semana}&dia=${dia}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `http://localhost:3001/api/planificacion?fecha=${fecha}&dia=${dia}`,
+        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
-
       const data = await res.json();
-
       if (res.ok) {
-        Swal.fire(
-          "Eliminado",
-          "Planificación eliminada correctamente.",
-          "success"
-        );
-
+        Swal.fire("Eliminado", "Planificación eliminada correctamente.", "success");
         setPlan({ A: "", B: "", C: "", D: "" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");
       }
-    } catch (err) {
+    } catch {
       Swal.fire("Error", "No se pudo conectar al servidor", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchPlanificacion();
-  }, [semana, dia, token]);
+  // Manejo manual de fecha/día con fetch
+  const handleManualFechaChange = (e) => {
+    const newFecha = e.target.value;
+    setFecha(newFecha);
+    fetchPlanificacion(newFecha, dia);
+  };
+
+  const handleManualDiaChange = (e) => {
+    const newDia = parseInt(e.target.value, 10);
+    setDia(newDia);
+    fetchPlanificacion(fecha, newDia);
+  };
 
   return (
     <div className="planificacion-container">
-      <h2>Planificación Semanal</h2>
-
+      <h2>Planificación Diaria</h2>
       <form className="planificacion-form" onSubmit={handleSubmit}>
         <div className="selectors">
           <input
-            type="week"
-            value={semana}
-            onChange={(e) => setSemana(e.target.value)}
+            type="date"
+            value={fecha}
+            onChange={handleManualFechaChange}
             required
           />
-          <select
-            value={dia}
-            onChange={(e) => setDia(parseInt(e.target.value, 10))}
-            required
-          >
+          <select value={dia} onChange={handleManualDiaChange} required>
             {[1, 2, 3, 4, 5, 6, 7].map((d) => (
               <option key={d} value={d}>
                 Día {d}
@@ -166,17 +148,24 @@ export const PlanificacionCoach = () => {
           </select>
         </div>
 
-        <label>Bloque A</label>
-        <textarea name="A" value={plan.A} onChange={handleChange} rows={4} />
-
-        <label>Bloque B</label>
-        <textarea name="B" value={plan.B} onChange={handleChange} rows={4} />
-
-        <label>Bloque C</label>
-        <textarea name="C" value={plan.C} onChange={handleChange} rows={4} />
-
-        <label>Bloque D</label>
-        <textarea name="D" value={plan.D} onChange={handleChange} rows={4} />
+        {["A", "B", "C", "D"].map((bloque) => (
+          <div key={bloque}>
+            <label>Bloque {bloque}</label>
+            <textarea
+              name={bloque}
+              value={plan[bloque]}
+              onChange={handleChange}
+              rows={4}
+            />
+            <div className="links-block">
+              {extractUrls(plan[bloque]).map((url, i) => (
+                <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+                  {url}
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
 
         <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
           <button type="submit" disabled={loading}>
@@ -194,7 +183,7 @@ export const PlanificacionCoach = () => {
       </form>
 
       <div style={{ marginTop: "20px" }}>
-        <Link to="/usuarioPages">← Volver al inicio</Link>
+        <Link to="/usuarioPages"> Volver al inicio</Link>
       </div>
     </div>
   );
