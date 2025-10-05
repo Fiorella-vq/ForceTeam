@@ -233,9 +233,7 @@ export const Usuario = ({ user }) => {
         {user.role === "admin" ? (
           <>
             <a href="/planificaCoach">Ir a planificaciones diarias del coach</a>
-            <a href="/cronometroWod" style={{ marginLeft: "20px" }}>
-              Ir a cronómetro
-            </a>
+           
           </>
         ) : (
           <>

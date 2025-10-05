@@ -16,7 +16,7 @@ export const PlanificacionViewer = () => {
     }
   }, [location.state?.user]);
 
-  // Fecha inicial: hoy
+  // Fecha inicial: hoy o la que viene del state
   const today = new Date();
   const initialFecha = location.state?.fecha || today.toISOString().split("T")[0];
 
@@ -34,9 +34,9 @@ export const PlanificacionViewer = () => {
     { id: 7, nombre: "Domingo" },
   ];
 
-  // Función para obtener número de semana a partir de una fecha
+  // ✅ Obtener número de semana ISO
   const getWeekNumber = (date) => {
-    const d = new Date(date);
+    const d = new Date(date + "T12:00:00"); // hora neutra para evitar problemas de zona horaria
     d.setHours(0, 0, 0, 0);
     const dayNum = d.getDay() || 7; // Domingo = 7
     d.setDate(d.getDate() + 4 - dayNum);
@@ -45,32 +45,31 @@ export const PlanificacionViewer = () => {
     return `${d.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
   };
 
-  // Calcular semana y día según fecha
+  // ✅ Obtener día según backend: 1 = lunes, 7 = domingo
+  const getDiaBackend = (fecha) => {
+    const d = new Date(fecha + "T12:00:00"); // hora neutra
+    const day = d.getDay(); // 0 = domingo, 1 = lunes
+    return day === 0 ? 7 : day;
+  };
+
   const semana = getWeekNumber(fecha);
-  const dia = new Date(fecha).getDay() === 0 ? 7 : new Date(fecha).getDay();
+  const dia = getDiaBackend(fecha);
 
+  // ✅ Cargar planificación cada vez que cambia la fecha
   useEffect(() => {
-    if (!token) {
-      setPlanificacion(null);
-      setError("Token no proporcionado");
-      return;
-    }
-
     const fetchPlanificacion = async () => {
       try {
+        const headers = {};
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+
         const response = await fetch(
-          `http://localhost:3001/api/planificacion?semana=${semana}&dia=${dia}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          `http://localhost:3001/api/planificacion?fecha=${fecha}&dia=${dia}`,
+          { headers }
         );
 
-        if (!response.ok) {
-          throw new Error("No se pudo cargar la planificación");
-        }
+        if (!response.ok) throw new Error("No se pudo cargar la planificación");
 
         const data = await response.json();
-
         if (data.plan) {
           setPlanificacion(data);
           setError(null);
@@ -85,14 +84,13 @@ export const PlanificacionViewer = () => {
     };
 
     fetchPlanificacion();
-  }, [token, semana, dia]);
+  }, [fecha, dia, token]);
 
+  // ✅ Detecta links dentro del texto
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
-
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const partes = texto.split(urlRegex);
-
     return partes.map((parte, i) =>
       urlRegex.test(parte) ? (
         <a

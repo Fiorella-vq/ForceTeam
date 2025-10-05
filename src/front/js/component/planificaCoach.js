@@ -3,7 +3,9 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import "../../styles/planifica.css";
 
+// Esta función ahora protege contra undefined/null
 const extractUrls = (text) => {
+  if (!text) return [];
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.match(urlRegex) || [];
 };
@@ -59,7 +61,7 @@ export const PlanificacionCoach = () => {
       if (res.ok) {
         Swal.fire("¡Guardado!", "Planificación registrada.", "success");
 
-        // Avanzar al siguiente día
+        // Avanzar al siguiente día automáticamente
         const fechaObj = new Date(fecha);
         fechaObj.setDate(fechaObj.getDate() + 1);
         const yyyy = fechaObj.getFullYear();
@@ -67,9 +69,7 @@ export const PlanificacionCoach = () => {
         const dd = String(fechaObj.getDate()).padStart(2, "0");
         setFecha(`${yyyy}-${mm}-${dd}`);
 
-        setDia(dia + 1); // actualizar select de día
-
-        // Limpiar bloques
+        setDia(dia + 1);
         setPlan({ A: "", B: "", C: "", D: "" });
       } else {
         Swal.fire("Error", data.error || "Algo salió mal", "error");
@@ -115,7 +115,6 @@ export const PlanificacionCoach = () => {
     }
   };
 
-  // Manejo manual de fecha/día con fetch
   const handleManualFechaChange = (e) => {
     const newFecha = e.target.value;
     setFecha(newFecha);
@@ -153,7 +152,7 @@ export const PlanificacionCoach = () => {
             <label>Bloque {bloque}</label>
             <textarea
               name={bloque}
-              value={plan[bloque]}
+              value={plan[bloque] || ""}
               onChange={handleChange}
               rows={4}
             />
