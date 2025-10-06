@@ -2,29 +2,29 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #121212;
+  background-color: #111;
   color: #eee;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3);
 }
 
-/* --- Contenedor Principal --- */
+
 .usuario-container {
   max-width: 700px;
   margin: 30px auto;
   padding: 25px 30px;
-  background: #121212;
+  background: #1a1a1a;
   border-radius: 12px;
-  color: #eee;
+  color: #eaeaea;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
 }
 
-/* --- Secciones de Entrenamientos y WODs --- */
+
 .entrenamientos-section,
 .wods-section {
   margin-bottom: 50px;
 }
 
-/* --- Inputs y Botones --- */
+
 .inputs-entrenamientos,
 .inputs-wods {
   display: flex;
@@ -39,13 +39,13 @@ html, body {
   flex: 1 1 100%;
   padding: 12px 14px;
   font-size: 1.1rem;
-  border: 2px solid #444;
+  border: 2px solid #333;
   border-radius: 8px;
   box-sizing: border-box;
   background-color: #222;
-  color: #eee;
+  color: #f5f5f5;
   font-weight: 500;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .inputs-entrenamientos input[type="date"],
@@ -61,36 +61,37 @@ html, body {
 .inputs-entrenamientos input:focus,
 .inputs-wods input:focus,
 .inputs-wods textarea:focus {
-  border-color: #ff6f61;
-  box-shadow: 0 0 8px #ff6f61aa;
+  border-color: #999;
+  box-shadow: 0 0 8px rgba(255,255,255,0.2);
   outline: none;
-  background-color: #331f1c;
+  background-color: #0d0d0d;
 }
+
 
 .inputs-entrenamientos button,
 .inputs-wods button {
   flex: 1 1 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #ff6f61, #ff9472);
-  color: white;
+  background: linear-gradient(135deg, #333, #000);
+  color: #fff;
   font-weight: 700;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   text-transform: uppercase;
   font-size: 1.1rem;
-  box-shadow: 0 4px 10px rgba(255,111,97,0.5);
+  box-shadow: 0 4px 10px rgba(255,255,255,0.05);
   transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s;
 }
 
 .inputs-entrenamientos button:hover,
 .inputs-wods button:hover {
-  background: linear-gradient(135deg, #ff9472, #ff6f61);
-  box-shadow: 0 6px 16px rgba(255,111,97,0.7);
+  background: linear-gradient(135deg, #000, #333);
+  box-shadow: 0 6px 16px rgba(255,255,255,0.15);
   transform: scale(1.02);
 }
 
-/* --- Tablas y Listas --- */
+
 .tabla-entrenamientos {
   width: 100%;
   border-collapse: separate;
@@ -128,11 +129,11 @@ html, body {
   border: 1px solid #444;
 }
 
-/* --- Botones de acción (editar / eliminar) --- */
+
 .button-icon {
   padding: 8px 12px;
-  background: linear-gradient(135deg, #ff6f61, #ff9472);
-  color: white;
+  background: linear-gradient(135deg, #444, #000);
+  color: #fff;
   font-weight: 700;
   border: none;
   border-radius: 8px;
@@ -143,12 +144,12 @@ html, body {
 }
 
 .button-icon:hover {
-  background: linear-gradient(135deg, #ff9472, #ff6f61);
-  box-shadow: 0 6px 16px rgba(255,111,97,0.7);
+  background: linear-gradient(135deg, #000, #444);
+  box-shadow: 0 6px 16px rgba(255,255,255,0.15);
   transform: scale(1.05);
 }
 
-/* --- Header del Usuario (nombre + logout) --- */
+
 .usuario-header {
   display: flex;
   justify-content: space-between;
@@ -157,13 +158,13 @@ html, body {
   padding: 12px 20px;
   border-radius: 10px;
   margin-bottom: 25px;
-  box-shadow: 0 4px 10px rgba(255,111,97,0.2);
+  box-shadow: 0 4px 10px rgba(255,255,255,0.1);
   border: 1px solid #333;
 }
 
 .usuario-header h2 {
   margin: 0;
-  color: #ff6f61;
+  color: #f5f5f5;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -171,9 +172,8 @@ html, body {
   letter-spacing: 0.5px;
 }
 
-/* --- Botón de Cerrar Sesión (versión oscura estilo SmartWOD) --- */
 .logout-btn {
-  background: linear-gradient(135deg, #ff6f61, #ff9472);
+  background: linear-gradient(135deg, #333, #000);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -184,7 +184,7 @@ html, body {
   align-items: center;
   gap: 8px;
   font-size: 0.95rem;
-  box-shadow: 0 4px 10px rgba(255,111,97,0.5);
+  box-shadow: 0 4px 10px rgba(255,255,255,0.1);
   transition: all 0.3s ease;
 }
 
@@ -193,25 +193,25 @@ html, body {
 }
 
 .logout-btn:hover {
-  background: linear-gradient(135deg, #ff9472, #ff6f61);
+  background: linear-gradient(135deg, #000, #333);
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(255,111,97,0.7);
+  box-shadow: 0 6px 16px rgba(255,255,255,0.2);
 }
 
-/* --- Enlaces del coach / atleta --- */
+
 .link-coach {
   margin-top: 30px;
   text-align: center;
 }
 
 .link-coach a {
-  color: #ff6f61;
+  color: #ccc;
   font-weight: 700;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .link-coach a:hover {
-  color: #ff9472;
+  color: #fff;
   text-decoration: underline;
 }

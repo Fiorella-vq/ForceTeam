@@ -11,11 +11,9 @@ import os
 from functools import wraps
 import jwt
 
-# --- BLUEPRINT ---
 api = Blueprint('api', __name__)
 CORS(api, origins=["http://localhost:3000"], supports_credentials=True)
 
-# --- JWT ---
 SECRET_KEY = os.getenv('SECRET_KEY', 'mi_clave_secreta_super_segura')
 
 def generar_jwt(payload, expiracion_minutos=60):
@@ -47,8 +45,6 @@ def admin_required(f):
             return jsonify({'error': 'Token inválido o no autorizado'}), 401
         return f(*args, **kwargs)
     return wrapper
-
-# --- UTILITARIOS ---
 
 def generate_token(length=32):
     chars = string.ascii_letters + string.digits
@@ -82,9 +78,6 @@ def enviar_email_smtp(destino, asunto, mensaje):
         current_app.logger.error(f"Error enviando correo a {destino}: {e}")
         return False, str(e)
 
-# ---- RUTAS ----
-
-# Registro de usuario
 @api.route('/register', methods=['POST'])
 def register():
     try:
@@ -95,7 +88,7 @@ def register():
         password = data.get('password')
 
         if not all([name, last_name, email, password]):
-            return jsonify({"error": "Todos los campos (name, last_name, email, password) son requeridos"}), 400
+            return jsonify({"error": "Todos los campos son requeridos"}), 400
 
         if User.query.filter_by(email=email).first():
             return jsonify({"error": "El usuario ya existe"}), 409
@@ -106,12 +99,18 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({"message": "Usuario creado correctamente"}), 201
+        payload = {
+            'user_id': new_user.id,
+            'email': new_user.email,
+            'role': getattr(new_user, 'role', 'user')
+        }
+        token = generar_jwt(payload, expiracion_minutos=1440)
+
+        return jsonify({"message": "Usuario creado correctamente", "user": new_user.serialize(), "token": token}), 201
     except Exception as e:
         current_app.logger.error(f"Error en register: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
-# Login
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -133,13 +132,11 @@ def login():
         }
 
         token = generar_jwt(payload, expiracion_minutos=1440)
-        return jsonify({"token": token}), 200
-
+        return jsonify({"token": token, "user": user.serialize()}), 200
     except Exception as e:
         current_app.logger.error(f"Error en login: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
-# Obtener datos del usuario logueado
 @api.route('/usuario', methods=['GET'])
 def usuario():
     auth_header = request.headers.get('Authorization', '')
@@ -168,15 +165,10 @@ def crear_o_actualizar_planificacion():
     fecha = data.get("fecha")
     plan = data.get("plan")
 
-    if not fecha or not plan:
-        return jsonify({"error": "Datos incompletos: fecha y plan son requeridos"}), 400
+    if not fecha or not plan or not all(k in plan for k in ("A","B","C","D")):
+        return jsonify({"error": "Datos incompletos: fecha y plan con bloques A-D requeridos"}), 400
 
-    if not all(k in plan for k in ("A", "B", "C", "D")):
-        return jsonify({"error": "El plan debe contener bloques A, B, C y D"}), 400
-
-    # Calcular día de la semana si no viene
     dia = datetime.strptime(fecha, "%Y-%m-%d").isoweekday()
-
     planificacion = Planificacion.query.filter_by(fecha=fecha).first()
 
     if not planificacion:
@@ -198,47 +190,34 @@ def crear_o_actualizar_planificacion():
     db.session.commit()
     return jsonify({"message": "Planificación guardada exitosamente"}), 200
 
-# Obtener planificación
 @api.route('/planificacion', methods=['GET'])
 def get_planificacion():
     fecha = request.args.get("fecha")
     semana = request.args.get('semana')
     dia = request.args.get('dia')
 
-    # Si envían fecha, calculamos dia y semana automáticamente
     if fecha:
         try:
             fecha_dt = datetime.strptime(fecha, "%Y-%m-%d")
         except ValueError:
             return jsonify({"error": "Formato de fecha inválido"}), 400
         dia = fecha_dt.isoweekday()
-        # calcular semana ISO
         week_num = fecha_dt.isocalendar()[1]
         semana = f"{fecha_dt.year}-W{str(week_num).zfill(2)}"
-    else:
-        # si no hay fecha, requieren semana + dia
-        if not semana or not dia:
-            return jsonify({"error": "Faltan parámetros 'fecha' o 'semana' y 'dia'"}), 400
-        dia = int(dia)
-
-    print("Semana:", semana)
-    print("Día:", dia)
-
-    # Buscar planificación por fecha
-    if fecha:
         planificacion = Planificacion.query.filter_by(fecha=fecha).first()
     else:
-        # Si buscan por semana+dia, convertimos a fecha (tomamos primer día de la semana + offset)
+        if not semana or not dia:
+            return jsonify({"error": "Faltan parámetros 'fecha' o 'semana' y 'dia'"}), 400
         year, week = map(int, semana.split("-W"))
         fecha_dt = datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%u") + timedelta(days=int(dia)-1)
         planificacion = Planificacion.query.filter_by(fecha=fecha_dt.strftime("%Y-%m-%d")).first()
 
     if not planificacion:
-        return jsonify({"semana": semana, "dia": dia, "plan": {}}), 200
+        return jsonify({"semana": semana, "dia": int(dia), "plan": {}}), 200
 
     return jsonify({
         "semana": semana,
-        "dia": dia,
+        "dia": int(dia),
         "plan": {
             "A": planificacion.bloque_a,
             "B": planificacion.bloque_b,
@@ -247,7 +226,6 @@ def get_planificacion():
         }
     }), 200
 
-# Eliminar planificación
 @api.route('/planificacion', methods=['DELETE'])
 @admin_required
 def eliminar_planificacion():

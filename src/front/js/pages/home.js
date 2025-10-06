@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ForceTeamLogo from "../../img/ForceTeam.jpg";
 import "../../styles/home.css";
@@ -9,6 +9,13 @@ export const Home = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -21,14 +28,14 @@ export const Home = () => {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/usuarioPages");
+        if (isMounted.current) navigate("/usuarioPages");
       } else {
-        alert("Error: " + (data.error || data.message));
+        if (isMounted.current) alert("Error: " + (data.error || data.message));
       }
     } catch (error) {
-      alert("Error al conectar con el servidor");
+      if (isMounted.current) alert("Error al conectar con el servidor");
     } finally {
-      setLoading(false);
+      if (isMounted.current) setLoading(false);
     }
   };
 
@@ -41,10 +48,8 @@ export const Home = () => {
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
-
       <h2>FORCE</h2>
       <h4>Planificación Tincho Soria</h4>
-
       <form
         className="home-form"
         onSubmit={(e) => {
@@ -59,7 +64,6 @@ export const Home = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <div className="password-container">
           <input
             type={showPassword ? "text" : "password"}
@@ -68,13 +72,11 @@ export const Home = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
           <i
             className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
             onClick={() => setShowPassword(!showPassword)}
           ></i>
         </div>
-
         <div className="button-group">
           <button type="submit" disabled={loading} className="login-button">
             Iniciar Sesión

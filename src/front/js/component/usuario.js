@@ -1,64 +1,34 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState, useEffect } from "react";
 import "../../styles/usuario.css";
 
-export const Usuario = ({ user }) => {
-  const { actions } = useContext(Context);
-
-  // --- Estados inicializados con localStorage ---
-  const [logs, setLogs] = useState(() => {
-    const saved = user ? localStorage.getItem(`logs_${user.id}`) : null;
-    return saved ? JSON.parse(saved) : [];
-  });
+export const Usuario = ({ user, onUserUpdate }) => {
+  const [logs, setLogs] = useState(user?.logs || []);
   const [fecha, setFecha] = useState("");
   const [ejercicio, setEjercicio] = useState("");
   const [peso, setPeso] = useState("");
 
-  const [wods, setWods] = useState(() => {
-    const saved = user ? localStorage.getItem(`wods_${user.id}`) : null;
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [wods, setWods] = useState(user?.wods || []);
   const [wodFecha, setWodFecha] = useState("");
   const [wodDescripcion, setWodDescripcion] = useState("");
   const [wodComoRealizo, setWodComoRealizo] = useState("");
   const [wodSentimiento, setWodSentimiento] = useState("");
 
-  // --- Guardar logs y wods en localStorage de manera segura ---
   useEffect(() => {
-    let isMounted = true;
-    if (isMounted && user) {
-      localStorage.setItem(`logs_${user.id}`, JSON.stringify(logs));
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [logs, user]);
+    if (!user) return;
+    onUserUpdate({ ...user, logs });
+  }, [logs]);
 
   useEffect(() => {
-    let isMounted = true;
-    if (isMounted && user) {
-      localStorage.setItem(`wods_${user.id}`, JSON.stringify(wods));
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [wods, user]);
+    if (!user) return;
+    onUserUpdate({ ...user, wods });
+  }, [wods]);
 
   if (!user) return <div>Cargando usuario...</div>;
 
-  // --- Funciones para agregar ---
   const agregarLog = () => {
-    if (!fecha.trim() || !ejercicio.trim()) {
-      alert("Fecha y ejercicio son obligatorios");
-      return;
-    }
-
+    if (!fecha.trim() || !ejercicio.trim()) return;
     const pesoNum = peso ? Number(peso) : null;
-    if (peso && (isNaN(pesoNum) || pesoNum < 0)) {
-      alert("Peso debe ser un número válido");
-      return;
-    }
-
+    if (peso && (isNaN(pesoNum) || pesoNum < 0)) return;
     setLogs([...logs, { fecha, ejercicio, peso: pesoNum }]);
     setFecha("");
     setEjercicio("");
@@ -66,11 +36,7 @@ export const Usuario = ({ user }) => {
   };
 
   const agregarWod = () => {
-    if (!wodFecha.trim() || !wodDescripcion.trim()) {
-      alert("Fecha y descripción son obligatorios");
-      return;
-    }
-
+    if (!wodFecha.trim() || !wodDescripcion.trim()) return;
     setWods([
       ...wods,
       {
@@ -80,14 +46,12 @@ export const Usuario = ({ user }) => {
         wodSentimiento: wodSentimiento.trim() || "No especificado",
       },
     ]);
-
     setWodFecha("");
     setWodDescripcion("");
     setWodComoRealizo("");
     setWodSentimiento("");
   };
 
-  // --- Funciones para eliminar y editar ---
   const eliminarLog = (index) => {
     const nuevos = [...logs];
     nuevos.splice(index, 1);
@@ -117,41 +81,36 @@ export const Usuario = ({ user }) => {
     eliminarWod(index);
   };
 
-  // --- Cerrar sesión usando Context ---
   const cerrarSesion = () => {
-    actions.logoutUser();
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    window.location.href = "/";
   };
 
   return (
     <div className="usuario-container">
-      {/* --- Encabezado del usuario --- */}
       <div className="usuario-header">
         <h2>
-          <i className="fa-solid fa-user"></i> Atleta: {user.name} {user.last_name}
+          Atleta: {user.name} {user.last_name}
         </h2>
         <button className="logout-btn" onClick={cerrarSesion}>
           Cerrar sesión
         </button>
       </div>
 
-      {/* --- Logs de levantamientos --- */}
       <section className="entrenamientos-section">
         <h3>Control de Levantamientos</h3>
         <div className="inputs-entrenamientos">
           <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} />
+          <input type="text" placeholder="Ejercicio" value={ejercicio} onChange={(e) => setEjercicio(e.target.value)} />
           <input
             type="text"
-            placeholder="Ejercicio"
-            value={ejercicio}
-            onChange={(e) => setEjercicio(e.target.value)}
-          />
-          <input
-            type="number"
             placeholder="Peso (kg)"
             value={peso}
-            onChange={(e) => setPeso(e.target.value)}
-            min="0"
-            step="0.1"
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^\d*\.?\d*$/.test(value)) setPeso(value);
+            }}
           />
           <button onClick={agregarLog}>Agregar</button>
         </div>
@@ -185,29 +144,13 @@ export const Usuario = ({ user }) => {
         </table>
       </section>
 
-      {/* --- WODs --- */}
       <section className="wods-section">
         <h3>Registro de WODs</h3>
         <div className="inputs-wods">
           <input type="date" value={wodFecha} onChange={(e) => setWodFecha(e.target.value)} />
-          <textarea
-            placeholder="Descripción del WOD"
-            value={wodDescripcion}
-            onChange={(e) => setWodDescripcion(e.target.value)}
-            rows={3}
-          />
-          <textarea
-            placeholder="Cómo realizaste el WOD"
-            value={wodComoRealizo}
-            onChange={(e) => setWodComoRealizo(e.target.value)}
-            rows={3}
-          />
-          <textarea
-            placeholder="Cómo te sentiste / Lograste el objetivo?"
-            value={wodSentimiento}
-            onChange={(e) => setWodSentimiento(e.target.value)}
-            rows={2}
-          />
+          <textarea placeholder="Descripción del WOD" value={wodDescripcion} onChange={(e) => setWodDescripcion(e.target.value)} rows={3} />
+          <textarea placeholder="Cómo realizaste el WOD" value={wodComoRealizo} onChange={(e) => setWodComoRealizo(e.target.value)} rows={3} />
+          <textarea placeholder="Cómo te sentiste / Lograste el objetivo?" value={wodSentimiento} onChange={(e) => setWodSentimiento(e.target.value)} rows={2} />
           <button onClick={agregarWod}>Agregar WOD</button>
         </div>
 
@@ -228,20 +171,15 @@ export const Usuario = ({ user }) => {
         </ul>
       </section>
 
-      {/* --- Enlaces finales --- */}
       <section className="link-coach">
         {user.role === "admin" ? (
-          <>
-            <a href="/planificaCoach">Ir a planificaciones diarias del coach</a>
-           
-          </>
+          <button className="link-btn" onClick={() => (window.location.href = "/planificaCoach")}>
+            Agregar planificaciones
+          </button>
         ) : (
-          <>
-            <a href="/planificacionViewer">Ir a planificaciones</a>
-            <a href="/cronometro" style={{ marginLeft: "20px" }}>
-              Ir a cronómetro
-            </a>
-          </>
+          <button className="link-btn" onClick={() => (window.location.href = "/planificacionViewer")}>
+            Ir a planificaciones
+          </button>
         )}
       </section>
     </div>

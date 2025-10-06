@@ -1,22 +1,32 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../../styles/planifica.css";
 
-// Esta función ahora protege contra undefined/null
+// Extrae URLs de un texto
 const extractUrls = (text) => {
   if (!text) return [];
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.match(urlRegex) || [];
 };
 
+// Devuelve la fecha de hoy en formato YYYY-MM-DD
+const getTodayString = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
+
 export const PlanificacionCoach = () => {
-  const [fecha, setFecha] = useState("2025-10-04");
+  const [fecha, setFecha] = useState(getTodayString());
   const [dia, setDia] = useState(1);
   const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "" });
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token")?.trim();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +35,6 @@ export const PlanificacionCoach = () => {
 
   const fetchPlanificacion = async (fechaParam, diaParam) => {
     if (!fechaParam || !token) return;
-
     try {
       const res = await fetch(
         `http://localhost:3001/api/planificacion?fecha=${fechaParam}&dia=${diaParam}`,
@@ -61,7 +70,7 @@ export const PlanificacionCoach = () => {
       if (res.ok) {
         Swal.fire("¡Guardado!", "Planificación registrada.", "success");
 
-        // Avanzar al siguiente día automáticamente
+        // Avanzar al siguiente día
         const fechaObj = new Date(fecha);
         fechaObj.setDate(fechaObj.getDate() + 1);
         const yyyy = fechaObj.getFullYear();
@@ -181,8 +190,14 @@ export const PlanificacionCoach = () => {
         </div>
       </form>
 
-      <div style={{ marginTop: "20px" }}>
-        <Link to="/usuarioPages"> Volver al inicio</Link>
+      <div style={{ marginTop: "20px", textAlign: "center" }}>
+        <button
+          type="button"
+          className="link-btn"
+          onClick={() => navigate("/usuarioPages")}
+        >
+          Volver al inicio
+        </button>
       </div>
     </div>
   );

@@ -2,19 +2,19 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #121212; 
-  color: #eee;
+  background-color: #111; 
+  color: #f0f0f0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 8px 25px rgba(255, 111, 97, 0.3);
 }
 
 .home-container {
   max-width: 400px;
-  margin: 50px auto;
-  padding: 30px 25px;
-  background: #121212;
-  color: #eee;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 60px auto;
+  padding: 35px 25px;
+  background: #1a1a1a;
+  color: #eaeaea;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
   text-align: center;
 }
 
@@ -23,23 +23,22 @@ html, body {
 }
 
 .logo-image {
-  max-width: 150px;
+  max-width: 140px;
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(247, 246, 246, 0.4);
-  transition: transform 0.3s ease;
-  cursor: default;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 
 .logo-image:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.25);
 }
 
 h2 {
   margin-bottom: 30px;
   font-weight: 700;
-  color: white;
-  letter-spacing: 1.2px;
+  color: #fff;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 
@@ -51,68 +50,19 @@ h2 {
 
 .home-form input {
   padding: 14px 16px;
-  font-size: 1.1rem;
-  border: 2px solid #444;
+  font-size: 1rem;
+  border: 2px solid #333;
   border-radius: 10px;
-  background-color: #222;
-  color: #eee;
-  font-weight: 600;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .home-form input:focus {
-  border-color: #ada8a8;
-  box-shadow: 0 0 8px white;
+  border-color: #999;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
   outline: none;
-  background-color: black;
-}
-
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.login-button,
-.register-button {
-  flex: 1;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  text-transform: uppercase;
-  box-shadow: 0 4px 10px rgba(255,111,97,0.5);
-  transition: background 0.4s ease, box-shadow 0.3s ease;
-}
-
-.login-button {
-  background: linear-gradient(135deg, #ff6f61, #ff9472);
-  color: white;
-}
-
-.login-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ff9472, #ff6f61);
-  box-shadow: 0 6px 16px rgba(255,111,97,0.7);
-}
-
-.register-button {
-  background: #444;
-  color: #eee;
-  box-shadow: 0 4px 10px rgba(68, 68, 68, 0.6);
-}
-
-.register-button:hover:not(:disabled) {
-  background: #666;
-  box-shadow: 0 6px 16px rgba(102, 102, 102, 0.8);
-}
-
-.login-button:disabled,
-.register-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+  background-color: #0d0d0d;
 }
 
 .password-container {
@@ -131,11 +81,59 @@ h2 {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #666;
+  color: #777;
   font-size: 18px;
   transition: color 0.3s ease;
 }
 
 .toggle-password:hover {
-  color: #000;
+  color: #fff;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.login-button,
+.register-button {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-button {
+  background: linear-gradient(135deg, #333, #000);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+}
+
+.login-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #000, #333);
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
+}
+
+.register-button {
+  background: #2a2a2a;
+  color: #ddd;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+}
+
+.register-button:hover:not(:disabled) {
+  background: #3a3a3a;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
+}
+
+.login-button:disabled,
+.register-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

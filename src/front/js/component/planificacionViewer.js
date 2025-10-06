@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/planiViewer.css";
 
 export const PlanificacionViewer = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const token = location.state?.token || localStorage.getItem("token")?.trim();
   const user =
@@ -16,10 +17,8 @@ export const PlanificacionViewer = () => {
     }
   }, [location.state?.user]);
 
-  // Fecha inicial: hoy o la que viene del state
   const today = new Date();
   const initialFecha = location.state?.fecha || today.toISOString().split("T")[0];
-
   const [fecha, setFecha] = useState(initialFecha);
   const [planificacion, setPlanificacion] = useState(null);
   const [error, setError] = useState(null);
@@ -34,28 +33,27 @@ export const PlanificacionViewer = () => {
     { id: 7, nombre: "Domingo" },
   ];
 
-  // ✅ Obtener número de semana ISO
-  const getWeekNumber = (date) => {
-    const d = new Date(date + "T12:00:00"); // hora neutra para evitar problemas de zona horaria
-    d.setHours(0, 0, 0, 0);
-    const dayNum = d.getDay() || 7; // Domingo = 7
-    d.setDate(d.getDate() + 4 - dayNum);
-    const yearStart = new Date(d.getFullYear(), 0, 1);
-    const weekNum = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    return `${d.getFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+  const renderContenido = (texto) => {
+    if (!texto) return "Sin plan";
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const partes = texto.split(urlRegex);
+    return partes.map((parte, i) =>
+      urlRegex.test(parte) ? (
+        <a
+          key={i}
+          href={parte}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#bbb" }}
+        >
+          {parte}
+        </a>
+      ) : (
+        <span key={i}>{parte}</span>
+      )
+    );
   };
 
-  // ✅ Obtener día según backend: 1 = lunes, 7 = domingo
-  const getDiaBackend = (fecha) => {
-    const d = new Date(fecha + "T12:00:00"); // hora neutra
-    const day = d.getDay(); // 0 = domingo, 1 = lunes
-    return day === 0 ? 7 : day;
-  };
-
-  const semana = getWeekNumber(fecha);
-  const dia = getDiaBackend(fecha);
-
-  // ✅ Cargar planificación cada vez que cambia la fecha
   useEffect(() => {
     const fetchPlanificacion = async () => {
       try {
@@ -63,7 +61,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `http://localhost:3001/api/planificacion?fecha=${fecha}&dia=${dia}`,
+          `http://localhost:3001/api/planificacion?fecha=${fecha}`,
           { headers }
         );
 
@@ -84,29 +82,7 @@ export const PlanificacionViewer = () => {
     };
 
     fetchPlanificacion();
-  }, [fecha, dia, token]);
-
-  // ✅ Detecta links dentro del texto
-  const renderContenido = (texto) => {
-    if (!texto) return "Sin plan";
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const partes = texto.split(urlRegex);
-    return partes.map((parte, i) =>
-      urlRegex.test(parte) ? (
-        <a
-          key={i}
-          href={parte}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "blue" }}
-        >
-          {parte}
-        </a>
-      ) : (
-        <span key={i}>{parte}</span>
-      )
-    );
-  };
+  }, [fecha, token]);
 
   return (
     <div className="plani-viewer-container">
@@ -128,7 +104,7 @@ export const PlanificacionViewer = () => {
         <div className="plan-content">
           <h3>
             {`Planificación para ${fecha} - ${
-              diasSemana.find((d) => d.id === dia)?.nombre || ""
+              diasSemana.find((d) => d.id === planificacion.dia)?.nombre || ""
             }`}
           </h3>
           <ul>
@@ -144,9 +120,12 @@ export const PlanificacionViewer = () => {
       )}
 
       <div className="link-coach">
-        <Link to="/usuarioPages" state={{ user: user || null }}>
+        <button
+          className="link-btn"
+          onClick={() => navigate("/usuarioPages", { state: { user } })}
+        >
           Volver a usuario
-        </Link>
+        </button>
       </div>
     </div>
   );

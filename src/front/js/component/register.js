@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Context } from "../store/appContext"; 
 import "../../styles/register.css";
 
 export const Register = () => {
+  const { actions } = useContext(Context);
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,20 +17,8 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ejemplo simple validación para que contraseña coincida
     if (password !== repeatPassword) {
-      Swal.fire({
-        title: "Error",
-        text: "Las contraseñas no coinciden",
-        icon: "error",
-        customClass: {
-          popup: "swal-popup",
-          title: "swal-title",
-          content: "swal-content",
-          confirmButton: "swal-button",
-        },
-        confirmButtonText: "Aceptar",
-      });
+      Swal.fire("Error", "Las contraseñas no coinciden", "error");
       return;
     }
 
@@ -48,47 +38,22 @@ export const Register = () => {
       const data = await res.json();
 
       if (res.ok) {
-        Swal.fire({
-          title: "¡Éxito!",
-          text: "Usuario creado con éxito",
-          icon: "success",
-          customClass: {
-            popup: "swal-popup",
-            title: "swal-title",
-            content: "swal-content",
-            confirmButton: "swal-button",
-          },
-          confirmButtonText: "Aceptar",
-        }).then(() => {
+       
+        const { user, token } = data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        actions.loginUser(user, token);
+
+        Swal.fire("¡Éxito!", "Usuario registrado e iniciado sesión.", "success").then(() => {
           navigate("/usuarioPages");
         });
       } else {
-        Swal.fire({
-          title: "Error",
-          text: data.error || data.message || "Error desconocido",
-          icon: "error",
-          customClass: {
-            popup: "swal-popup",
-            title: "swal-title",
-            content: "swal-content",
-            confirmButton: "swal-button",
-          },
-          confirmButtonText: "Aceptar",
-        });
+        Swal.fire("Error", data.error || data.message || "Error desconocido", "error");
       }
     } catch (error) {
-      Swal.fire({
-        title: "Error",
-        text: "Error al conectar con el servidor",
-        icon: "error",
-        customClass: {
-          popup: "swal-popup",
-          title: "swal-title",
-          content: "swal-content",
-          confirmButton: "swal-button",
-        },
-        confirmButtonText: "Aceptar",
-      });
+      Swal.fire("Error", "Error al conectar con el servidor", "error");
     } finally {
       setLoading(false);
     }

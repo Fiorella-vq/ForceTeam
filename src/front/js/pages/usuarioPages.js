@@ -7,6 +7,7 @@ export const UsuarioPages = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/");
@@ -16,14 +17,15 @@ export const UsuarioPages = () => {
     const fetchUser = async () => {
       try {
         const res = await fetch("http://localhost:3001/api/usuario", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
+          headers: { Authorization: "Bearer " + token },
         });
+
+        if (!isMounted) return;
 
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
+          localStorage.setItem("user", JSON.stringify(data.user));
         } else {
           localStorage.removeItem("token");
           navigate("/");
@@ -34,8 +36,20 @@ export const UsuarioPages = () => {
       }
     };
 
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+
     fetchUser();
+
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
-  return <Usuario user={user} />;
+  const handleUserUpdate = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
+
+  return <Usuario user={user} onUserUpdate={handleUserUpdate} />;
 };
