@@ -4,46 +4,44 @@ import { Usuario } from "../component/usuario";
 
 export const UsuarioPages = () => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    let isMounted = true;
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const storedToken = localStorage.getItem("token");
+
+    if (!storedToken) {
       navigate("/");
       return;
     }
 
+    setToken(storedToken);
+
     const fetchUser = async () => {
       try {
         const res = await fetch("http://localhost:3001/api/usuario", {
-          headers: { Authorization: "Bearer " + token },
+          headers: { Authorization: `Bearer ${storedToken}` },
         });
 
-        if (!isMounted) return;
-
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-          localStorage.setItem("user", JSON.stringify(data.user));
-        } else {
+        if (!res.ok) {
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
           navigate("/");
+          return;
         }
-      } catch (error) {
-        console.error("Error al obtener usuario:", error);
+
+        const data = await res.json();
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      } catch (err) {
+        console.error(err);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         navigate("/");
       }
     };
 
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
-
     fetchUser();
-
-    return () => {
-      isMounted = false;
-    };
   }, [navigate]);
 
   const handleUserUpdate = (updatedUser) => {
@@ -51,5 +49,7 @@ export const UsuarioPages = () => {
     localStorage.setItem("user", JSON.stringify(updatedUser));
   };
 
-  return <Usuario user={user} onUserUpdate={handleUserUpdate} />;
+  if (!user || !token) return <div>Cargando...</div>;
+
+  return <Usuario user={user} token={token} onUserUpdate={handleUserUpdate} />;
 };

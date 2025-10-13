@@ -1,3 +1,4 @@
+/* Reset y estilos base */
 html, body {
   height: 100%;
   margin: 0;
@@ -7,7 +8,7 @@ html, body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
+/* Contenedor principal */
 .usuario-container {
   max-width: 700px;
   margin: 30px auto;
@@ -18,24 +19,27 @@ html, body {
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
 }
 
-
+/* Secciones */
 .entrenamientos-section,
 .wods-section {
   margin-bottom: 50px;
 }
 
-
+/* Inputs de logs y WODs */
 .inputs-entrenamientos,
-.inputs-wods {
+.inputs-wods,
+.inputs-wods-atleta {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
+  flex-direction: column;
 }
 
 .inputs-entrenamientos input,
 .inputs-wods input,
-.inputs-wods textarea {
+.inputs-wods textarea,
+.inputs-wods-atleta textarea {
   flex: 1 1 100%;
   padding: 12px 14px;
   font-size: 1.1rem;
@@ -60,16 +64,18 @@ html, body {
 
 .inputs-entrenamientos input:focus,
 .inputs-wods input:focus,
-.inputs-wods textarea:focus {
+.inputs-wods textarea:focus,
+.inputs-wods-atleta textarea:focus {
   border-color: #999;
   box-shadow: 0 0 8px rgba(255,255,255,0.2);
   outline: none;
   background-color: #0d0d0d;
 }
 
-
+/* Botones de logs y WODs */
 .inputs-entrenamientos button,
-.inputs-wods button {
+.inputs-wods button,
+.inputs-wods-atleta button {
   flex: 1 1 100%;
   padding: 14px;
   background: linear-gradient(135deg, #333, #000);
@@ -85,13 +91,14 @@ html, body {
 }
 
 .inputs-entrenamientos button:hover,
-.inputs-wods button:hover {
+.inputs-wods button:hover,
+.inputs-wods-atleta button:hover {
   background: linear-gradient(135deg, #000, #333);
   box-shadow: 0 6px 16px rgba(255,255,255,0.15);
   transform: scale(1.02);
 }
 
-
+/* Tabla de logs */
 .tabla-entrenamientos {
   width: 100%;
   border-collapse: separate;
@@ -112,6 +119,7 @@ html, body {
   background-color: #333;
 }
 
+/* Lista de WODs */
 .lista-wods {
   list-style-type: none;
   padding-left: 0;
@@ -129,7 +137,7 @@ html, body {
   border: 1px solid #444;
 }
 
-
+/* Botones de iconos */
 .button-icon {
   padding: 8px 12px;
   background: linear-gradient(135deg, #444, #000);
@@ -149,7 +157,7 @@ html, body {
   transform: scale(1.05);
 }
 
-
+/* Header usuario */
 .usuario-header {
   display: flex;
   justify-content: space-between;
@@ -172,6 +180,7 @@ html, body {
   letter-spacing: 0.5px;
 }
 
+/* Botón de cerrar sesión */
 .logout-btn {
   background: linear-gradient(135deg, #333, #000);
   color: #fff;
@@ -198,10 +207,30 @@ html, body {
   box-shadow: 0 6px 16px rgba(255,255,255,0.2);
 }
 
-
+/* Botones de planificaciones */
 .link-coach {
   margin-top: 30px;
   text-align: center;
+}
+
+.link-btn {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #333, #000);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(255,255,255,0.05);
+  transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s;
+}
+
+.link-btn:hover {
+  background: linear-gradient(135deg, #000, #333);
+  box-shadow: 0 6px 16px rgba(255,255,255,0.15);
+  transform: scale(1.02);
 }
 
 .link-coach a {

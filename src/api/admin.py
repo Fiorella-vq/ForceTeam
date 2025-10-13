@@ -2,7 +2,7 @@
   
 import os
 from flask_admin import Admin
-from .models import db, User, Planificacion
+from .models import db, User, Planificacion, UserLog, UserWod
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -13,12 +13,11 @@ def setup_admin(app):
    
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Planificacion, db.session))
+    admin.add_view(ModelView(UserLog, db.session))
+    admin.add_view(ModelView(UserWod, db.session))
   
 
 
-# def check_admin_login(email, password):
-#     admin_email = os.getenv("ADMIN_EMAIL")
-#     admin_password = os.getenv("ADMIN_PASSWORD")
-#     return email == admin_email and password == admin_password
+
     
   

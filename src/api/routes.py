@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app
-from api.models import db, User, Planificacion
+from api.models import db, User, Planificacion, UserLog, UserWod
 from flask_cors import CORS
 from datetime import datetime, timedelta
 import random
@@ -240,3 +240,86 @@ def eliminar_planificacion():
     db.session.delete(planificacion)
     db.session.commit()
     return jsonify({"message": "Planificación eliminada exitosamente"}), 200
+
+
+# Obtener todos los logs de un usuario
+@api.route('/users/<int:user_id>/logs', methods=['GET'])
+def get_user_logs(user_id):
+    user = User.query.get_or_404(user_id)
+    return jsonify([log.serialize() for log in user.logs]), 200
+
+# Crear un nuevo log
+@api.route('/users/<int:user_id>/logs', methods=['POST'])
+def add_user_log(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.get_json() or {}
+    fecha = data.get('fecha')
+    ejercicio = data.get('ejercicio')
+    peso = data.get('peso')
+
+    if not fecha or not ejercicio:
+        return jsonify({"error": "Fecha y ejercicio son requeridos"}), 400
+
+    log = UserLog(user_id=user.id, fecha=fecha, ejercicio=ejercicio, peso=peso)
+    db.session.add(log)
+    db.session.commit()
+    return jsonify(log.serialize()), 201
+
+# Eliminar un log
+@api.route('/users/<int:user_id>/logs/<int:log_id>', methods=['DELETE'])
+def delete_user_log(user_id, log_id):
+    log = UserLog.query.filter_by(user_id=user_id, id=log_id).first_or_404()
+    db.session.delete(log)
+    db.session.commit()
+    return jsonify({"message": "Log eliminado"}), 200
+
+# Obtener todos los WODs de un usuario
+@api.route('/users/<int:user_id>/wods', methods=['GET'])
+def get_user_wods(user_id):
+    user = User.query.get_or_404(user_id)
+    return jsonify([wod.serialize() for wod in user.wods]), 200
+
+# Crear un nuevo WOD (corregido)
+@api.route('/users/<int:user_id>/wods', methods=['POST'])
+def add_user_wod(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.get_json() or {}
+
+    wod_fecha = data.get('wod_fecha')
+    wod_descripcion = data.get('wod_descripcion')
+    wod_como_realizo = data.get('wod_como_realizo', 'No especificado')
+    wod_sentimiento = data.get('wod_sentimiento', 'No especificado')
+
+    # Validación básica
+    if not wod_fecha or not wod_descripcion:
+        return jsonify({"error": "Fecha y descripción del WOD son requeridos"}), 400
+
+    # Validar formato de fecha YYYY-MM-DD
+    try:
+        wod_fecha_dt = datetime.strptime(wod_fecha, "%Y-%m-%d").date()
+    except ValueError:
+        return jsonify({"error": "Formato de fecha inválido, usar YYYY-MM-DD"}), 400
+
+    try:
+        wod = UserWod(
+            user_id=user.id,
+            wod_fecha=wod_fecha_dt,
+            wod_descripcion=wod_descripcion,
+            wod_como_realizo=wod_como_realizo,
+            wod_sentimiento=wod_sentimiento
+        )
+        db.session.add(wod)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error creando WOD para user_id={user_id}: {e}")
+        db.session.rollback()
+        return jsonify({"error": "Error interno al guardar WOD"}), 500
+
+    # Serializar respuesta
+    return jsonify({
+        "id": wod.id,
+        "wod_fecha": wod.wod_fecha.strftime("%Y-%m-%d"),
+        "wod_descripcion": wod.wod_descripcion,
+        "wod_como_realizo": wod.wod_como_realizo,
+        "wod_sentimiento": wod.wod_sentimiento
+    }), 201
