@@ -14,6 +14,20 @@ import jwt
 api = Blueprint('api', __name__)
 CORS(api, origins=["http://localhost:3000"], supports_credentials=True)
 
+# ======================================
+#  CORS headers para todas las rutas
+# ======================================
+@api.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
+    return response
+
+
+# ======================================
+#  Autenticación y JWT
+# ======================================
 SECRET_KEY = os.getenv('SECRET_KEY', 'mi_clave_secreta_super_segura')
 
 def generar_jwt(payload, expiracion_minutos=60):
@@ -46,6 +60,10 @@ def admin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
+
+# ======================================
+#  Utilidades
+# ======================================
 def generate_token(length=32):
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
@@ -78,6 +96,10 @@ def enviar_email_smtp(destino, asunto, mensaje):
         current_app.logger.error(f"Error enviando correo a {destino}: {e}")
         return False, str(e)
 
+
+# ======================================
+# Registro y Login
+# ======================================
 @api.route('/register', methods=['POST'])
 def register():
     try:
@@ -95,7 +117,6 @@ def register():
 
         new_user = User(name=name, last_name=last_name, email=email)
         new_user.set_password(password)
-
         db.session.add(new_user)
         db.session.commit()
 
@@ -110,6 +131,7 @@ def register():
     except Exception as e:
         current_app.logger.error(f"Error en register: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
+
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -137,6 +159,7 @@ def login():
         current_app.logger.error(f"Error en login: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
+
 @api.route('/usuario', methods=['GET'])
 def usuario():
     auth_header = request.headers.get('Authorization', '')
@@ -149,15 +172,16 @@ def usuario():
         return jsonify({'error': 'Token inválido o expirado'}), 401
 
     user_id = decoded.get('user_id')
-    if not user_id:
-        return jsonify({'error': 'Token inválido: no contiene user_id'}), 401
-
     user = User.query.get(user_id)
     if not user:
         return jsonify({'error': 'Usuario no encontrado'}), 404
 
     return jsonify({'user': user.serialize()}), 200
 
+
+# ======================================
+# Planificación
+# ======================================
 @api.route('/planificacion', methods=['POST'])
 @admin_required
 def crear_o_actualizar_planificacion():
@@ -189,6 +213,7 @@ def crear_o_actualizar_planificacion():
 
     db.session.commit()
     return jsonify({"message": "Planificación guardada exitosamente"}), 200
+
 
 @api.route('/planificacion', methods=['GET'])
 def get_planificacion():
@@ -226,6 +251,7 @@ def get_planificacion():
         }
     }), 200
 
+
 @api.route('/planificacion', methods=['DELETE'])
 @admin_required
 def eliminar_planificacion():
@@ -242,13 +268,14 @@ def eliminar_planificacion():
     return jsonify({"message": "Planificación eliminada exitosamente"}), 200
 
 
-# Obtener todos los logs de un usuario
+# ======================================
+#  Logs de levantamientos
+# ======================================
 @api.route('/users/<int:user_id>/logs', methods=['GET'])
 def get_user_logs(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify([log.serialize() for log in user.logs]), 200
 
-# Crear un nuevo log
 @api.route('/users/<int:user_id>/logs', methods=['POST'])
 def add_user_log(user_id):
     user = User.query.get_or_404(user_id)
@@ -265,7 +292,6 @@ def add_user_log(user_id):
     db.session.commit()
     return jsonify(log.serialize()), 201
 
-# Eliminar un log
 @api.route('/users/<int:user_id>/logs/<int:log_id>', methods=['DELETE'])
 def delete_user_log(user_id, log_id):
     log = UserLog.query.filter_by(user_id=user_id, id=log_id).first_or_404()
@@ -273,13 +299,15 @@ def delete_user_log(user_id, log_id):
     db.session.commit()
     return jsonify({"message": "Log eliminado"}), 200
 
-# Obtener todos los WODs de un usuario
+
+# ======================================
+# WODs
+# ======================================
 @api.route('/users/<int:user_id>/wods', methods=['GET'])
 def get_user_wods(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify([wod.serialize() for wod in user.wods]), 200
 
-# Crear un nuevo WOD (corregido)
 @api.route('/users/<int:user_id>/wods', methods=['POST'])
 def add_user_wod(user_id):
     user = User.query.get_or_404(user_id)
@@ -290,36 +318,45 @@ def add_user_wod(user_id):
     wod_como_realizo = data.get('wod_como_realizo', 'No especificado')
     wod_sentimiento = data.get('wod_sentimiento', 'No especificado')
 
-    # Validación básica
     if not wod_fecha or not wod_descripcion:
         return jsonify({"error": "Fecha y descripción del WOD son requeridos"}), 400
 
-    # Validar formato de fecha YYYY-MM-DD
     try:
-        wod_fecha_dt = datetime.strptime(wod_fecha, "%Y-%m-%d").date()
+        datetime.strptime(wod_fecha, "%Y-%m-%d")
     except ValueError:
         return jsonify({"error": "Formato de fecha inválido, usar YYYY-MM-DD"}), 400
 
-    try:
-        wod = UserWod(
-            user_id=user.id,
-            wod_fecha=wod_fecha_dt,
-            wod_descripcion=wod_descripcion,
-            wod_como_realizo=wod_como_realizo,
-            wod_sentimiento=wod_sentimiento
-        )
-        db.session.add(wod)
-        db.session.commit()
-    except Exception as e:
-        current_app.logger.error(f"Error creando WOD para user_id={user_id}: {e}")
-        db.session.rollback()
-        return jsonify({"error": "Error interno al guardar WOD"}), 500
+    wod = UserWod(
+        user_id=user.id,
+        fecha=wod_fecha,
+        descripcion=wod_descripcion,
+        como_realizo=wod_como_realizo,
+        sentimiento=wod_sentimiento
+    )
 
-    # Serializar respuesta
-    return jsonify({
-        "id": wod.id,
-        "wod_fecha": wod.wod_fecha.strftime("%Y-%m-%d"),
-        "wod_descripcion": wod.wod_descripcion,
-        "wod_como_realizo": wod.wod_como_realizo,
-        "wod_sentimiento": wod.wod_sentimiento
-    }), 201
+    db.session.add(wod)
+    db.session.commit()
+
+    return jsonify(wod.serialize()), 201
+
+#  Actualizar un WOD existente
+@api.route('/users/<int:user_id>/wods/<int:wod_id>', methods=['PATCH', 'OPTIONS'])
+def update_user_wod(user_id, wod_id):
+    if request.method == 'OPTIONS':
+        return '', 204  
+
+    user = User.query.get_or_404(user_id)
+    wod = UserWod.query.filter_by(user_id=user.id, id=wod_id).first_or_404()
+    data = request.get_json() or {}
+
+    wod.descripcion = data.get('wod_descripcion', wod.descripcion)
+    wod.como_realizo = data.get('wod_como_realizo', wod.como_realizo)
+    wod.sentimiento = data.get('wod_sentimiento', wod.sentimiento)
+
+    try:
+        db.session.commit()
+        return jsonify(wod.serialize()), 200
+    except Exception as e:
+        current_app.logger.error(f"Error actualizando WOD id={wod_id}: {e}")
+        db.session.rollback()
+        return jsonify({"error": "Error al actualizar el WOD"}), 500

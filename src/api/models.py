@@ -39,8 +39,9 @@ class User(db.Model):
             "last_name": self.last_name,
             "email": self.email,
             "role": self.role,
-            "logs": [log.serialize() for log in self.logs],
-            "wods": [wod.serialize() for wod in self.wods],
+            "logs": [log.serialize() for log in self.logs] if self.logs else [],
+            "wods": [wod.serialize() for wod in self.wods] if self.wods else [],
+
         }
 
 
