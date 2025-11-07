@@ -1,5 +1,5 @@
 # ==========================
-# Build tools (para evitar errores con Cython/PyYAML)
+# Build tools
 # ==========================
 pip==25.1.1
 setuptools==75.1.0
@@ -15,7 +15,7 @@ Flask-Cors==3.0.10
 Flask-Migrate==4.0.5
 Flask-SQLAlchemy==3.1.1
 Flask-Admin==1.6.1
-flasgger==0.9.7
+flasgger==0.9.5  # Versión estable compatible
 
 # ==========================
 # Database & migrations
