@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Context } from "../store/appContext"; 
+import { Context } from "../store/appContext";
 import "../../styles/register.css";
 
 export const Register = () => {
@@ -24,21 +24,23 @@ export const Register = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          last_name: lastName,
-          email,
-          password,
-        }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            last_name: lastName,
+            email,
+            password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
       if (res.ok) {
-       
         const { user, token } = data;
 
         localStorage.setItem("token", token);
@@ -46,11 +48,19 @@ export const Register = () => {
 
         actions.loginUser(user, token);
 
-        Swal.fire("¡Éxito!", "Usuario registrado e iniciado sesión.", "success").then(() => {
+        Swal.fire(
+          "¡Éxito!",
+          "Usuario registrado e iniciado sesión.",
+          "success"
+        ).then(() => {
           navigate("/usuarioPages");
         });
       } else {
-        Swal.fire("Error", data.error || data.message || "Error desconocido", "error");
+        Swal.fire(
+          "Error",
+          data.error || data.message || "Error desconocido",
+          "error"
+        );
       }
     } catch (error) {
       Swal.fire("Error", "Error al conectar con el servidor", "error");

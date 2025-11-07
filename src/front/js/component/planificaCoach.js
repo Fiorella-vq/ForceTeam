@@ -37,7 +37,7 @@ export const PlanificacionCoach = () => {
     if (!fechaParam || !token) return;
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}&dia=${diaParam}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}&dia=${diaParam}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) {
@@ -57,14 +57,17 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/planificacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ fecha, dia, plan }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/planificacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ fecha, dia, plan }),
+        }
+      );
       const data = await res.json();
 
       if (res.ok) {
@@ -107,12 +110,16 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}&dia=${dia}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&dia=${dia}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
       if (res.ok) {
-        Swal.fire("Eliminado", "Planificación eliminada correctamente.", "success");
+        Swal.fire(
+          "Eliminado",
+          "Planificación eliminada correctamente.",
+          "success"
+        );
         setPlan({ A: "", B: "", C: "", D: "" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");

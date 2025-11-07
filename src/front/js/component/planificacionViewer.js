@@ -61,7 +61,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
           { headers }
         );
 

@@ -19,9 +19,12 @@ export const UsuarioPages = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/usuario", {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        });
+        const res = await fetch(
+          "https://forceteam.onrender.com/api/usuario",
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
+        );
 
         if (!res.ok) {
           localStorage.removeItem("token");

@@ -23,21 +23,25 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     const fetchData = async () => {
       try {
         const logsRes = await fetch(
-          `http://localhost:3001/api/users/${user.id}/logs`,
+          `https://forceteam.onrender.com/api/users/${user.id}/logs`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const logsData = await logsRes.json();
         setLogs(logsData);
 
         const wodsRes = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const wodsData = await wodsRes.json();
         setWods(wodsData);
       } catch (err) {
         console.error(err);
-        Swal.fire("Error", "No se pudieron cargar los datos del usuario.", "error");
+        Swal.fire(
+          "Error",
+          "No se pudieron cargar los datos del usuario.",
+          "error"
+        );
       }
     };
 
@@ -58,7 +62,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/logs`,
+        `https://forceteam.onrender.com/api/users/${user.id}/logs`,
         {
           method: "POST",
           headers: {
@@ -87,7 +91,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   const eliminarLog = async (logId) => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/logs/${logId}`,
+        `https://forceteam.onrender.com/api/users/${user.id}/logs/${logId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (!res.ok) throw new Error("Error al eliminar log");
@@ -125,7 +129,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
       let res;
       if (wodActual) {
         res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods/${wodActual.id}`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodActual.id}`,
           {
             method: "PATCH",
             headers: {
@@ -137,7 +141,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
         );
       } else {
         res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
           {
             method: "POST",
             headers: {
@@ -164,7 +168,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   const eliminarWod = async (wodId) => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/wods/${wodId}`,
+        `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (!res.ok) throw new Error("Error al eliminar WOD");
@@ -241,10 +245,16 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
                 <td>{log.ejercicio}</td>
                 <td>{log.peso !== null ? log.peso : "-"}</td>
                 <td>
-                  <button className="button-icon" onClick={() => editarLog(log)}>
+                  <button
+                    className="button-icon"
+                    onClick={() => editarLog(log)}
+                  >
                     <i className="fa-solid fa-pencil"></i>
                   </button>
-                  <button className="button-icon" onClick={() => eliminarLog(log.id)}>
+                  <button
+                    className="button-icon"
+                    onClick={() => eliminarLog(log.id)}
+                  >
                     <i className="fa-solid fa-trash"></i>
                   </button>
                 </td>
@@ -310,9 +320,15 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
                     title: `WOD del ${wod.fecha.split("T")[0]}`,
                     html: `
                       <div style="text-align:left; color:#eee;">
-                        <p><strong>🏋️ Descripción:</strong> ${wod.descripcion}</p>
-                        <p><strong>🔥 Cómo lo realizaste:</strong> ${wod.como_realizo || "-"}</p>
-                        <p><strong>❤️ Sentimiento:</strong> ${wod.sentimiento || "-"}</p>
+                        <p><strong>🏋️ Descripción:</strong> ${
+                          wod.descripcion
+                        }</p>
+                        <p><strong>🔥 Cómo lo realizaste:</strong> ${
+                          wod.como_realizo || "-"
+                        }</p>
+                        <p><strong>❤️ Sentimiento:</strong> ${
+                          wod.sentimiento || "-"
+                        }</p>
                       </div>
                     `,
                     background: "#1e1e1e",
@@ -345,10 +361,16 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
               Sentimiento: {wod.sentimiento || "-"} <br />
               {user.role === "admin" && (
                 <>
-                  <button className="button-icon" onClick={() => editarWod(wod)}>
+                  <button
+                    className="button-icon"
+                    onClick={() => editarWod(wod)}
+                  >
                     <i className="fa-solid fa-pencil"></i>
                   </button>
-                  <button className="button-icon" onClick={() => eliminarWod(wod.id)}>
+                  <button
+                    className="button-icon"
+                    onClick={() => eliminarWod(wod.id)}
+                  >
                     <i className="fa-solid fa-trash"></i>
                   </button>
                 </>

@@ -12,14 +12,14 @@ from functools import wraps
 import jwt
 
 api = Blueprint('api', __name__)
-CORS(api, origins=["http://localhost:3000"], supports_credentials=True)
+CORS(api, origins=["https://forceteam.onrender.com"], supports_credentials=True)
 
 # ======================================
 #  CORS headers para todas las rutas
 # ======================================
 @api.after_request
 def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Origin", "https://forceteam.onrender.com")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
     return response
