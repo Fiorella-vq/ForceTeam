@@ -146,3 +146,20 @@ h2 {
 .remember-me input {
   margin-right: 6px;
 }
+
+.forgot-password {
+  text-align: right;
+  margin-top: 5px;
+}
+
+.forgot-password span {
+  color: #aaa;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.forgot-password span:hover {
+  color: #fff;
+  text-decoration: underline;
+}

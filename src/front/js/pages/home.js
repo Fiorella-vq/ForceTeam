@@ -12,14 +12,12 @@ export const Home = () => {
   const navigate = useNavigate();
   const isMounted = useRef(true);
 
-  // ✅ Al montar, si hay email guardado, lo cargamos
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberedEmail");
     if (savedEmail) {
       setEmail(savedEmail);
       setRememberMe(true);
     }
-
     return () => {
       isMounted.current = false;
     };
@@ -37,7 +35,6 @@ export const Home = () => {
       if (res.ok) {
         localStorage.setItem("token", data.token);
 
-        // ✅ Guardar o eliminar el email según el estado de "Recordarme"
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", email);
         } else {
@@ -59,12 +56,17 @@ export const Home = () => {
     navigate("/register");
   };
 
+  const handleForgotPassword = () => {
+    navigate("/forgot-password"); // 🔗 redirige a la ruta de recuperación
+  };
+
   return (
     <div className="home-container">
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
       <h2>Planificación Tincho Soria</h2>
+
       <form
         className="home-form"
         onSubmit={(e) => {
@@ -94,7 +96,11 @@ export const Home = () => {
           ></i>
         </div>
 
-        {/* ✅ Checkbox Recordarme */}
+        {/* 🔹 Link de "Olvidé mi contraseña" */}
+        <div className="forgot-password">
+          <span onClick={handleForgotPassword}>¿Olvidaste tu contraseña?</span>
+        </div>
+
         <div className="remember-me">
           <label>
             <input

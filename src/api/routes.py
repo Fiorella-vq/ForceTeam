@@ -360,3 +360,74 @@ def update_user_wod(user_id, wod_id):
         current_app.logger.error(f"Error actualizando WOD id={wod_id}: {e}")
         db.session.rollback()
         return jsonify({"error": "Error al actualizar el WOD"}), 500
+
+
+
+# ======================================
+#  Recuperación de contraseña
+# ======================================
+
+@api.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json() or {}
+    email = data.get("email")
+    if not email:
+        return jsonify({"error": "El email es requerido"}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "No existe un usuario con ese email"}), 404
+
+    
+    reset_token = generar_jwt({"user_id": user.id}, expiracion_minutos=30)
+
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    reset_link = f"{frontend_url}/reset-password?token={reset_token}"
+
+   
+    mensaje = f"""
+Hola {user.name},
+
+Se solicitó restablecer tu contraseña. Haz clic en el siguiente enlace para establecer una nueva contraseña:
+
+{reset_link}
+
+Si no solicitaste este cambio, ignora este correo.
+
+Saludos,
+Tu equipo de ForceTeam
+"""
+
+    success, info = enviar_email_smtp(user.email, "Recuperar contraseña", mensaje)
+    if success:
+        return jsonify({"message": "Correo enviado con instrucciones"}), 200
+    else:
+        return jsonify({"error": f"No se pudo enviar el correo: {info}"}), 500
+
+
+
+# ======================================
+#  Restablecer contraseña
+# ======================================
+
+@api.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json() or {}
+    token = data.get("token")
+    new_password = data.get("new_password")
+
+    if not token or not new_password:
+        return jsonify({"error": "Token y nueva contraseña son requeridos"}), 400
+
+    decoded = verificar_jwt(token)
+    if not decoded:
+        return jsonify({"error": "Token inválido o expirado"}), 401
+
+    user_id = decoded.get("user_id")
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    user.set_password(new_password)
+    db.session.commit()
+    return jsonify({"message": "Contraseña actualizada correctamente"}), 200

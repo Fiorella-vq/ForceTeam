@@ -15,6 +15,8 @@ import { Register } from "./component/register";
 import {PlanificacionCoach} from "./component/planificaCoach";
 import { Usuario } from "./component/usuario"; 
 import {PlanificacionViewer} from './component/planificacionViewer';
+import { ForgotPassword } from "./component/forgotPassword";
+import { ResetPassword } from "./component/resetPassword";
 
 
 
@@ -37,6 +39,8 @@ const Layout = () => {
             <Route element={<Usuario />} path="/usuario" />
             <Route element={<PlanificacionCoach />} path="/planificaCoach" />
             <Route element={<PlanificacionViewer />} path="/planificacionViewer" />
+            <Route element={<ForgotPassword />} path="/forgot-password" />  
+            <Route element={<ResetPassword />} path="/reset-password" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
           <Footer />
