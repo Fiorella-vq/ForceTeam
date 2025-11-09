@@ -18,7 +18,8 @@ export const PlanificacionViewer = () => {
   }, [location.state?.user]);
 
   const today = new Date();
-  const initialFecha = location.state?.fecha || today.toISOString().split("T")[0];
+  const initialFecha =
+    location.state?.fecha || today.toISOString().split("T")[0];
   const [fecha, setFecha] = useState(initialFecha);
   const [planificacion, setPlanificacion] = useState(null);
   const [error, setError] = useState(null);
@@ -61,7 +62,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
+          `http://localhost:3001/api/planificacion?fecha=${fecha}`,
           { headers }
         );
 

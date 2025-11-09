@@ -11,6 +11,8 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -24,19 +26,16 @@ export const Register = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/register",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name,
-            last_name: lastName,
-            email,
-            password,
-          }),
-        }
-      );
+      const res = await fetch("http://localhost:3001/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          last_name: lastName,
+          email,
+          password,
+        }),
+      });
 
       const data = await res.json();
 
@@ -94,22 +93,34 @@ export const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Contraseña (mín. 6 letras y números)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-        />
-        <input
-          type="password"
-          placeholder="Repetir contraseña"
-          value={repeatPassword}
-          onChange={(e) => setRepeatPassword(e.target.value)}
-          required
-          minLength={6}
-        />
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña (mín. 6 letras y números)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+          <i
+            className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
+            onClick={() => setShowPassword(!showPassword)}
+          ></i>
+        </div>
+        <div className="password-container">
+          <input
+            type={showRepeatPassword ? "text" : "password"}
+            placeholder="Repetir contraseña"
+            value={repeatPassword}
+            onChange={(e) => setRepeatPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+          <i
+            className={`fa ${showRepeatPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
+            onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+          ></i>
+        </div>
         <button type="submit" disabled={loading}>
           {loading ? "Registrando..." : "Registrarse"}
         </button>

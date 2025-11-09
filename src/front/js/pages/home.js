@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import ForceTeamLogo from "../../img/ForceTeam.jpg";
+import ForceTeamLogo from "../../img/ForceTe.png";
 import "../../styles/home.css";
 
 export const Home = () => {
@@ -20,14 +20,11 @@ export const Home = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("token", data.token);
@@ -51,8 +48,7 @@ export const Home = () => {
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
-      <h2>FORCE</h2>
-      <h4>Planificación Tincho Soria</h4>
+      <h2>Planificación Tincho Soria</h2>
       <form
         className="home-form"
         onSubmit={(e) => {

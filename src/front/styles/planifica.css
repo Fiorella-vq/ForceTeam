@@ -189,3 +189,19 @@ textarea[name="D"] {
   color: #000;
   box-shadow: 0 4px 12px rgba(255,255,255,0.2);
 }
+
+.button-atleta{
+  background: linear-gradient(135deg, #333, #000);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}

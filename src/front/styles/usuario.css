@@ -244,3 +244,28 @@ html, body {
   color: #fff;
   text-decoration: underline;
 }
+
+.inputs-entrenamientos select {
+  flex: 1 1 100%;
+  padding: 12px 14px;
+  font-size: 1.1rem;
+  border: 2px solid #333;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: #222;
+  color: #f5f5f5;
+  font-weight: 500;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  appearance: none;
+}
+
+.inputs-entrenamientos select:focus {
+  border-color: #999;
+  box-shadow: 0 0 8px rgba(255,255,255,0.2);
+  outline: none;
+  background-color: #0d0d0d;
+}
+
+.inputs-entrenamientos {
+  overflow: visible;
+}
