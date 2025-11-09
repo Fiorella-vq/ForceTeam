@@ -9,7 +9,6 @@ export const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
- 
   const swalOptions = (title, text, icon) => ({
     title,
     text,
@@ -22,16 +21,21 @@ export const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      return Swal.fire(swalOptions("Error", "Por favor ingresa tu email", "warning"));
+      return Swal.fire(
+        swalOptions("Error", "Por favor ingresa tu email", "warning")
+      );
     }
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/forgot-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {
@@ -44,10 +48,18 @@ export const ForgotPassword = () => {
         );
         navigate("/");
       } else {
-        Swal.fire(swalOptions("Error", data.error || "No se pudo enviar el correo", "error"));
+        Swal.fire(
+          swalOptions(
+            "Error",
+            data.error || "No se pudo enviar el correo",
+            "error"
+          )
+        );
       }
     } catch {
-      Swal.fire(swalOptions("Error", "No se pudo conectar con el servidor", "error"));
+      Swal.fire(
+        swalOptions("Error", "No se pudo conectar con el servidor", "error")
+      );
     } finally {
       setLoading(false);
     }

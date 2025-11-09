@@ -26,7 +26,7 @@ export const Register = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/register", {
+      const res = await fetch("https://forceteam.onrender.com/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -103,7 +103,9 @@ export const Register = () => {
             minLength={6}
           />
           <i
-            className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
+            className={`fa ${
+              showPassword ? "fa-eye-slash" : "fa-eye"
+            } toggle-password`}
             onClick={() => setShowPassword(!showPassword)}
           ></i>
         </div>
@@ -117,7 +119,9 @@ export const Register = () => {
             minLength={6}
           />
           <i
-            className={`fa ${showRepeatPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
+            className={`fa ${
+              showRepeatPassword ? "fa-eye-slash" : "fa-eye"
+            } toggle-password`}
             onClick={() => setShowRepeatPassword(!showRepeatPassword)}
           ></i>
         </div>

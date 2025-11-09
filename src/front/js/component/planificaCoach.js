@@ -3,14 +3,13 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import "../../styles/planifica.css";
 
-
 const extractUrls = (text) => {
   if (!text) return [];
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.match(urlRegex) || [];
 };
 
-// Fecha hoy en formato YYYY-MM-DD
+
 const getTodayString = () => {
   const today = new Date();
   return today.toISOString().split("T")[0];
@@ -27,12 +26,12 @@ export const PlanificacionCoach = () => {
   const user_id = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
-  // Cargar planificación
+
   const fetchPlanificacion = async (fechaParam) => {
     if (!fechaParam || !token) return;
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) {
@@ -46,13 +45,16 @@ export const PlanificacionCoach = () => {
     }
   };
 
-  // Cargar WODs del usuario
+ 
   const fetchWods = async () => {
     if (!token || !user_id) return;
     try {
-      const res = await fetch(`http://localhost:3001/api/users/${user_id}/wods`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `https://forceteam.onrender.com/api/users/${user_id}/wods`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.ok) {
         const data = await res.json();
         const wodsHoy = data.filter((w) => w.fecha === fecha);
@@ -79,14 +81,17 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/planificacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ fecha, plan }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/planificacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ fecha, plan }),
+        }
+      );
       const data = await res.json();
 
       if (res.ok) {
@@ -119,12 +124,16 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
       if (res.ok) {
-        Swal.fire("Eliminado", "Planificación eliminada correctamente.", "success");
+        Swal.fire(
+          "Eliminado",
+          "Planificación eliminada correctamente.",
+          "success"
+        );
         setPlan({ A: "", B: "", C: "", D: "" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");
@@ -139,9 +148,13 @@ export const PlanificacionCoach = () => {
   return (
     <div className="planificacion-container">
       <h2>Planificación Diaria</h2>
-
-      {/* Botón modo coach / atleta */}
-      <div style={{ marginBottom: "15px", display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          marginBottom: "15px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <button
           className="button-atleta"
           onClick={() => setVerComoAtleta(!verComoAtleta)}
@@ -149,9 +162,13 @@ export const PlanificacionCoach = () => {
           {verComoAtleta ? "Volver a modo Coach" : "Ver como Atleta"}
         </button>
       </div>
-
-      {/* Selector de fecha */}
-      <div style={{ marginBottom: "15px", display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          marginBottom: "15px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <input
           type="date"
           value={fecha}
@@ -159,20 +176,18 @@ export const PlanificacionCoach = () => {
           required
         />
       </div>
-
-      {/* Modo atleta: solo lectura */}
       {verComoAtleta ? (
         <div className="planificacion-atleta">
           {["A", "B", "C", "D"].map((bloque) => (
             <div key={bloque} style={{ marginBottom: "20px" }}>
               <h4>Bloque {bloque}</h4>
-
-              {/* Texto con saltos de línea */}
-              <div className="bloque-lectura" style={{ whiteSpace: "pre-wrap" }}>
+              <div
+                className="bloque-lectura"
+                style={{ whiteSpace: "pre-wrap" }}
+              >
                 {plan[bloque] || "-"}
               </div>
 
-              {/* Links */}
               <div className="links-block" style={{ marginTop: "5px" }}>
                 {extractUrls(plan[bloque]).map((url, i) => (
                   <a
@@ -194,17 +209,26 @@ export const PlanificacionCoach = () => {
             <div className="wods-atleta">
               <h3>WODs del día</h3>
               {wods.map((wod) => (
-                <div key={wod.id} className="wod-card" style={{ marginBottom: "10px" }}>
-                  <p><strong>Descripción:</strong> {wod.descripcion}</p>
-                  <p><strong>Cómo lo realizaste:</strong> {wod.como_realizo}</p>
-                  <p><strong>Sentimiento:</strong> {wod.sentimiento}</p>
+                <div
+                  key={wod.id}
+                  className="wod-card"
+                  style={{ marginBottom: "10px" }}
+                >
+                  <p>
+                    <strong>Descripción:</strong> {wod.descripcion}
+                  </p>
+                  <p>
+                    <strong>Cómo lo realizaste:</strong> {wod.como_realizo}
+                  </p>
+                  <p>
+                    <strong>Sentimiento:</strong> {wod.sentimiento}
+                  </p>
                 </div>
               ))}
             </div>
           )}
         </div>
       ) : (
-        
         <form className="planificacion-form" onSubmit={handleSubmit}>
           {["A", "B", "C", "D"].map((bloque) => (
             <div key={bloque}>
@@ -217,7 +241,14 @@ export const PlanificacionCoach = () => {
               />
               <div className="links-block">
                 {extractUrls(plan[bloque]).map((url, i) => (
-                  <a key={i} href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+                  <a
+                    key={i}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {url}
+                  </a>
                 ))}
               </div>
             </div>
@@ -238,10 +269,14 @@ export const PlanificacionCoach = () => {
           </div>
         </form>
       )}
-
-      {/* Botón volver al inicio */}
-      <div style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}>
-        <button type="button" className="link-btn" onClick={() => navigate("/usuarioPages")}>
+      <div
+        style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}
+      >
+        <button
+          type="button"
+          className="link-btn"
+          onClick={() => navigate("/usuarioPages")}
+        >
           Volver al inicio
         </button>
       </div>

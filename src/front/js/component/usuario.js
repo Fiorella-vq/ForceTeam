@@ -16,7 +16,6 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   const hoy = new Date().toISOString().split("T")[0];
   const [fechaSeleccionada, setFechaSeleccionada] = useState(hoy);
 
- 
   const ejerciciosDisponibles = [
     "Push jerk",
     "Brench press",
@@ -26,21 +25,20 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     "Clean & Jerk",
   ];
 
-
   useEffect(() => {
     if (!user || !token) return;
 
     const fetchData = async () => {
       try {
         const logsRes = await fetch(
-          `http://localhost:3001/api/users/${user.id}/logs`,
+          `https://forceteam.onrender.com/api/users/${user.id}/logs`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const logsData = await logsRes.json();
         setLogs(logsData);
 
         const wodsRes = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const wodsData = await wodsRes.json();
@@ -58,7 +56,6 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     fetchData();
   }, [user, token]);
 
- 
   const cerrarSesion = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -72,7 +69,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/logs`,
+        `https://forceteam.onrender.com/api/users/${user.id}/logs`,
         {
           method: "POST",
           headers: {
@@ -102,7 +99,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   const eliminarLog = async (logId) => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/logs/${logId}`,
+        `https://forceteam.onrender.com/api/users/${user.id}/logs/${logId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (!res.ok) throw new Error("Error al eliminar log");
@@ -124,7 +121,6 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   };
 
   const calcularSquats = () => {
-  
     const cleanJerk = logs
       .filter((l) => l.ejercicio === "Clean & Jerk")
       .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
@@ -134,10 +130,10 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
       .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
 
     const estimados = {};
-    if (cleanJerk) estimados.backSquat = Math.round(cleanJerk.peso * 1.2); 
-    if (snatch) estimados.frontSquat = Math.round(snatch.peso * 1.15); 
+    if (cleanJerk) estimados.backSquat = Math.round(cleanJerk.peso * 1.2);
+    if (snatch) estimados.frontSquat = Math.round(snatch.peso * 1.15);
 
-    return estimados; 
+    return estimados;
   };
 
   // --- WODs ---
@@ -157,7 +153,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
       let res;
       if (wodActual) {
         res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods/${wodActual.id}`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodActual.id}`,
           {
             method: "PATCH",
             headers: {
@@ -168,14 +164,17 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
           }
         );
       } else {
-        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await fetch(
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          }
+        );
       }
 
       if (!res.ok) throw new Error("Error al guardar WOD");
@@ -194,7 +193,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   const eliminarWod = async (wodId) => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/wods/${wodId}`,
+        `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (!res.ok) throw new Error("Error al eliminar WOD");
@@ -216,7 +215,6 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     eliminarWod(wod.id);
   };
 
- 
   return (
     <div className="usuario-container">
       <div className="usuario-header">
@@ -265,7 +263,8 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
         <div className="estimados-squats">
           {Object.entries(calcularSquats()).map(([tipo, valor]) => (
             <small key={tipo}>
-              💡 Total Olímpico {tipo === "frontSquat" ? "Front Squat" : "Back Squat"}: {valor} kg
+              💡 Total Olímpico{" "}
+              {tipo === "frontSquat" ? "Front Squat" : "Back Squat"}: {valor} kg
             </small>
           ))}
         </div>
@@ -286,10 +285,16 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
                 <td>{log.ejercicio}</td>
                 <td>{log.peso !== null ? log.peso : "-"}</td>
                 <td>
-                  <button className="button-icon" onClick={() => editarLog(log)}>
+                  <button
+                    className="button-icon"
+                    onClick={() => editarLog(log)}
+                  >
                     <i className="fa-solid fa-pencil"></i>
                   </button>
-                  <button className="button-icon" onClick={() => eliminarLog(log.id)}>
+                  <button
+                    className="button-icon"
+                    onClick={() => eliminarLog(log.id)}
+                  >
                     <i className="fa-solid fa-trash"></i>
                   </button>
                 </td>
@@ -345,7 +350,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
         {/* WOD histórico */}
         <div className="wod-por-fecha inputs-wods">
           <label>
-            Fecha WOD histórico: 
+            Fecha WOD histórico:
             <input
               type="date"
               value={fechaSeleccionada}
@@ -362,9 +367,15 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
                     title: `WOD del ${wod.fecha.split("T")[0]}`,
                     html: `
                       <div style="text-align:left; color:#eee;">
-                        <p><strong>🏋️ Descripción:</strong> ${wod.descripcion}</p>
-                        <p><strong>🔥 Cómo lo realizaste:</strong> ${wod.como_realizo || "-"}</p>
-                        <p><strong>❤️ Sentimiento:</strong> ${wod.sentimiento || "-"}</p>
+                        <p><strong>🏋️ Descripción:</strong> ${
+                          wod.descripcion
+                        }</p>
+                        <p><strong>🔥 Cómo lo realizaste:</strong> ${
+                          wod.como_realizo || "-"
+                        }</p>
+                        <p><strong>❤️ Sentimiento:</strong> ${
+                          wod.sentimiento || "-"
+                        }</p>
                       </div>
                     `,
                     background: "#1e1e1e",

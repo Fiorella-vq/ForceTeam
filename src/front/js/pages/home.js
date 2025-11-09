@@ -26,7 +26,7 @@ export const Home = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/login", {
+      const res = await fetch("https://forceteam.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -91,7 +91,9 @@ export const Home = () => {
             required
           />
           <i
-            className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
+            className={`fa ${
+              showPassword ? "fa-eye-slash" : "fa-eye"
+            } toggle-password`}
             onClick={() => setShowPassword(!showPassword)}
           ></i>
         </div>

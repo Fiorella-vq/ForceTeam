@@ -13101,7 +13101,7 @@
                           f(!0),
                           (e.prev = 1),
                           (e.next = 4),
-                          fetch("http://localhost:3001/api/login", {
+                          fetch("https://forceteam.onrender.com/api/login", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ email: n, password: a }),
@@ -13276,7 +13276,7 @@
                               (e.prev = 3),
                               (e.next = 6),
                               fetch(
-                                "http://http://localhost:3001/api/usuario",
+                                "http://https://forceteam.onrender.com/api/usuario",
                                 {
                                   headers: {
                                     Authorization: "Bearer ".concat(t),
@@ -13328,11 +13328,19 @@
                             return (
                               (e.prev = 0),
                               (e.next = 3),
-                              fetch("http://http://localhost:3001/api/login", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ email: t, password: n }),
-                              })
+                              fetch(
+                                "http://https://forceteam.onrender.com/api/login",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    email: t,
+                                    password: n,
+                                  }),
+                                }
+                              )
                             );
                           case 3:
                             return (o = e.sent), (e.next = 6), o.json();
@@ -13601,7 +13609,7 @@
                                   (e.prev = 0),
                                   (e.next = 3),
                                   fetch(
-                                    "http://localhost:3001/api/users/".concat(
+                                    "https://forceteam.onrender.com/api/users/".concat(
                                       n.id,
                                       "/logs"
                                     ),
@@ -13620,7 +13628,7 @@
                                   l(o),
                                   (e.next = 10),
                                   fetch(
-                                    "http://localhost:3001/api/users/".concat(
+                                    "https://forceteam.onrender.com/api/users/".concat(
                                       n.id,
                                       "/wods"
                                     ),
@@ -13689,7 +13697,7 @@
                               (e.prev = 3),
                               (e.next = 6),
                               fetch(
-                                "http://localhost:3001/api/users/".concat(
+                                "https://forceteam.onrender.com/api/users/".concat(
                                   n.id,
                                   "/logs"
                                 ),
@@ -13763,7 +13771,7 @@
                               (e.prev = 0),
                               (e.next = 3),
                               fetch(
-                                "http://localhost:3001/api/users/"
+                                "https://forceteam.onrender.com/api/users/"
                                   .concat(n.id, "/logs/")
                                   .concat(t),
                                 {
@@ -13847,7 +13855,7 @@
                             return (
                               (e.next = 6),
                               fetch(
-                                "http://localhost:3001/api/users/"
+                                "https://forceteam.onrender.com/api/users/"
                                   .concat(n.id, "/wods/")
                                   .concat(t.id),
                                 {
@@ -13867,7 +13875,7 @@
                             return (
                               (e.next = 11),
                               fetch(
-                                "http://localhost:3001/api/users/".concat(
+                                "https://forceteam.onrender.com/api/users/".concat(
                                   n.id,
                                   "/wods"
                                 ),
@@ -13944,7 +13952,7 @@
                               (e.prev = 0),
                               (e.next = 3),
                               fetch(
-                                "http://localhost:3001/api/users/"
+                                "https://forceteam.onrender.com/api/users/"
                                   .concat(n.id, "/wods/")
                                   .concat(t),
                                 {
@@ -14327,11 +14335,14 @@
                                   return (
                                     (t.prev = 0),
                                     (t.next = 3),
-                                    fetch("http://localhost:3001/api/usuario", {
-                                      headers: {
-                                        Authorization: "Bearer ".concat(e),
-                                      },
-                                    })
+                                    fetch(
+                                      "https://forceteam.onrender.com/api/usuario",
+                                      {
+                                        headers: {
+                                          Authorization: "Bearer ".concat(e),
+                                        },
+                                      }
+                                    )
                                   );
                                 case 3:
                                   if ((n = t.sent).ok) {
@@ -14457,16 +14468,21 @@
                               v(!0),
                               (t.prev = 5),
                               (t.next = 8),
-                              fetch("http://localhost:3001/api/register", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                  name: r,
-                                  last_name: i,
-                                  email: u,
-                                  password: f,
-                                }),
-                              })
+                              fetch(
+                                "https://forceteam.onrender.com/api/register",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    name: r,
+                                    last_name: i,
+                                    email: u,
+                                    password: f,
+                                  }),
+                                }
+                              )
                             );
                           case 8:
                             return (o = t.sent), (t.next = 11), o.json();
@@ -14682,7 +14698,7 @@
                               (e.prev = 2),
                               (e.next = 5),
                               fetch(
-                                "http://localhost:3001/api/planificacion?fecha="
+                                "https://forceteam.onrender.com/api/planificacion?fecha="
                                   .concat(t, "&dia=")
                                   .concat(n),
                                 {
@@ -14757,18 +14773,21 @@
                               w(!0),
                               (e.prev = 4),
                               (e.next = 7),
-                              fetch("http://localhost:3001/api/planificacion", {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  Authorization: "Bearer ".concat(b),
-                                },
-                                body: JSON.stringify({
-                                  fecha: l,
-                                  dia: c,
-                                  plan: p,
-                                }),
-                              })
+                              fetch(
+                                "https://forceteam.onrender.com/api/planificacion",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer ".concat(b),
+                                  },
+                                  body: JSON.stringify({
+                                    fecha: l,
+                                    dia: c,
+                                    plan: p,
+                                  }),
+                                }
+                              )
                             );
                           case 7:
                             return (n = e.sent), (e.next = 10), n.json();
@@ -14869,7 +14888,7 @@
                               (e.prev = 8),
                               (e.next = 11),
                               fetch(
-                                "http://localhost:3001/api/planificacion?fecha="
+                                "https://forceteam.onrender.com/api/planificacion?fecha="
                                   .concat(l, "&dia=")
                                   .concat(c),
                                 {
@@ -15100,7 +15119,7 @@
                                 u && (t.Authorization = "Bearer ".concat(u)),
                                 (e.next = 5),
                                 fetch(
-                                  "http://localhost:3001/api/planificacion?fecha=".concat(
+                                  "https://forceteam.onrender.com/api/planificacion?fecha=".concat(
                                     m
                                   ),
                                   { headers: t }

@@ -31,17 +31,13 @@ export const PlanificacionViewer = () => {
     { id: 4, nombre: "Jueves" },
     { id: 5, nombre: "Viernes" },
     { id: 6, nombre: "Sábado" },
-    { id: 7, nombre: "Domingo" },
   ];
 
-  
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
 
-
     const urlRegex = /(https?:\/\/[^\s]+)/g;
 
- 
     const partes = texto.split(urlRegex);
 
     return partes.map((parte, i) => {
@@ -58,7 +54,6 @@ export const PlanificacionViewer = () => {
           </a>
         );
       } else {
-       
         return parte.split("\n").map((linea, j) => (
           <React.Fragment key={`${i}-${j}`}>
             {linea}
@@ -76,7 +71,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
           { headers }
         );
 

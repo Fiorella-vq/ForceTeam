@@ -11,13 +11,11 @@ export const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  
   const token = searchParams.get("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  
     if (!password || !confirmPassword) {
       return Swal.fire("Error", "Por favor completa ambos campos", "warning");
     }
@@ -32,11 +30,14 @@ export const ResetPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, new_password: password }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/reset-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, new_password: password }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {
@@ -47,7 +48,11 @@ export const ResetPassword = () => {
         );
         navigate("/");
       } else {
-        Swal.fire("Error", data.error || "Error al restablecer la contraseña", "error");
+        Swal.fire(
+          "Error",
+          data.error || "Error al restablecer la contraseña",
+          "error"
+        );
       }
     } catch {
       Swal.fire("Error", "No se pudo conectar con el servidor", "error");
