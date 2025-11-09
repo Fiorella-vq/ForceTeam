@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 import os
 from functools import wraps
 import jwt
+from threading import Thread
 
 api = Blueprint('api', __name__)
 CORS(api, origins=["https://forceteam.onrender.com"], supports_credentials=True)
@@ -367,6 +368,16 @@ def update_user_wod(user_id, wod_id):
 #  Recuperación de contraseña
 # ======================================
 
+def send_async_email(destino, asunto, mensaje):
+    def send():
+        success, info = enviar_email_smtp(destino, asunto, mensaje)
+        if success:
+            current_app.logger.info(f"Correo enviado correctamente a {destino}")
+        else:
+            current_app.logger.error(f"Error enviando correo a {destino}: {info}")
+    Thread(target=send).start()
+
+
 @api.route('/forgot-password', methods=['POST'])
 def forgot_password():
     data = request.get_json() or {}
@@ -376,15 +387,15 @@ def forgot_password():
 
     user = User.query.filter_by(email=email).first()
     if not user:
-        return jsonify({"error": "No existe un usuario con ese email"}), 404
+        # No revelamos si existe o no el email para mayor seguridad
+        return jsonify({"message": "Si el email está registrado, recibirás instrucciones"}), 200
 
-    
+    # Generar token de restablecimiento con expiración de 30 minutos
     reset_token = generar_jwt({"user_id": user.id}, expiracion_minutos=30)
 
     frontend_url = os.getenv("FRONTEND_URL", "https://forceteam.onrender.com")
     reset_link = f"{frontend_url}/reset-password?token={reset_token}"
 
-   
     mensaje = f"""
 Hola {user.name},
 
@@ -398,11 +409,10 @@ Saludos,
 Tu equipo de ForceTeam
 """
 
-    success, info = enviar_email_smtp(user.email, "Recuperar contraseña", mensaje)
-    if success:
-        return jsonify({"message": "Correo enviado con instrucciones"}), 200
-    else:
-        return jsonify({"error": f"No se pudo enviar el correo: {info}"}), 500
+   
+    send_async_email(user.email, "Recuperar contraseña", mensaje)
+
+    return jsonify({"message": "Si el email está registrado, recibirás instrucciones"}), 200
 
 
 
@@ -431,3 +441,8 @@ def reset_password():
     user.set_password(new_password)
     db.session.commit()
     return jsonify({"message": "Contraseña actualizada correctamente"}), 200
+
+@api.route('/test-email', methods=['GET'])
+def test_email():
+    success, info = enviar_email_smtp("tuemail@test.com", "Prueba", "Esto es un test")
+    return jsonify({"success": success, "info": info})
