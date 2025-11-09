@@ -70,7 +70,7 @@ export const Register = () => {
 
   return (
     <div className="register-container">
-      <h2>Crear cuenta</h2>
+      <h3>Crear cuenta</h3>
       <form onSubmit={handleSubmit} className="register-form">
         <input
           type="text"

@@ -34,25 +34,39 @@ export const PlanificacionViewer = () => {
     { id: 7, nombre: "Domingo" },
   ];
 
+  
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
+
+    // Detectar URLs
     const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+ 
     const partes = texto.split(urlRegex);
-    return partes.map((parte, i) =>
-      urlRegex.test(parte) ? (
-        <a
-          key={i}
-          href={parte}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#bbb" }}
-        >
-          {parte}
-        </a>
-      ) : (
-        <span key={i}>{parte}</span>
-      )
-    );
+
+    return partes.map((parte, i) => {
+      if (urlRegex.test(parte)) {
+        return (
+          <a
+            key={i}
+            href={parte}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#4fa3ff" }}
+          >
+            {parte}
+          </a>
+        );
+      } else {
+       
+        return parte.split("\n").map((linea, j) => (
+          <React.Fragment key={`${i}-${j}`}>
+            {linea}
+            <br />
+          </React.Fragment>
+        ));
+      }
+    });
   };
 
   useEffect(() => {
@@ -111,7 +125,8 @@ export const PlanificacionViewer = () => {
           <ul>
             {Object.entries(planificacion.plan).map(([bloque, contenido]) => (
               <li key={bloque}>
-                <strong>Bloque {bloque}:</strong> {renderContenido(contenido)}
+                <strong>Bloque {bloque}:</strong>
+                <div className="bloque-texto">{renderContenido(contenido)}</div>
               </li>
             ))}
           </ul>

@@ -125,21 +125,20 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
 
   // -------------------- Cálculo automático de Squats --------------------
   const calcularSquats = () => {
-    // Último Clean & Jerk
+  
     const cleanJerk = logs
       .filter((l) => l.ejercicio === "Clean & Jerk")
       .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
 
-    // Último Snatch
     const snatch = logs
       .filter((l) => l.ejercicio.includes("Snatch"))
       .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
 
     const estimados = {};
-    if (cleanJerk) estimados.backSquat = Math.round(cleanJerk.peso * 1.2); // Back Squat ≈ 120% Clean & Jerk
-    if (snatch) estimados.frontSquat = Math.round(snatch.peso * 1.15); // Front Squat ≈ 115% Snatch
+    if (cleanJerk) estimados.backSquat = Math.round(cleanJerk.peso * 1.2); 
+    if (snatch) estimados.frontSquat = Math.round(snatch.peso * 1.15); 
 
-    return estimados; // { frontSquat: xx, backSquat: xx }
+    return estimados; 
   };
 
   // --- WODs ---
@@ -264,11 +263,10 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
           <button onClick={agregarLog}>Agregar</button>
         </div>
 
-        {/* Estimados tipo “lamparitas” */}
         <div className="estimados-squats">
           {Object.entries(calcularSquats()).map(([tipo, valor]) => (
             <small key={tipo}>
-              💡 Estimado {tipo === "frontSquat" ? "Front Squat" : "Back Squat"}: {valor} kg
+              💡 Total Olímpico {tipo === "frontSquat" ? "Front Squat" : "Back Squat"}: {valor} kg
             </small>
           ))}
         </div>
@@ -348,7 +346,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
         {/* WOD histórico */}
         <div className="wod-por-fecha inputs-wods">
           <label>
-            Fecha WOD histórico:
+            Fecha WOD histórico: 
             <input
               type="date"
               value={fechaSeleccionada}

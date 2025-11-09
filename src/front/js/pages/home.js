@@ -8,10 +8,18 @@ export const Home = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const isMounted = useRef(true);
 
+  // ✅ Al montar, si hay email guardado, lo cargamos
   useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+
     return () => {
       isMounted.current = false;
     };
@@ -28,6 +36,14 @@ export const Home = () => {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("token", data.token);
+
+        // ✅ Guardar o eliminar el email según el estado de "Recordarme"
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
+
         if (isMounted.current) navigate("/usuarioPages");
       } else {
         if (isMounted.current) alert("Error: " + (data.error || data.message));
@@ -63,6 +79,7 @@ export const Home = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <div className="password-container">
           <input
             type={showPassword ? "text" : "password"}
@@ -72,12 +89,23 @@ export const Home = () => {
             required
           />
           <i
-            className={`fa ${
-              showPassword ? "fa-eye-slash" : "fa-eye"
-            } toggle-password`}
+            className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"} toggle-password`}
             onClick={() => setShowPassword(!showPassword)}
           ></i>
         </div>
+
+        {/* ✅ Checkbox Recordarme */}
+        <div className="remember-me">
+          <label>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={() => setRememberMe(!rememberMe)}
+            />{" "}
+            Recordarme
+          </label>
+        </div>
+
         <div className="button-group">
           <button type="submit" disabled={loading} className="login-button">
             Iniciar Sesión

@@ -52,7 +52,8 @@ export const UsuarioPages = () => {
     localStorage.setItem("user", JSON.stringify(updatedUser));
   };
 
-  if (!user || !token) return <div>Cargando...</div>;
+  if (!user || !token) return null;
+;
 
   return <Usuario user={user} token={token} onUserUpdate={handleUserUpdate} />;
 };

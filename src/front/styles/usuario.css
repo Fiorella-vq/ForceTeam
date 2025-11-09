@@ -54,7 +54,11 @@ html, body {
 
 .inputs-entrenamientos input[type="date"],
 .inputs-wods input[type="date"] {
-  flex: 1 1 30%;
+ padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background-color: #2a2a2a;
+  color: #fff;
 }
 
 .inputs-entrenamientos input[type="text"],
@@ -269,3 +273,12 @@ html, body {
 .inputs-entrenamientos {
   overflow: visible;
 }
+
+.wod-por-fecha label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; 
+  color: #fff;
+}
+
+

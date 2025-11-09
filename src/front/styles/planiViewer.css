@@ -3,7 +3,7 @@
   max-width: 400px;
   margin: 50px auto;
   padding: 30px 25px;
-  background: #1a1a1a;
+  background: black;
   color: #eee;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
@@ -39,7 +39,7 @@
 .plani-viewer-container select {
   width: 100%;
   padding: 12px 16px;
-  font-size: 1rem;
+  font-size: 15px;
   border: 2px solid #333;
   border-radius: 10px;
   background-color: #222;
