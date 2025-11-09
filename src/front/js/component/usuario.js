@@ -16,7 +16,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
   const hoy = new Date().toISOString().split("T")[0];
   const [fechaSeleccionada, setFechaSeleccionada] = useState(hoy);
 
-  // Ejercicios disponibles sin Front y Back Squat
+ 
   const ejerciciosDisponibles = [
     "Push jerk",
     "Brench press",
@@ -26,7 +26,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     "Clean & Jerk",
   ];
 
-  // -------------------- Fetch inicial --------------------
+
   useEffect(() => {
     if (!user || !token) return;
 
@@ -58,7 +58,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     fetchData();
   }, [user, token]);
 
-  // -------------------- Funciones --------------------
+ 
   const cerrarSesion = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -123,7 +123,6 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     eliminarLog(log.id);
   };
 
-  // -------------------- Cálculo automático de Squats --------------------
   const calcularSquats = () => {
   
     const cleanJerk = logs
@@ -217,7 +216,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     eliminarWod(wod.id);
   };
 
-  // -------------------- Render --------------------
+ 
   return (
     <div className="usuario-container">
       <div className="usuario-header">

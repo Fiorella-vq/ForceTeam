@@ -38,7 +38,7 @@ export const PlanificacionViewer = () => {
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
 
-    // Detectar URLs
+
     const urlRegex = /(https?:\/\/[^\s]+)/g;
 
  

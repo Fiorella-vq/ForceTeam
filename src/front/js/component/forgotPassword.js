@@ -9,10 +9,20 @@ export const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+ 
+  const swalOptions = (title, text, icon) => ({
+    title,
+    text,
+    icon,
+    confirmButtonColor: "#333",
+    background: "#1e1e1e",
+    color: "#f0f0f0",
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      return Swal.fire("Error", "Por favor ingresa tu email", "warning");
+      return Swal.fire(swalOptions("Error", "Por favor ingresa tu email", "warning"));
     }
 
     setLoading(true);
@@ -26,16 +36,18 @@ export const ForgotPassword = () => {
       const data = await res.json();
       if (res.ok) {
         await Swal.fire(
-          "¡Éxito!",
-          "Se envió un correo con las instrucciones para recuperar tu contraseña.",
-          "success"
+          swalOptions(
+            "¡Éxito!",
+            "Se envió un correo con las instrucciones para recuperar tu contraseña.",
+            "success"
+          )
         );
         navigate("/");
       } else {
-        Swal.fire("Error", data.error || "No se pudo enviar el correo", "error");
+        Swal.fire(swalOptions("Error", data.error || "No se pudo enviar el correo", "error"));
       }
     } catch {
-      Swal.fire("Error", "No se pudo conectar con el servidor", "error");
+      Swal.fire(swalOptions("Error", "No se pudo conectar con el servidor", "error"));
     } finally {
       setLoading(false);
     }
@@ -61,7 +73,11 @@ export const ForgotPassword = () => {
           <button type="submit" disabled={loading} className="login-button">
             {loading ? "Enviando..." : "Enviar correo"}
           </button>
-          <button type="button" onClick={() => navigate("/")} className="register-button">
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="register-button"
+          >
             Volver al inicio
           </button>
         </div>

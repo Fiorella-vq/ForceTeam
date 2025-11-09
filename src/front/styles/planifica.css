@@ -1,207 +1,131 @@
-
 .planificacion-container {
-  max-width: 400px;
-  margin: 50px auto;
+  max-width: 800px;
+  margin: 40px auto;
   padding: 30px 25px;
-  background: #1a1a1a;
-  color: #eee;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
+  background-color: #121212;
+  color: #f0f0f0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
   text-align: center;
 }
 
-
 .planificacion-container h2 {
-  margin-bottom: 30px;
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.planificacion-container input[type="date"] {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.planificacion-container input[type="date"]:focus {
+  border-color: #4fa3ff;
+  box-shadow: 0 0 8px rgba(79, 163, 255, 0.4);
+  outline: none;
+  background-color: #0d0d0d;
+}
+
+.button-atleta,
+.link-btn,
+.planificacion-form button,
+.btn-eliminar {
+  padding: 12px 20px;
+  font-size: 14px;
   font-weight: 700;
-  color: #f5f5f5;
-  letter-spacing: 1.2px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   text-transform: uppercase;
 }
 
-.planificacion-container h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #ddd;
-  font-weight: 700;
+.button-atleta {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
 }
 
-.planificacion-container label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: 600;
-  color: #ccc;
-  text-align: left;
+.button-atleta:hover {
+  background-color: #4fa3ff;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
-.planificacion-container input[type="date"],
-.planificacion-container select,
-.planificacion-container textarea {
+.planificacion-form textarea {
   width: 100%;
-  padding: 12px 16px;
-  font-size: 1rem;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 8px;
   border: 2px solid #333;
-  border-radius: 10px;
-  background-color: #222;
-  color: #eee;
-  font-weight: 600;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  resize: vertical;
+  margin-bottom: 5px;
 }
 
-.planificacion-container input[type="date"]:focus,
-.planificacion-container select:focus,
-.planificacion-container textarea:focus {
-  border-color: #999;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+.planificacion-form textarea:focus {
+  border-color: #4fa3ff;
+  box-shadow: 0 0 8px rgba(79, 163, 255, 0.4);
   outline: none;
   background-color: #0d0d0d;
-  color: #fff;
 }
-
-
-.planificacion-container p {
-  color: #bbb;
-  font-weight: 700;
-  margin-top: 10px;
-  text-align: center;
-}
-
 
 .links-block a {
   display: block;
-  margin-top: 5px;
-  color: #bbb;
+  color: #4fa3ff;
   text-decoration: underline;
-  word-break: break-all;
-  transition: color 0.3s ease;
+  margin-top: 2px;
+  word-break: break-word;
 }
 
-.links-block a:hover {
-  color: #fff;
+.planificacion-atleta .bloque-lectura {
+  background-color: #1e1e1e;
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 40px;
 }
 
-
-.plan-content {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid #444;
-  border-radius: 12px;
-  background-color: #1c1c1c;
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-  text-align: left;
-}
-
-.plan-content ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.plan-content li {
+.wods-atleta .wod-card {
+  background-color: #1e1e1e;
+  padding: 12px;
+  border-radius: 8px;
   margin-bottom: 10px;
-  font-weight: 600;
-  font-size: 1rem;
-  color: #eee;
+  text-align: left;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.plan-content strong {
-  color: #ccc;
-}
-
-
-textarea[name="A"] {
-  border-left: 4px solid #aaa;
-}
-
-textarea[name="B"] {
-  border-left: 4px solid #888;
-}
-
-textarea[name="C"] {
-  border-left: 4px solid #666;
-}
-
-textarea[name="D"] {
-  border-left: 4px solid #444;
-}
-
-
-.planificacion-container > p:not(.error) {
-  margin-top: 1rem;
-  color: #aaa;
-  font-style: italic;
-}
-
-.planificacion-form button {
-  padding: 10px 20px;
-  font-weight: 700;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(255,255,255,0.05);
-}
-
-.planificacion-form button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.planificacion-form button[type="submit"] {
-  background: linear-gradient(135deg, #333, #000);
-  color: #fff;
-}
-
-.planificacion-form button[type="submit"]:hover:not(:disabled) {
-  background: linear-gradient(135deg, #000, #333);
-  box-shadow: 0 6px 16px rgba(255,255,255,0.15);
-}
-
+.planificacion-form button,
 .btn-eliminar {
-  background: linear-gradient(135deg, #555, #222);
-  color: #fff;
+  flex: 1;
+  margin-top: 10px;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
 }
 
+.planificacion-form button:hover:not(:disabled),
 .btn-eliminar:hover:not(:disabled) {
-  background: linear-gradient(135deg, #222, #555);
-  box-shadow: 0 6px 16px rgba(255,255,255,0.1);
-}
-
-
-.link-coach {
-  margin-top: 25px;
-  text-align: center;
-}
-
-.link-coach a {
-  text-decoration: none;
-  color: #111;
-  background-color: #ddd;
-  padding: 10px 18px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  font-weight: 700;
-}
-
-.link-coach a:hover {
-  background-color: #fff;
-  color: #000;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.2);
-}
-
-.button-atleta{
-  background: linear-gradient(135deg, #333, #000);
+  background-color: #4fa3ff;
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 10px rgba(255,255,255,0.1);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
+
+.link-btn {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.link-btn:hover {
+  background-color: #4fa3ff;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
+}
+

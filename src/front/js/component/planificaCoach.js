@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import "../../styles/planifica.css";
 
-// Función para extraer URLs de un texto
+
 const extractUrls = (text) => {
   if (!text) return [];
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -204,7 +204,7 @@ export const PlanificacionCoach = () => {
           )}
         </div>
       ) : (
-        // Modo coach: edición
+        
         <form className="planificacion-form" onSubmit={handleSubmit}>
           {["A", "B", "C", "D"].map((bloque) => (
             <div key={bloque}>
