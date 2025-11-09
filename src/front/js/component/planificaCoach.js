@@ -24,7 +24,7 @@ export const PlanificacionCoach = () => {
   const [verComoAtleta, setVerComoAtleta] = useState(false);
 
   const token = localStorage.getItem("token")?.trim();
-  const user_id = localStorage.getItem("user_id"); // asegurarse de tener el user_id guardado
+  const user_id = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
   // Cargar planificación
@@ -55,7 +55,6 @@ export const PlanificacionCoach = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        // Filtrar por fecha seleccionada
         const wodsHoy = data.filter((w) => w.fecha === fecha);
         setWods(wodsHoy);
       }
@@ -165,23 +164,37 @@ export const PlanificacionCoach = () => {
       {verComoAtleta ? (
         <div className="planificacion-atleta">
           {["A", "B", "C", "D"].map((bloque) => (
-            <div key={bloque}>
+            <div key={bloque} style={{ marginBottom: "20px" }}>
               <h4>Bloque {bloque}</h4>
-              <div className="bloque-lectura">{plan[bloque] || "-"}</div>
-              <div className="links-block">
+
+              {/* Texto con saltos de línea */}
+              <div className="bloque-lectura" style={{ whiteSpace: "pre-wrap" }}>
+                {plan[bloque] || "-"}
+              </div>
+
+              {/* Links */}
+              <div className="links-block" style={{ marginTop: "5px" }}>
                 {extractUrls(plan[bloque]).map((url, i) => (
-                  <a key={i} href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+                  <a
+                    key={i}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: "block" }}
+                  >
+                    {url}
+                  </a>
                 ))}
               </div>
             </div>
           ))}
 
-          {/* Mostrar WODs del día */}
+          {/* WODs */}
           {wods.length > 0 && (
             <div className="wods-atleta">
               <h3>WODs del día</h3>
               {wods.map((wod) => (
-                <div key={wod.id} className="wod-card">
+                <div key={wod.id} className="wod-card" style={{ marginBottom: "10px" }}>
                   <p><strong>Descripción:</strong> {wod.descripcion}</p>
                   <p><strong>Cómo lo realizaste:</strong> {wod.como_realizo}</p>
                   <p><strong>Sentimiento:</strong> {wod.sentimiento}</p>
@@ -191,7 +204,7 @@ export const PlanificacionCoach = () => {
           )}
         </div>
       ) : (
-        /* Modo coach: edición */
+        // Modo coach: edición
         <form className="planificacion-form" onSubmit={handleSubmit}>
           {["A", "B", "C", "D"].map((bloque) => (
             <div key={bloque}>
