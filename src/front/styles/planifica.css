@@ -10,22 +10,26 @@
   text-align: center;
 }
 
+/* TITULO */
 .planificacion-container h2 {
-  font-size: 18px;
+  font-size: 1.2rem;
   margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #fff;
 }
 
+/* INPUT DATE */
 .planificacion-container input[type="date"] {
   padding: 10px 12px;
-  font-size: 14px;
+  font-size: 0.9rem;
   border: 2px solid #333;
   border-radius: 8px;
   background-color: #1e1e1e;
   color: #f0f0f0;
   transition: border 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 280px;
 }
 
 .planificacion-container input[type="date"]:focus {
@@ -35,12 +39,13 @@
   background-color: #0d0d0d;
 }
 
+/* BOTONES */
 .button-atleta,
 .link-btn,
 .planificacion-form button,
 .btn-eliminar {
   padding: 12px 20px;
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: 700;
   border-radius: 10px;
   border: none;
@@ -60,10 +65,11 @@
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
+/* TEXTAREAS */
 .planificacion-form textarea {
   width: 100%;
   padding: 10px;
-  font-size: 14px;
+  font-size: 0.9rem;
   border-radius: 8px;
   border: 2px solid #333;
   background-color: #1e1e1e;
@@ -79,6 +85,7 @@
   background-color: #0d0d0d;
 }
 
+/* LINKS */
 .links-block a {
   display: block;
   color: #4fa3ff;
@@ -87,13 +94,16 @@
   word-break: break-word;
 }
 
+/* BLOQUES DE LECTURA */
 .planificacion-atleta .bloque-lectura {
   background-color: #1e1e1e;
   padding: 10px;
   border-radius: 8px;
   min-height: 40px;
+  text-align: left;
 }
 
+/* TARJETAS DE WODS */
 .wods-atleta .wod-card {
   background-color: #1e1e1e;
   padding: 12px;
@@ -103,6 +113,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
+/* BOTONES DEL FORMULARIO */
 .planificacion-form button,
 .btn-eliminar {
   flex: 1;
@@ -118,6 +129,7 @@
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
+/* LINK BUTTON */
 .link-btn {
   background-color: #2a2a2a;
   color: #f0f0f0;
@@ -129,3 +141,61 @@
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
+/* -------------------------- */
+/* 🔹 MEDIA QUERIES RESPONSIVE */
+/* -------------------------- */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .planificacion-container {
+    max-width: 90%;
+    margin: 30px auto;
+    padding: 25px 20px;
+  }
+
+  .planificacion-container h2 {
+    font-size: 1rem;
+  }
+
+  .planificacion-form textarea,
+  .planificacion-container input[type="date"] {
+    font-size: 0.85rem;
+  }
+
+  .button-atleta,
+  .link-btn,
+  .planificacion-form button,
+  .btn-eliminar {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+  .planificacion-container {
+    max-width: 95%;
+    padding: 20px 15px;
+    margin: 20px auto;
+  }
+
+  .planificacion-container h2 {
+    font-size: 0.9rem;
+  }
+
+  .planificacion-form textarea {
+    font-size: 0.85rem;
+  }
+
+  .button-atleta,
+  .link-btn,
+  .planificacion-form button,
+  .btn-eliminar {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .wods-atleta .wod-card {
+    font-size: 0.85rem;
+  }
+}

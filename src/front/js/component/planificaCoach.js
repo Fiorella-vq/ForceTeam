@@ -9,7 +9,6 @@ const extractUrls = (text) => {
   return text.match(urlRegex) || [];
 };
 
-
 const getTodayString = () => {
   const today = new Date();
   return today.toISOString().split("T")[0];
@@ -26,12 +25,11 @@ export const PlanificacionCoach = () => {
   const user_id = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
-
   const fetchPlanificacion = async (fechaParam) => {
     if (!fechaParam || !token) return;
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}`,
+        `http://localhost:3001/api/planificacion?fecha=${fechaParam}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) {
@@ -45,12 +43,11 @@ export const PlanificacionCoach = () => {
     }
   };
 
- 
   const fetchWods = async () => {
     if (!token || !user_id) return;
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user_id}/wods`,
+        `http://localhost:3001/api/users/${user_id}/wods`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -81,17 +78,14 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/planificacion",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ fecha, plan }),
-        }
-      );
+      const res = await fetch("http://localhost:3001/api/planificacion", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ fecha, plan }),
+      });
       const data = await res.json();
 
       if (res.ok) {
@@ -124,7 +118,7 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
+        `http://localhost:3001/api/planificacion?fecha=${fecha}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();

@@ -10,23 +10,27 @@
   text-align: center;
 }
 
+/* TÍTULO */
 .plani-viewer-container h2 {
-  font-size: 18px;
+  font-size: 1.2rem;
   margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #fff;
 }
 
+/* INPUT */
 .plani-input {
   padding: 10px 12px;
   margin-left: 10px;
-  font-size: 14px;
+  font-size: 0.9rem;
   border: 2px solid #333;
   border-radius: 8px;
   background-color: #1e1e1e;
   color: #f0f0f0;
   transition: border 0.3s ease, box-shadow 0.3s ease;
+  width: auto;
+  max-width: 250px;
 }
 
 .plani-input:focus {
@@ -36,25 +40,30 @@
   background-color: #0d0d0d;
 }
 
+/* MENSAJES DE ERROR */
 .plani-error {
   color: #ff4d4f;
   margin-top: 15px;
+  font-size: 0.9rem;
 }
 
+/* CONTENIDO DEL PLAN */
 .plan-content {
   margin-top: 20px;
   text-align: left;
 }
 
 .plan-content h3 {
-  font-size: 16px;
+  font-size: 1rem;
   margin-bottom: 15px;
   color: #4fa3ff;
 }
 
+/* LISTA DE ITEMS */
 .plan-content ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .plan-content li {
@@ -63,21 +72,24 @@
   padding: 12px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  line-height: 1.5;
 }
 
+/* LINKS DENTRO DE LOS BLOQUES */
 .bloque-texto a {
   color: #4fa3ff;
   text-decoration: underline;
   word-break: break-word;
 }
 
+/* BOTÓN DE LINK */
 .link-coach {
   margin-top: 25px;
 }
 
 .link-btn {
   padding: 12px 20px;
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: 700;
   border-radius: 10px;
   border: none;
@@ -91,4 +103,71 @@
   background-color: #4fa3ff;
   color: #fff;
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
+}
+
+/* -------------------------- */
+/* 🔹 MEDIA QUERIES RESPONSIVE */
+/* -------------------------- */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .plani-viewer-container {
+    max-width: 90%;
+    margin: 30px auto;
+    padding: 25px 20px;
+  }
+
+  .plani-viewer-container h2 {
+    font-size: 1rem;
+  }
+
+  .plani-input {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+
+  .plan-content h3 {
+    font-size: 0.95rem;
+  }
+
+  .plan-content li {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .link-btn {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+  .plani-viewer-container {
+    max-width: 95%;
+    padding: 20px 15px;
+    margin: 20px auto;
+  }
+
+  .plani-viewer-container h2 {
+    font-size: 0.9rem;
+  }
+
+  .plani-input {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .plan-content li {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .link-btn {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
 }

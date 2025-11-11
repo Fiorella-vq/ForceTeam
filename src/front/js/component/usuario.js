@@ -4,11 +4,8 @@ import "../../styles/usuario.css";
 
 export const Usuario = ({ user, token, onUserUpdate }) => {
   const [logs, setLogs] = useState([]);
-  const [fecha, setFecha] = useState("");
-  const [ejercicio, setEjercicio] = useState("");
-  const [peso, setPeso] = useState("");
-
   const [wods, setWods] = useState([]);
+
   const [wodDescripcion, setWodDescripcion] = useState("");
   const [wodComoRealizo, setWodComoRealizo] = useState("");
   const [wodSentimiento, setWodSentimiento] = useState("");
@@ -18,12 +15,19 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
 
   const ejerciciosDisponibles = [
     "Push jerk",
-    "Brench press",
+    "Bench press",
     "Deadlift",
     "Clean",
     "Snatch",
     "Clean & Jerk",
   ];
+
+  const [pesos, setPesos] = useState(
+    ejerciciosDisponibles.reduce((acc, ej) => {
+      acc[ej] = "";
+      return acc;
+    }, {})
+  );
 
   useEffect(() => {
     if (!user || !token) return;
@@ -31,25 +35,21 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     const fetchData = async () => {
       try {
         const logsRes = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/logs`,
+          `http://localhost:3001/api/users/${user.id}/logs`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const logsData = await logsRes.json();
         setLogs(logsData);
 
         const wodsRes = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
+          `http://localhost:3001/api/users/${user.id}/wods`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const wodsData = await wodsRes.json();
         setWods(wodsData);
       } catch (err) {
         console.error(err);
-        Swal.fire(
-          "Error",
-          "No se pudieron cargar los datos del usuario.",
-          "error"
-        );
+        Swal.fire("Error", "No se pudieron cargar los datos.", "error");
       }
     };
 
@@ -62,78 +62,32 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     window.location.href = "/";
   };
 
-  // --- Logs ---
-  const agregarLog = async () => {
-    if (!fecha.trim() || !ejercicio.trim()) return;
-    const payload = { fecha, ejercicio, peso: peso ? Number(peso) : null };
-
-    try {
-      const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/logs`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      if (!res.ok) throw new Error("Error al guardar log");
-
-      const nuevoLog = await res.json();
-      const nuevosLogs = [...logs, nuevoLog];
-      setLogs(nuevosLogs);
-      onUserUpdate({ ...user, logs: nuevosLogs });
-
-      setFecha("");
-      setEjercicio("");
-      setPeso("");
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "No se pudo agregar el log", "error");
-    }
+  // Calcular porcentajes del peso máximo
+  const calcularPorcentajes = (peso) => {
+    if (!peso || isNaN(peso)) return {};
+    const porcentajes = [45, 55, 65, 70, 80, 85, 90, 95];
+    return porcentajes.reduce((acc, p) => {
+      acc[p] = Math.round((peso * p) / 100);
+      return acc;
+    }, {});
   };
 
-  const eliminarLog = async (logId) => {
-    try {
-      const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/logs/${logId}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (!res.ok) throw new Error("Error al eliminar log");
-
-      const nuevos = logs.filter((log) => log.id !== logId);
-      setLogs(nuevos);
-      onUserUpdate({ ...user, logs: nuevos });
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "No se pudo eliminar el log", "error");
-    }
-  };
-
-  const editarLog = (log) => {
-    setFecha(log.fecha);
-    setEjercicio(log.ejercicio);
-    setPeso(log.peso !== null ? log.peso : "");
-    eliminarLog(log.id);
-  };
-
+  // ✅ Calcular Squats estimados con fórmulas olímpicas reales
   const calcularSquats = () => {
-    const cleanJerk = logs
-      .filter((l) => l.ejercicio === "Clean & Jerk")
-      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+    const cleanJerk = parseFloat(pesos["Clean & Jerk"]);
+    const snatch = parseFloat(pesos["Snatch"]);
 
-    const snatch = logs
-      .filter((l) => l.ejercicio.includes("Snatch"))
-      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+    if (!cleanJerk || !snatch) return {};
 
-    const estimados = {};
-    if (cleanJerk) estimados.backSquat = Math.round(cleanJerk.peso * 1.2);
-    if (snatch) estimados.frontSquat = Math.round(snatch.peso * 1.15);
+    const totalOlimpico = cleanJerk + snatch;
+    const backSquatOlimpico = Math.round(totalOlimpico * 0.73);
+    const frontSquatOlimpico = Math.round(backSquatOlimpico * 0.85);
 
-    return estimados;
+    return {
+      totalOlimpico,
+      backSquatOlimpico,
+      frontSquatOlimpico,
+    };
   };
 
   // --- WODs ---
@@ -153,7 +107,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
       let res;
       if (wodActual) {
         res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodActual.id}`,
+          `http://localhost:3001/api/users/${user.id}/wods/${wodActual.id}`,
           {
             method: "PATCH",
             headers: {
@@ -164,21 +118,17 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
           }
         );
       } else {
-        res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
+        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
       }
 
       if (!res.ok) throw new Error("Error al guardar WOD");
-
       const nuevoWod = await res.json();
       setWods([...wods.filter((w) => w.id !== nuevoWod.id), nuevoWod]);
       setWodDescripcion("");
@@ -190,30 +140,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     }
   };
 
-  const eliminarWod = async (wodId) => {
-    try {
-      const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodId}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (!res.ok) throw new Error("Error al eliminar WOD");
-
-      const nuevos = wods.filter((wod) => wod.id !== wodId);
-      setWods(nuevos);
-      onUserUpdate({ ...user, wods: nuevos });
-    } catch (err) {
-      console.error(err);
-      Swal.fire("Error", "No se pudo eliminar el WOD", "error");
-    }
-  };
-
-  const editarWod = (wod) => {
-    setWodDescripcion(wod.descripcion);
-    setWodComoRealizo(wod.como_realizo);
-    setWodSentimiento(wod.sentimiento);
-    setFechaSeleccionada(wod.fecha.split("T")[0] || wod.fecha);
-    eliminarWod(wod.id);
-  };
+  const squats = calcularSquats();
 
   return (
     <div className="usuario-container">
@@ -226,112 +153,100 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
         </button>
       </div>
 
-      {/* Logs */}
+      {/* Tabla de levantamientos */}
       <section className="entrenamientos-section">
-        <h3>Control de Levantamientos</h3>
-        <div className="inputs-entrenamientos">
-          <input
-            type="date"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-          />
-
-          <select
-            value={ejercicio}
-            onChange={(e) => setEjercicio(e.target.value)}
-          >
-            <option value="">Seleccionar ejercicio</option>
-            {ejerciciosDisponibles.map((ex) => (
-              <option key={ex} value={ex}>
-                {ex}
-              </option>
+  <h3>Porcentajes de levantamientos</h3>
+  <table className="tabla-porcentajes">
+    <thead>
+      <tr>
+        <th>Ejercicio</th>
+        <th>Peso Máximo (kg)</th>
+        <th>45%</th>
+        <th>55%</th>
+        <th>65%</th>
+        <th>70%</th>
+        <th>80%</th>
+        <th>85%</th>
+        <th>90%</th>
+        <th>95%</th>
+      </tr>
+    </thead>
+    <tbody>
+      {ejerciciosDisponibles.map((ej) => {
+        const peso = pesos[ej];
+        const porcentajes = calcularPorcentajes(peso);
+        return (
+          <tr key={ej}>
+            <td>{ej}</td>
+            <td>
+              <input
+                type="text"
+                value={peso}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d*\.?\d*$/.test(val)) {
+                    setPesos({ ...pesos, [ej]: val });
+                  }
+                }}
+                placeholder="Máx"
+                className="input-peso"
+              />
+            </td>
+            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+              <td key={p}>{porcentajes[p] || "-"}</td>
             ))}
-          </select>
+          </tr>
+        );
+      })}
 
-          <input
-            type="text"
-            placeholder="Peso (kg)"
-            value={peso}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (/^\d*\.?\d*$/.test(value)) setPeso(value);
-            }}
-          />
-          <button onClick={agregarLog}>Agregar</button>
-        </div>
-
-        <div className="estimados-squats">
-          {Object.entries(calcularSquats()).map(([tipo, valor]) => (
-            <small key={tipo}>
-              💡 Total Olímpico{" "}
-              {tipo === "frontSquat" ? "Front Squat" : "Back Squat"}: {valor} kg
-            </small>
-          ))}
-        </div>
-
-        <table className="tabla-entrenamientos">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Ejercicio</th>
-              <th>Peso (kg)</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map((log) => (
-              <tr key={log.id}>
-                <td>{log.fecha}</td>
-                <td>{log.ejercicio}</td>
-                <td>{log.peso !== null ? log.peso : "-"}</td>
-                <td>
-                  <button
-                    className="button-icon"
-                    onClick={() => editarLog(log)}
-                  >
-                    <i className="fa-solid fa-pencil"></i>
-                  </button>
-                  <button
-                    className="button-icon"
-                    onClick={() => eliminarLog(log.id)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
+      
+      {squats.totalOlimpico && (
+        <>
+          {/* <tr className="fila-calculo">
+            <td>Total Olímpico 💡</td>
+            <td>{squats.totalOlimpico}</td>
+            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+              <td key={p}>
+                {Math.round((squats.totalOlimpico * p) / 100) || "-"}
+              </td>
             ))}
-          </tbody>
-        </table>
-      </section>
+          </tr> */}
+          <tr className="fila-calculo">
+            <td>Back Squat Olímpico </td>
+            <td>{squats.backSquatOlimpico}</td>
+            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+              <td key={p}>
+                {Math.round((squats.backSquatOlimpico * p) / 100) || "-"}
+              </td>
+            ))}
+          </tr>
+
+          <tr className="fila-calculo">
+            <td>Front Squat Olímpico </td>
+            <td>{squats.frontSquatOlimpico}</td>
+            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+              <td key={p}>
+                {Math.round((squats.frontSquatOlimpico * p) / 100) || "-"}
+              </td>
+            ))}
+          </tr>
+        </>
+      )}
+    </tbody>
+  </table>
+</section>
 
       {/* WODs */}
       <section className="wods-section">
         <h3>Registro de WODs</h3>
         <div className="inputs-wods">
           {user.role !== "admin" && <h4>WOD de hoy ({hoy})</h4>}
-          {user.role === "admin" && (
-            <>
-              <input
-                type="date"
-                value={fechaSeleccionada}
-                onChange={(e) => setFechaSeleccionada(e.target.value)}
-              />
-              <textarea
-                placeholder="Descripción del WOD"
-                value={wodDescripcion}
-                onChange={(e) => setWodDescripcion(e.target.value)}
-                rows={3}
-              />
-            </>
-          )}
-          {user.role !== "admin" && (
-            <textarea
-              placeholder="Descripción del WOD"
-              value={wodDescripcion}
-              onChange={(e) => setWodDescripcion(e.target.value)}
-              rows={3}
-            />
-          )}
+          <textarea
+            placeholder="Descripción del WOD"
+            value={wodDescripcion}
+            onChange={(e) => setWodDescripcion(e.target.value)}
+            rows={3}
+          />
           <textarea
             placeholder="Cómo realizaste el WOD"
             value={wodComoRealizo}
@@ -346,87 +261,6 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
           />
           <button onClick={guardarWodHoy}>Guardar WOD</button>
         </div>
-
-        {/* WOD histórico */}
-        <div className="wod-por-fecha inputs-wods">
-          <label>
-            Fecha WOD histórico:
-            <input
-              type="date"
-              value={fechaSeleccionada}
-              onChange={(e) => {
-                const nuevaFecha = e.target.value;
-                setFechaSeleccionada(nuevaFecha);
-
-                const wod = wods.find(
-                  (w) => (w.fecha?.split("T")[0] || w.fecha) === nuevaFecha
-                );
-
-                if (wod) {
-                  Swal.fire({
-                    title: `WOD del ${wod.fecha.split("T")[0]}`,
-                    html: `
-                      <div style="text-align:left; color:#eee;">
-                        <p><strong>🏋️ Descripción:</strong> ${
-                          wod.descripcion
-                        }</p>
-                        <p><strong>🔥 Cómo lo realizaste:</strong> ${
-                          wod.como_realizo || "-"
-                        }</p>
-                        <p><strong>❤️ Sentimiento:</strong> ${
-                          wod.sentimiento || "-"
-                        }</p>
-                      </div>
-                    `,
-                    background: "#1e1e1e",
-                    color: "#fff",
-                    confirmButtonText: "Cerrar",
-                    confirmButtonColor: "#d33",
-                    width: "500px",
-                  });
-                } else {
-                  Swal.fire({
-                    title: "Sin registro",
-                    text: "No hay WOD guardado para esta fecha.",
-                    icon: "info",
-                    background: "#1e1e1e",
-                    color: "#fff",
-                    confirmButtonColor: "#3085d6",
-                  });
-                }
-              }}
-            />
-          </label>
-        </div>
-
-        {/* Lista de WODs */}
-        <ul className="lista-wods">
-          {wods
-            .filter((w) => (w.fecha?.split("T")[0] || w.fecha) === hoy)
-            .map((wod) => (
-              <li key={wod.id}>
-                <strong>{wod.fecha}</strong> - {wod.descripcion} <br />
-                Cómo: {wod.como_realizo || "-"} <br />
-                Sentimiento: {wod.sentimiento || "-"} <br />
-                {user.role === "admin" && (
-                  <>
-                    <button
-                      className="button-icon"
-                      onClick={() => editarWod(wod)}
-                    >
-                      <i className="fa-solid fa-pencil"></i>
-                    </button>
-                    <button
-                      className="button-icon"
-                      onClick={() => eliminarWod(wod.id)}
-                    >
-                      <i className="fa-solid fa-trash"></i>
-                    </button>
-                  </>
-                )}
-              </li>
-            ))}
-        </ul>
       </section>
 
       {/* Botones de planificaciones */}
