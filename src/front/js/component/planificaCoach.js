@@ -16,7 +16,7 @@ const getTodayString = () => {
 
 export const PlanificacionCoach = () => {
   const [fecha, setFecha] = useState(getTodayString());
-  const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "" });
+  const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "", E:"" });
   const [wods, setWods] = useState([]);
   const [loading, setLoading] = useState(false);
   const [verComoAtleta, setVerComoAtleta] = useState(false);
@@ -34,9 +34,9 @@ export const PlanificacionCoach = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        setPlan(data.plan || { A: "", B: "", C: "", D: "" });
+        setPlan(data.plan || { AA: "", B: "", C: "", D: "", E:"" });
       } else {
-        setPlan({ A: "", B: "", C: "", D: "" });
+        setPlan({ AA: "", B: "", C: "", D: "", E:"" });
       }
     } catch {
       Swal.fire("Error", "No se pudo cargar la planificación", "error");
@@ -90,7 +90,7 @@ export const PlanificacionCoach = () => {
 
       if (res.ok) {
         Swal.fire("¡Guardado!", "Planificación registrada.", "success");
-        setPlan({ A: "", B: "", C: "", D: "" });
+        setPlan({ AA: "", B: "", C: "", D: "", E:"" });
       } else {
         Swal.fire("Error", data.error || "Algo salió mal", "error");
       }
@@ -128,7 +128,7 @@ export const PlanificacionCoach = () => {
           "Planificación eliminada correctamente.",
           "success"
         );
-        setPlan({ A: "", B: "", C: "", D: "" });
+        setPlan({ AA: "", B: "", C: "", D: "", E:"" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");
       }
@@ -172,7 +172,7 @@ export const PlanificacionCoach = () => {
       </div>
       {verComoAtleta ? (
         <div className="planificacion-atleta">
-          {["A", "B", "C", "D"].map((bloque) => (
+          {["A", "B", "C", "D", "E"].map((bloque) => (
             <div key={bloque} style={{ marginBottom: "20px" }}>
               <h4>Bloque {bloque}</h4>
               <div
@@ -224,7 +224,7 @@ export const PlanificacionCoach = () => {
         </div>
       ) : (
         <form className="planificacion-form" onSubmit={handleSubmit}>
-          {["A", "B", "C", "D"].map((bloque) => (
+          {["A", "B", "C", "D", "E"].map((bloque) => (
             <div key={bloque}>
               <label>Bloque {bloque}</label>
               <textarea

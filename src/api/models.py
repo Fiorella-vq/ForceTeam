@@ -58,6 +58,7 @@ class Planificacion(db.Model):
     bloque_b = db.Column(db.Text, default="")
     bloque_c = db.Column(db.Text, default="")
     bloque_d = db.Column(db.Text, default="")
+    bloque_e = db.Column(db.Text, default="")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -71,6 +72,7 @@ class Planificacion(db.Model):
                 "B": self.bloque_b,
                 "C": self.bloque_c,
                 "D": self.bloque_d,
+                "E": self.bloque_e,
             },
         }
 

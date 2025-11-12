@@ -190,7 +190,7 @@ def crear_o_actualizar_planificacion():
     fecha = data.get("fecha")
     plan = data.get("plan")
 
-    if not fecha or not plan or not all(k in plan for k in ("A","B","C","D")):
+    if not fecha or not plan or not all(k in plan for k in ("A","B","C","D", "E")):
         return jsonify({"error": "Datos incompletos: fecha y plan con bloques A-D requeridos"}), 400
 
     dia = datetime.strptime(fecha, "%Y-%m-%d").isoweekday()
@@ -204,6 +204,7 @@ def crear_o_actualizar_planificacion():
             bloque_b=plan.get("B"),
             bloque_c=plan.get("C"),
             bloque_d=plan.get("D"),
+            bloque_e=plan.get("E"),
         )
         db.session.add(planificacion)
     else:
@@ -211,6 +212,7 @@ def crear_o_actualizar_planificacion():
         planificacion.bloque_b = plan.get("B")
         planificacion.bloque_c = plan.get("C")
         planificacion.bloque_d = plan.get("D")
+        planificacion.bloque_e = plan.get("E")
 
     db.session.commit()
     return jsonify({"message": "Planificación guardada exitosamente"}), 200
@@ -249,6 +251,7 @@ def get_planificacion():
             "B": planificacion.bloque_b,
             "C": planificacion.bloque_c,
             "D": planificacion.bloque_d,
+            "E": planificacion.bloque_e,
         }
     }), 200
 
