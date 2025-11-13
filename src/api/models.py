@@ -114,10 +114,37 @@ class UserWod(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def serialize(self):
-        return {
-            "id": self.id,
-            "fecha": self.fecha,
-            "descripcion": self.descripcion,
-            "como_realizo": self.como_realizo,
-            "sentimiento": self.sentimiento,
-        }
+     return {
+        "id": self.id,
+        "fecha": self.fecha,
+        "wod_descripcion": self.descripcion,
+        "wod_como_realizo": self.como_realizo,
+        "wod_sentimiento": self.sentimiento,
+        "user_id": self.user_id
+    }
+
+        
+# ===========================
+# MODELO PESOS DE USUARIO
+# ===========================
+class UserPeso(db.Model):
+    __tablename__ = "user_peso"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    ejercicio = db.Column(db.String(50), nullable=False)
+    valor = db.Column(db.Float, nullable=False)
+    fecha = db.Column(db.String(10), default=datetime.utcnow().strftime("%Y-%m-%d"))
+
+    user = db.relationship("User", backref="pesos")
+
+    def serialize(self):
+     return {
+        "id": self.id,
+        "fecha": self.fecha,
+        "wod_descripcion": self.descripcion,
+        "wod_como_realizo": self.como_realizo,
+        "wod_sentimiento": self.sentimiento,
+    }
+
+        

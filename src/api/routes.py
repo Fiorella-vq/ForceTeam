@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app
-from api.models import db, User, Planificacion, UserLog, UserWod
+from api.models import db, User, Planificacion, UserLog, UserWod, UserPeso
 from flask_cors import CORS
 from datetime import datetime, timedelta
 import random
@@ -13,21 +13,20 @@ import jwt
 from threading import Thread
 
 api = Blueprint('api', __name__)
-CORS(api, origins=["https://forceteam.onrender.com"], supports_credentials=True)
+CORS(api, origins=["http://localhost:3000"], supports_credentials=True)
 
 # ======================================
-#  CORS headers para todas las rutas
+# CORS headers para todas las rutas
 # ======================================
 @api.after_request
 def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "https://forceteam.onrender.com")
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
     return response
 
-
 # ======================================
-#  Autenticación y JWT
+# Autenticación y JWT
 # ======================================
 SECRET_KEY = os.getenv('SECRET_KEY', 'mi_clave_secreta_super_segura')
 
@@ -61,9 +60,8 @@ def admin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
-
 # ======================================
-#  Utilidades
+# Utilidades
 # ======================================
 def generate_token(length=32):
     chars = string.ascii_letters + string.digits
@@ -97,6 +95,19 @@ def enviar_email_smtp(destino, asunto, mensaje):
         current_app.logger.error(f"Error enviando correo a {destino}: {e}")
         return False, str(e)
 
+def send_async_email(destino, asunto, mensaje):
+    from flask import current_app
+    app = current_app._get_current_object()
+
+    def send():
+        with app.app_context():
+            success, info = enviar_email_smtp(destino, asunto, mensaje)
+            if success:
+                app.logger.info(f"✅ Correo enviado correctamente a {destino}")
+            else:
+                app.logger.error(f"❌ Error enviando correo a {destino}: {info}")
+
+    Thread(target=send).start()
 
 # ======================================
 # Registro y Login
@@ -133,7 +144,6 @@ def register():
         current_app.logger.error(f"Error en register: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
-
 @api.route('/login', methods=['POST'])
 def login():
     try:
@@ -160,7 +170,6 @@ def login():
         current_app.logger.error(f"Error en login: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
-
 @api.route('/usuario', methods=['GET'])
 def usuario():
     auth_header = request.headers.get('Authorization', '')
@@ -179,7 +188,6 @@ def usuario():
 
     return jsonify({'user': user.serialize()}), 200
 
-
 # ======================================
 # Planificación
 # ======================================
@@ -190,8 +198,8 @@ def crear_o_actualizar_planificacion():
     fecha = data.get("fecha")
     plan = data.get("plan")
 
-    if not fecha or not plan or not all(k in plan for k in ("A","B","C","D", "E")):
-        return jsonify({"error": "Datos incompletos: fecha y plan con bloques A-D requeridos"}), 400
+    if not fecha or not plan or not all(k in plan for k in ("A","B","C","D","E")):
+        return jsonify({"error": "Datos incompletos: fecha y plan con bloques A-E requeridos"}), 400
 
     dia = datetime.strptime(fecha, "%Y-%m-%d").isoweekday()
     planificacion = Planificacion.query.filter_by(fecha=fecha).first()
@@ -216,7 +224,6 @@ def crear_o_actualizar_planificacion():
 
     db.session.commit()
     return jsonify({"message": "Planificación guardada exitosamente"}), 200
-
 
 @api.route('/planificacion', methods=['GET'])
 def get_planificacion():
@@ -255,7 +262,6 @@ def get_planificacion():
         }
     }), 200
 
-
 @api.route('/planificacion', methods=['DELETE'])
 @admin_required
 def eliminar_planificacion():
@@ -271,9 +277,8 @@ def eliminar_planificacion():
     db.session.commit()
     return jsonify({"message": "Planificación eliminada exitosamente"}), 200
 
-
 # ======================================
-#  Logs de levantamientos
+# Logs de levantamientos
 # ======================================
 @api.route('/users/<int:user_id>/logs', methods=['GET'])
 def get_user_logs(user_id):
@@ -303,7 +308,6 @@ def delete_user_log(user_id, log_id):
     db.session.commit()
     return jsonify({"message": "Log eliminado"}), 200
 
-
 # ======================================
 # WODs
 # ======================================
@@ -330,6 +334,7 @@ def add_user_wod(user_id):
     except ValueError:
         return jsonify({"error": "Formato de fecha inválido, usar YYYY-MM-DD"}), 400
 
+    # ⚠️ Usar nombres de campo correctos del modelo
     wod = UserWod(
         user_id=user.id,
         fecha=wod_fecha,
@@ -343,11 +348,10 @@ def add_user_wod(user_id):
 
     return jsonify(wod.serialize()), 201
 
-
 @api.route('/users/<int:user_id>/wods/<int:wod_id>', methods=['PATCH', 'OPTIONS'])
 def update_user_wod(user_id, wod_id):
     if request.method == 'OPTIONS':
-        return '', 204  
+        return '', 204
 
     user = User.query.get_or_404(user_id)
     wod = UserWod.query.filter_by(user_id=user.id, id=wod_id).first_or_404()
@@ -365,28 +369,9 @@ def update_user_wod(user_id, wod_id):
         db.session.rollback()
         return jsonify({"error": "Error al actualizar el WOD"}), 500
 
-
-
 # ======================================
-#  Recuperación de contraseña
+# Recuperación de contraseña
 # ======================================
-
-def send_async_email(destino, asunto, mensaje):
-    from flask import current_app
-    app = current_app._get_current_object()
-
-    def send():
-        with app.app_context():
-            success, info = enviar_email_smtp(destino, asunto, mensaje)
-            if success:
-                app.logger.info(f"✅ Correo enviado correctamente a {destino}")
-            else:
-                app.logger.error(f"❌ Error enviando correo a {destino}: {info}")
-
-    Thread(target=send).start()
-
-
-
 @api.route('/forgot-password', methods=['POST'])
 def forgot_password():
     data = request.get_json() or {}
@@ -396,13 +381,13 @@ def forgot_password():
 
     user = User.query.filter_by(email=email).first()
     if not user:
-        # No revelamos si existe o no el email para mayor seguridad
+    
         return jsonify({"message": "Si el email está registrado, recibirás instrucciones"}), 200
 
-    # Generar token de restablecimiento con expiración de 30 minutos
+    
     reset_token = generar_jwt({"user_id": user.id}, expiracion_minutos=30)
 
-    frontend_url = os.getenv("FRONTEND_URL", "https://forceteam.onrender.com")
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
     reset_link = f"{frontend_url}/reset-password?token={reset_token}"
 
     mensaje = f"""
@@ -417,17 +402,9 @@ Si no solicitaste este cambio, ignora este correo.
 Saludos,
 Tu equipo de ForceTeam
 """
-
-   
     send_async_email(user.email, "Recuperar contraseña", mensaje)
 
     return jsonify({"message": "Si el email está registrado, recibirás instrucciones"}), 200
-
-
-
-# ======================================
-#  Restablecer contraseña
-# ======================================
 
 @api.route('/reset-password', methods=['POST'])
 def reset_password():
@@ -455,3 +432,33 @@ def reset_password():
 def test_email():
     success, info = enviar_email_smtp("tuemail@test.com", "Prueba", "Esto es un test")
     return jsonify({"success": success, "info": info})
+
+# =======================
+# PESOS
+# =======================
+@api.route('/users/<int:user_id>/pesos', methods=['GET', 'PATCH'])
+def user_pesos(user_id):
+    user = User.query.get_or_404(user_id)
+
+    if request.method == 'GET':
+        pesos = UserPeso.query.filter_by(user_id=user_id).all()
+        return jsonify({p.ejercicio: p.valor for p in pesos})
+
+    if request.method == 'PATCH':
+        data = request.json or {}
+        ejercicio = data.get('ejercicio')
+        valor = data.get('valor')
+
+        if not ejercicio or valor is None:
+            return jsonify({"error": "Datos incompletos"}), 400
+
+        peso = UserPeso.query.filter_by(user_id=user_id, ejercicio=ejercicio).first()
+
+        if peso:
+            peso.valor = valor
+        else:
+            peso = UserPeso(user_id=user_id, ejercicio=ejercicio, valor=valor)
+            db.session.add(peso)
+
+        db.session.commit()
+        return jsonify({"message": "Peso guardado"}), 200
