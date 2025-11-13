@@ -19,7 +19,7 @@ export const UsuarioPages = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/usuario", {
+        const res = await fetch("https://forceteam.onrender.com/api/usuario", {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
 
