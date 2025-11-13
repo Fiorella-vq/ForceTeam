@@ -372,13 +372,19 @@ def update_user_wod(user_id, wod_id):
 # ======================================
 
 def send_async_email(destino, asunto, mensaje):
+    from flask import current_app
+    app = current_app._get_current_object()
+
     def send():
-        success, info = enviar_email_smtp(destino, asunto, mensaje)
-        if success:
-            current_app.logger.info(f"Correo enviado correctamente a {destino}")
-        else:
-            current_app.logger.error(f"Error enviando correo a {destino}: {info}")
+        with app.app_context():
+            success, info = enviar_email_smtp(destino, asunto, mensaje)
+            if success:
+                app.logger.info(f"✅ Correo enviado correctamente a {destino}")
+            else:
+                app.logger.error(f"❌ Error enviando correo a {destino}: {info}")
+
     Thread(target=send).start()
+
 
 
 @api.route('/forgot-password', methods=['POST'])
