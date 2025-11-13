@@ -124,9 +124,6 @@ class UserWod(db.Model):
     }
 
         
-# ===========================
-# MODELO PESOS DE USUARIO
-# ===========================
 class UserPeso(db.Model):
     __tablename__ = "user_peso"
 
@@ -139,12 +136,10 @@ class UserPeso(db.Model):
     user = db.relationship("User", backref="pesos")
 
     def serialize(self):
-     return {
-        "id": self.id,
-        "fecha": self.fecha,
-        "wod_descripcion": self.descripcion,
-        "wod_como_realizo": self.como_realizo,
-        "wod_sentimiento": self.sentimiento,
-    }
-
-        
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "ejercicio": self.ejercicio,
+            "valor": self.valor,
+            "fecha": self.fecha,
+        }
