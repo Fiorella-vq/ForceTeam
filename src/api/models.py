@@ -131,7 +131,7 @@ class UserPeso(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     ejercicio = db.Column(db.String(50), nullable=False)
     valor = db.Column(db.Float, nullable=False)
-    fecha = db.Column(db.String(10), default=datetime.utcnow().strftime("%Y-%m-%d"))
+    fecha = db.Column(db.String(10), default=lambda: datetime.utcnow().strftime("%Y-%m-%d"))
 
     user = db.relationship("User", backref="pesos")
 
