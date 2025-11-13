@@ -16,7 +16,7 @@ const getTodayString = () => {
 
 export const PlanificacionCoach = () => {
   const [fecha, setFecha] = useState(getTodayString());
-  const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "", E:"" });
+  const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "", E: "" });
   const [wods, setWods] = useState([]);
   const [loading, setLoading] = useState(false);
   const [verComoAtleta, setVerComoAtleta] = useState(false);
@@ -29,14 +29,14 @@ export const PlanificacionCoach = () => {
     if (!fechaParam || !token) return;
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) {
         const data = await res.json();
-        setPlan(data.plan || { AA: "", B: "", C: "", D: "", E:"" });
+        setPlan(data.plan || { AA: "", B: "", C: "", D: "", E: "" });
       } else {
-        setPlan({ AA: "", B: "", C: "", D: "", E:"" });
+        setPlan({ AA: "", B: "", C: "", D: "", E: "" });
       }
     } catch {
       Swal.fire("Error", "No se pudo cargar la planificación", "error");
@@ -47,7 +47,7 @@ export const PlanificacionCoach = () => {
     if (!token || !user_id) return;
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user_id}/wods`,
+        `https://forceteam.onrender.com/api/users/${user_id}/wods`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -78,19 +78,22 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/planificacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ fecha, plan }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/planificacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ fecha, plan }),
+        }
+      );
       const data = await res.json();
 
       if (res.ok) {
         Swal.fire("¡Guardado!", "Planificación registrada.", "success");
-        setPlan({ AA: "", B: "", C: "", D: "", E:"" });
+        setPlan({ AA: "", B: "", C: "", D: "", E: "" });
       } else {
         Swal.fire("Error", data.error || "Algo salió mal", "error");
       }
@@ -118,7 +121,7 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -128,7 +131,7 @@ export const PlanificacionCoach = () => {
           "Planificación eliminada correctamente.",
           "success"
         );
-        setPlan({ AA: "", B: "", C: "", D: "", E:"" });
+        setPlan({ AA: "", B: "", C: "", D: "", E: "" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");
       }

@@ -35,14 +35,14 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
     const fetchData = async () => {
       try {
         const logsRes = await fetch(
-          `http://localhost:3001/api/users/${user.id}/logs`,
+          `https://forceteam.onrender.com/api/users/${user.id}/logs`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const logsData = await logsRes.json();
         setLogs(logsData);
 
         const wodsRes = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const wodsData = await wodsRes.json();
@@ -107,7 +107,7 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
       let res;
       if (wodActual) {
         res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods/${wodActual.id}`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodActual.id}`,
           {
             method: "PATCH",
             headers: {
@@ -118,14 +118,17 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
           }
         );
       } else {
-        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await fetch(
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          }
+        );
       }
 
       if (!res.ok) throw new Error("Error al guardar WOD");
@@ -155,54 +158,53 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
 
       {/* Tabla de levantamientos */}
       <section className="entrenamientos-section">
-  <h3>Porcentajes de levantamientos</h3>
-  <table className="tabla-porcentajes">
-    <thead>
-      <tr>
-        <th>Ejercicio</th>
-        <th>Peso Máximo (kg)</th>
-        <th>45%</th>
-        <th>55%</th>
-        <th>65%</th>
-        <th>70%</th>
-        <th>80%</th>
-        <th>85%</th>
-        <th>90%</th>
-        <th>95%</th>
-      </tr>
-    </thead>
-    <tbody>
-      {ejerciciosDisponibles.map((ej) => {
-        const peso = pesos[ej];
-        const porcentajes = calcularPorcentajes(peso);
-        return (
-          <tr key={ej}>
-            <td>{ej}</td>
-            <td>
-              <input
-                type="text"
-                value={peso}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (/^\d*\.?\d*$/.test(val)) {
-                    setPesos({ ...pesos, [ej]: val });
-                  }
-                }}
-                placeholder="Máx"
-                className="input-peso"
-              />
-            </td>
-            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
-              <td key={p}>{porcentajes[p] || "-"}</td>
-            ))}
-          </tr>
-        );
-      })}
+        <h3>Porcentajes de levantamientos</h3>
+        <table className="tabla-porcentajes">
+          <thead>
+            <tr>
+              <th>Ejercicio</th>
+              <th>Peso Máximo (kg)</th>
+              <th>45%</th>
+              <th>55%</th>
+              <th>65%</th>
+              <th>70%</th>
+              <th>80%</th>
+              <th>85%</th>
+              <th>90%</th>
+              <th>95%</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ejerciciosDisponibles.map((ej) => {
+              const peso = pesos[ej];
+              const porcentajes = calcularPorcentajes(peso);
+              return (
+                <tr key={ej}>
+                  <td>{ej}</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={peso}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^\d*\.?\d*$/.test(val)) {
+                          setPesos({ ...pesos, [ej]: val });
+                        }
+                      }}
+                      placeholder="Máx"
+                      className="input-peso"
+                    />
+                  </td>
+                  {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+                    <td key={p}>{porcentajes[p] || "-"}</td>
+                  ))}
+                </tr>
+              );
+            })}
 
-      
-      {squats.totalOlimpico && (
-        <>
-          {/* <tr className="fila-calculo">
+            {squats.totalOlimpico && (
+              <>
+                {/* <tr className="fila-calculo">
             <td>Total Olímpico 💡</td>
             <td>{squats.totalOlimpico}</td>
             {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
@@ -211,30 +213,30 @@ export const Usuario = ({ user, token, onUserUpdate }) => {
               </td>
             ))}
           </tr> */}
-          <tr className="fila-calculo">
-            <td>Back Squat Olímpico </td>
-            <td>{squats.backSquatOlimpico}</td>
-            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
-              <td key={p}>
-                {Math.round((squats.backSquatOlimpico * p) / 100) || "-"}
-              </td>
-            ))}
-          </tr>
+                <tr className="fila-calculo">
+                  <td>Back Squat Olímpico </td>
+                  <td>{squats.backSquatOlimpico}</td>
+                  {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+                    <td key={p}>
+                      {Math.round((squats.backSquatOlimpico * p) / 100) || "-"}
+                    </td>
+                  ))}
+                </tr>
 
-          <tr className="fila-calculo">
-            <td>Front Squat Olímpico </td>
-            <td>{squats.frontSquatOlimpico}</td>
-            {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
-              <td key={p}>
-                {Math.round((squats.frontSquatOlimpico * p) / 100) || "-"}
-              </td>
-            ))}
-          </tr>
-        </>
-      )}
-    </tbody>
-  </table>
-</section>
+                <tr className="fila-calculo">
+                  <td>Front Squat Olímpico </td>
+                  <td>{squats.frontSquatOlimpico}</td>
+                  {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+                    <td key={p}>
+                      {Math.round((squats.frontSquatOlimpico * p) / 100) || "-"}
+                    </td>
+                  ))}
+                </tr>
+              </>
+            )}
+          </tbody>
+        </table>
+      </section>
 
       {/* WODs */}
       <section className="wods-section">
