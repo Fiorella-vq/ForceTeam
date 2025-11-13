@@ -1,4 +1,6 @@
-/* 🌙 Contenedor principal */
+/* ============================================================
+   🌙 CONTENEDOR PRINCIPAL
+   ============================================================ */
 .register-container {
   max-width: 400px;
   margin: 60px auto;
@@ -12,31 +14,37 @@
   animation: fadeIn 0.6s ease-in-out;
 }
 
-/* ✨ Título */
+/* ============================================================
+   ✨ TÍTULO
+   ============================================================ */
 .register-container h3 {
-  font-size: 18px;
+  font-size: 1.1rem;
   margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #fff;
 }
 
-/* 📋 Formulario */
+/* ============================================================
+   📋 FORMULARIO
+   ============================================================ */
 .register-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* 🔤 Inputs */
+/* ============================================================
+   🔤 INPUTS
+   ============================================================ */
 .register-form input {
   padding: 12px 14px;
-  font-size: 14px;
+  font-size: 0.9rem;
   border: 2px solid #333;
   border-radius: 10px;
   background-color: #1e1e1e;
   color: #f0f0f0;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .register-form input:hover {
@@ -50,7 +58,9 @@
   background-color: #0d0d0d;
 }
 
-/* 👁️ Toggle de contraseña */
+/* ============================================================
+   👁️ TOGGLE PASSWORD
+   ============================================================ */
 .password-container {
   position: relative;
 }
@@ -70,10 +80,12 @@
   color: #4fa3ff;
 }
 
-/* 🔘 Botón */
+/* ============================================================
+   🔘 BOTÓN SUBMIT
+   ============================================================ */
 .register-form button {
   padding: 14px 0;
-  font-size: 15px;
+  font-size: 0.95rem;
   font-weight: 700;
   border-radius: 12px;
   border: none;
@@ -95,21 +107,27 @@
   opacity: 0.5;
 }
 
-/* ⚠️ Mensaje de error opcional */
+/* ============================================================
+   ⚠️ MENSAJE DE ERROR
+   ============================================================ */
 .error-message {
   color: #ff4f4f;
-  font-size: 13px;
-  margin-top: -8px;
+  font-size: 0.85rem;
   text-align: left;
+  margin-top: -5px;
 }
 
-/* 🌈 Animación de entrada */
+/* ============================================================
+   🌈 ANIMACIÓN
+   ============================================================ */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 📱 Responsividad */
+/* ============================================================
+   📱 RESPONSIVE — TABLETS
+   ============================================================ */
 @media (max-width: 768px) {
   .register-container {
     max-width: 90%;
@@ -118,20 +136,23 @@
   }
 
   .register-container h3 {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .register-form input {
-    font-size: 13px;
+    font-size: 0.85rem;
     padding: 10px 12px;
   }
 
   .register-form button {
-    font-size: 14px;
+    font-size: 0.9rem;
     padding: 12px 0;
   }
 }
 
+/* ============================================================
+   📱 RESPONSIVE — CELULARES
+   ============================================================ */
 @media (max-width: 480px) {
   .register-container {
     margin: 30px 10px;
@@ -149,7 +170,7 @@
   }
 
   .register-form button {
-    font-size: 13px;
+    font-size: 0.85rem;
     padding: 10px 0;
   }
 }

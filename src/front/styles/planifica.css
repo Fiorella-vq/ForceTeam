@@ -1,3 +1,6 @@
+/* ============================================================
+   🔥 CONTENEDOR PRINCIPAL PLANIFICACIÓN
+   ============================================================ */
 .planificacion-container {
   max-width: 800px;
   margin: 40px auto;
@@ -10,7 +13,9 @@
   text-align: center;
 }
 
-/* TITULO */
+/* ============================================================
+   🔥 TITULOS
+   ============================================================ */
 .planificacion-container h2 {
   font-size: 1.2rem;
   margin-bottom: 20px;
@@ -19,7 +24,9 @@
   color: #fff;
 }
 
-/* INPUT DATE */
+/* ============================================================
+   🔥 INPUT DATE
+   ============================================================ */
 .planificacion-container input[type="date"] {
   padding: 10px 12px;
   font-size: 0.9rem;
@@ -27,7 +34,7 @@
   border-radius: 8px;
   background-color: #1e1e1e;
   color: #f0f0f0;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   width: 100%;
   max-width: 280px;
 }
@@ -39,7 +46,9 @@
   background-color: #0d0d0d;
 }
 
-/* BOTONES */
+/* ============================================================
+   🔥 BOTONES GENERALES
+   ============================================================ */
 .button-atleta,
 .link-btn,
 .planificacion-form button,
@@ -50,22 +59,25 @@
   border-radius: 10px;
   border: none;
   cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
   text-transform: uppercase;
-}
-
-.button-atleta {
+  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
   background-color: #2a2a2a;
   color: #f0f0f0;
 }
 
-.button-atleta:hover {
+/* Hover general */
+.button-atleta:hover,
+.link-btn:hover,
+.planificacion-form button:hover:not(:disabled),
+.btn-eliminar:hover:not(:disabled) {
   background-color: #4fa3ff;
   color: #fff;
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
-/* TEXTAREAS */
+/* ============================================================
+   🔥 TEXTAREAS
+   ============================================================ */
 .planificacion-form textarea {
   width: 100%;
   padding: 10px;
@@ -76,6 +88,7 @@
   color: #f0f0f0;
   resize: vertical;
   margin-bottom: 5px;
+  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .planificacion-form textarea:focus {
@@ -85,7 +98,9 @@
   background-color: #0d0d0d;
 }
 
-/* LINKS */
+/* ============================================================
+   🔥 LINKS CON URLS
+   ============================================================ */
 .links-block a {
   display: block;
   color: #4fa3ff;
@@ -94,16 +109,21 @@
   word-break: break-word;
 }
 
-/* BLOQUES DE LECTURA */
+/* ============================================================
+   🔥 BLOQUES PARA LECTURA (VISTA ATLETA)
+   ============================================================ */
 .planificacion-atleta .bloque-lectura {
   background-color: #1e1e1e;
   padding: 10px;
   border-radius: 8px;
   min-height: 40px;
   text-align: left;
+  border: 1px solid #222;
 }
 
-/* TARJETAS DE WODS */
+/* ============================================================
+   🔥 TARJETAS DE WODS (VISTA ATLETA)
+   ============================================================ */
 .wods-atleta .wod-card {
   background-color: #1e1e1e;
   padding: 12px;
@@ -111,39 +131,12 @@
   margin-bottom: 10px;
   text-align: left;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  border: 1px solid #222;
 }
 
-/* BOTONES DEL FORMULARIO */
-.planificacion-form button,
-.btn-eliminar {
-  flex: 1;
-  margin-top: 10px;
-  background-color: #2a2a2a;
-  color: #f0f0f0;
-}
-
-.planificacion-form button:hover:not(:disabled),
-.btn-eliminar:hover:not(:disabled) {
-  background-color: #4fa3ff;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
-}
-
-/* LINK BUTTON */
-.link-btn {
-  background-color: #2a2a2a;
-  color: #f0f0f0;
-}
-
-.link-btn:hover {
-  background-color: #4fa3ff;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
-}
-
-/* -------------------------- */
-/* 🔹 MEDIA QUERIES RESPONSIVE */
-/* -------------------------- */
+/* ============================================================
+   🔥 MEDIA QUERIES RESPONSIVE
+   ============================================================ */
 
 /* Tablets */
 @media (max-width: 768px) {
@@ -175,6 +168,9 @@
 @media (max-width: 480px) {
   .planificacion-container {
     max-width: 95%;
+  }
+
+  .planificacion-container {
     padding: 20px 15px;
     margin: 20px auto;
   }

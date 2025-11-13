@@ -1,3 +1,6 @@
+/* ============================================================
+   🔥 CONTENEDOR GENERAL DEL VIEWER
+   ============================================================ */
 .plani-viewer-container {
   max-width: 700px;
   margin: 40px auto;
@@ -10,7 +13,9 @@
   text-align: center;
 }
 
-/* TÍTULO */
+/* ============================================================
+   🔥 TÍTULO PRINCIPAL
+   ============================================================ */
 .plani-viewer-container h2 {
   font-size: 1.2rem;
   margin-bottom: 20px;
@@ -19,7 +24,9 @@
   color: #fff;
 }
 
-/* INPUT */
+/* ============================================================
+   🔥 INPUT DE FECHA / CÓDIGO / BUSQUEDA
+   ============================================================ */
 .plani-input {
   padding: 10px 12px;
   margin-left: 10px;
@@ -28,9 +35,9 @@
   border-radius: 8px;
   background-color: #1e1e1e;
   color: #f0f0f0;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
-  width: auto;
+  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   max-width: 250px;
+  width: auto;
 }
 
 .plani-input:focus {
@@ -40,14 +47,18 @@
   background-color: #0d0d0d;
 }
 
-/* MENSAJES DE ERROR */
+/* ============================================================
+   🔥 MENSAJES DE ERROR
+   ============================================================ */
 .plani-error {
   color: #ff4d4f;
   margin-top: 15px;
   font-size: 0.9rem;
 }
 
-/* CONTENIDO DEL PLAN */
+/* ============================================================
+   🔥 CONTENIDO DEL PLAN
+   ============================================================ */
 .plan-content {
   margin-top: 20px;
   text-align: left;
@@ -59,7 +70,9 @@
   color: #4fa3ff;
 }
 
-/* LISTA DE ITEMS */
+/* ============================================================
+   🔥 LISTA DE ITEMS
+   ============================================================ */
 .plan-content ul {
   list-style: none;
   padding: 0;
@@ -71,18 +84,23 @@
   background-color: #1e1e1e;
   padding: 12px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   line-height: 1.5;
+  border: 1px solid #222;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* LINKS DENTRO DE LOS BLOQUES */
+/* ============================================================
+   🔥 LINKS DENTRO DE LOS BLOQUES
+   ============================================================ */
 .bloque-texto a {
   color: #4fa3ff;
   text-decoration: underline;
   word-break: break-word;
 }
 
-/* BOTÓN DE LINK */
+/* ============================================================
+   🔥 BOTÓN PARA VER PLAN DE COACH
+   ============================================================ */
 .link-coach {
   margin-top: 25px;
 }
@@ -96,7 +114,7 @@
   background-color: #2a2a2a;
   color: #f0f0f0;
   cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .link-btn:hover {
@@ -105,9 +123,9 @@
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
-/* -------------------------- */
-/* 🔹 MEDIA QUERIES RESPONSIVE */
-/* -------------------------- */
+/* ============================================================
+   🔥 MEDIA QUERIES RESPONSIVE
+   ============================================================ */
 
 /* Tablets */
 @media (max-width: 768px) {
