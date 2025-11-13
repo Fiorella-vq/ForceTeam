@@ -132,7 +132,7 @@ export const Usuario = ({ user, token }) => {
   };
 
   const wodDeHoy = wods.find(
-    (w) => (w.fecha?.split("T")[0] || w.fecha) === hoy
+    (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
   );
 
   const guardarWodHoy = async () => {
@@ -175,7 +175,7 @@ export const Usuario = ({ user, token }) => {
 
       setWods((prev) => {
         const sinHoy = prev.filter(
-          (w) => (w.fecha?.split("T")[0] || w.fecha) !== hoy
+          (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) !== hoy
         );
         return [...sinHoy, nuevoWod];
       });
@@ -262,7 +262,7 @@ export const Usuario = ({ user, token }) => {
                   <td>
                     <input
                       type="text"
-                      value={peso}
+                      value={peso || ""}
                       onChange={(e) => {
                         const val = e.target.value;
                         if (/^\d*\.?\d*$/.test(val))
@@ -315,19 +315,19 @@ export const Usuario = ({ user, token }) => {
 
           <textarea
             placeholder="Descripción del WOD"
-            value={wodDescripcion}
+            value={wodDescripcion || ""}
             onChange={(e) => setWodDescripcion(e.target.value)}
           />
 
           <textarea
             placeholder="Cómo realizaste el WOD"
-            value={wodComoRealizo}
+            value={wodComoRealizo || ""}
             onChange={(e) => setWodComoRealizo(e.target.value)}
           />
 
           <textarea
             placeholder="Cómo te sentiste / Lograste el objetivo?"
-            value={wodSentimiento}
+            value={wodSentimiento || ""}
             onChange={(e) => setWodSentimiento(e.target.value)}
           />
 
@@ -350,12 +350,17 @@ export const Usuario = ({ user, token }) => {
                   Swal.fire({
                     title: `WOD del ${wod.fecha}`,
                     html: `
-              <p><strong>🏋️ Descripción:</strong> ${wod.descripcion}</p>
-              <p><strong>🔥 Cómo lo realizaste:</strong> ${
-                wod.como_realizo || "-"
-              }</p>
-              <p><strong>❤️ Sentimiento:</strong> ${wod.sentimiento || "-"}</p>
-            `,
+  <p><strong>🏋️ Descripción:</strong> ${
+    wod.descripcion || wod.wod_descripcion || "-"
+  }</p>
+  <p><strong>🔥 Cómo lo realizaste:</strong> ${
+    wod.como_realizo || wod.wod_como_realizo || "-"
+  }</p>
+  <p><strong>❤️ Sentimiento:</strong> ${
+    wod.sentimiento || wod.wod_sentimiento || "-"
+  }</p>
+`,
+
                     background: "#1e1e1e",
                     color: "#fff",
                   });
@@ -375,20 +380,25 @@ export const Usuario = ({ user, token }) => {
 
         <ul className="lista-wods">
           {wods
-            .filter((w) => (w.fecha?.split("T")[0] || w.fecha) === hoy)
+            .filter(
+              (w) =>
+                (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
+            )
             .slice(0, 1)
             .map((wod) => (
               <li key={wod.id}>
                 <strong>{wod.fecha}</strong> <br />
                 <p>
-                  <strong>🏋️ Descripción:</strong> {wod.wod_descripcion}
+                  <strong>🏋️ Descripción:</strong>{" "}
+                  {wod.descripcion || wod.wod_descripcion || "-"}
                 </p>
                 <p>
                   <strong>🔥 Cómo lo realizaste:</strong>{" "}
-                  {wod.wod_como_realizo || "-"}
+                  {wod.como_realizo || wod.wod_como_realizo || "-"}
                 </p>
                 <p>
-                  <strong>❤️ Sentimiento:</strong> {wod.wod_sentimiento || "-"}
+                  <strong>❤️ Sentimiento:</strong>{" "}
+                  {wod.sentimiento || wod.wod_sentimiento || "-"}
                 </p>
               </li>
             ))}

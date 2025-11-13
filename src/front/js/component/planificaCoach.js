@@ -62,10 +62,7 @@ export const PlanificacionCoach = () => {
     }
   };
 
-  useEffect(() => {
-    fetchPlanificacion(fecha);
-    if (verComoAtleta) fetchWods();
-  }, [fecha, verComoAtleta]);
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,7 +125,7 @@ export const PlanificacionCoach = () => {
           "Planificación eliminada correctamente.",
           "success"
         );
-        setPlan({ AA: "", B: "", C: "", D: "", E: "" });
+        setPlan({ A: "", B: "", C: "", D: "", E: "" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");
       }
@@ -149,12 +146,6 @@ export const PlanificacionCoach = () => {
           justifyContent: "center",
         }}
       >
-        <button
-          className="button-atleta"
-          onClick={() => setVerComoAtleta(!verComoAtleta)}
-        >
-          {verComoAtleta ? "Volver a modo Coach" : "Ver como Atleta"}
-        </button>
       </div>
       <div
         style={{
