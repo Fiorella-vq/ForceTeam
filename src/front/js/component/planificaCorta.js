@@ -22,13 +22,12 @@ export const PlanificaCorta = () => {
   const token = localStorage.getItem("token")?.trim();
   const navigate = useNavigate();
 
-
   const fetchPlanificacion = async (fechaParam) => {
     if (!fechaParam || !token) return;
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}&tipo=corta`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}&tipo=corta`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -44,7 +43,7 @@ export const PlanificaCorta = () => {
         title: "Error",
         text: "No se pudo cargar la planificación corta",
         background: "#1e1e1e",
-        color: "#fff"
+        color: "#fff",
       });
     }
   };
@@ -66,19 +65,22 @@ export const PlanificaCorta = () => {
         icon: "error",
         text: "No estás autenticado",
         background: "#1e1e1e",
-        color: "#fff"
+        color: "#fff",
       });
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/planificacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ fecha, tipo: "corta", plan })
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/planificacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ fecha, tipo: "corta", plan }),
+        }
+      );
 
       if (res.ok) {
         Swal.fire({
@@ -86,14 +88,14 @@ export const PlanificaCorta = () => {
           title: "Guardado",
           text: "Planificación corta guardada correctamente",
           background: "#1e1e1e",
-          color: "#fff"
+          color: "#fff",
         });
       } else {
         Swal.fire({
           icon: "error",
           text: "Error guardando planificación corta",
           background: "#1e1e1e",
-          color: "#fff"
+          color: "#fff",
         });
       }
     } catch {
@@ -101,7 +103,7 @@ export const PlanificaCorta = () => {
         icon: "error",
         text: "Error de conexión",
         background: "#1e1e1e",
-        color: "#fff"
+        color: "#fff",
       });
     } finally {
       setLoading(false);
@@ -114,10 +116,9 @@ export const PlanificaCorta = () => {
         icon: "error",
         text: "No estás autenticado",
         background: "#1e1e1e",
-        color: "#fff"
+        color: "#fff",
       });
 
-   
     const confirm = await Swal.fire({
       title: "¿Eliminar planificación corta?",
       text: `Se eliminará la planificación corta del ${fecha}.`,
@@ -127,7 +128,7 @@ export const PlanificaCorta = () => {
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-      confirmButtonColor: "#d33"
+      confirmButtonColor: "#d33",
     });
 
     if (!confirm.isConfirmed) return;
@@ -135,7 +136,7 @@ export const PlanificaCorta = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=corta`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=corta`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -145,7 +146,7 @@ export const PlanificaCorta = () => {
           title: "Eliminada",
           text: "Planificación corta eliminada",
           background: "#1e1e1e",
-          color: "#fff"
+          color: "#fff",
         });
         setPlan({ A: "", B: "", C: "", D: "", E: "" });
       } else {
@@ -153,7 +154,7 @@ export const PlanificaCorta = () => {
           icon: "error",
           text: "Error eliminando planificación",
           background: "#1e1e1e",
-          color: "#fff"
+          color: "#fff",
         });
       }
     } catch {
@@ -161,7 +162,7 @@ export const PlanificaCorta = () => {
         icon: "error",
         text: "Error de conexión",
         background: "#1e1e1e",
-        color: "#fff"
+        color: "#fff",
       });
     } finally {
       setLoading(false);
@@ -177,13 +178,21 @@ export const PlanificaCorta = () => {
           marginBottom: "15px",
           display: "flex",
           gap: "10px",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
-        <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
+        <input
+          type="date"
+          value={fecha}
+          onChange={(e) => setFecha(e.target.value)}
+          required
+        />
 
-        <button className="link-btn" onClick={() => navigate("/planificaCoach")}>
-           Volver a planificación normal
+        <button
+          className="link-btn"
+          onClick={() => navigate("/planificaCoach")}
+        >
+          Volver a planificación normal
         </button>
       </div>
 
@@ -223,7 +232,9 @@ export const PlanificaCorta = () => {
         </div>
       </form>
 
-      <div style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}>
+      <div
+        style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}
+      >
         <button className="link-btn" onClick={() => navigate("/usuarioPages")}>
           Volver al inicio
         </button>

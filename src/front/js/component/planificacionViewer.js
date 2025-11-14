@@ -13,19 +13,18 @@ export const PlanificacionViewer = () => {
 
   const [pesos, setPesos] = useState({});
 
- 
   useEffect(() => {
-    const controller = new AbortController(); 
+    const controller = new AbortController();
 
     const fetchPesos = async () => {
       if (!user?.id) return;
 
       try {
         const res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/pesos`,
+          `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
           {
             headers: { Authorization: `Bearer ${token}` },
-            signal: controller.signal, 
+            signal: controller.signal,
           }
         );
 
@@ -38,7 +37,7 @@ export const PlanificacionViewer = () => {
 
     fetchPesos();
 
-    return () => controller.abort(); 
+    return () => controller.abort();
   }, [user, token]);
 
   const aplicarPesosAPlan = (texto) => {
@@ -157,9 +156,8 @@ export const PlanificacionViewer = () => {
     });
   };
 
-  
   useEffect(() => {
-    const controller = new AbortController(); 
+    const controller = new AbortController();
 
     const fetchPlanificacion = async () => {
       try {
@@ -167,10 +165,10 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
+          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
           {
             headers,
-            signal: controller.signal, 
+            signal: controller.signal,
           }
         );
 

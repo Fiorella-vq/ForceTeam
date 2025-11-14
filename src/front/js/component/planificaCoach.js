@@ -28,7 +28,7 @@ export const PlanificacionCoach = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -59,14 +59,17 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/planificacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ fecha, plan }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/planificacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ fecha, plan }),
+        }
+      );
 
       const data = await res.json();
 
@@ -99,14 +102,18 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 
       const data = await res.json();
 
       if (res.ok) {
-        Swal.fire("Eliminado", "Planificación eliminada correctamente.", "success");
+        Swal.fire(
+          "Eliminado",
+          "Planificación eliminada correctamente.",
+          "success"
+        );
         setPlan({ A: "", B: "", C: "", D: "", E: "" });
       } else {
         Swal.fire("Error", data.error || "No se pudo eliminar", "error");
@@ -123,31 +130,30 @@ export const PlanificacionCoach = () => {
       <h2>Planificación Diaria</h2>
 
       <div
-  style={{
-    marginBottom: "15px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  }}
->
-  <input
-    type="date"
-    value={fecha}
-    onChange={(e) => setFecha(e.target.value)}
-    required
-    style={{ flex: 1, marginRight: "10px" }}
-  />
+        style={{
+          marginBottom: "15px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <input
+          type="date"
+          value={fecha}
+          onChange={(e) => setFecha(e.target.value)}
+          required
+          style={{ flex: 1, marginRight: "10px" }}
+        />
 
-  <button
-    className="link-btn"
-    style={{ padding: "10px 14px", whiteSpace: "nowrap" }}
-    onClick={() => navigate("/planificaCorta")}
-  >
-    Planificación corta
-  </button>
-</div>
-
+        <button
+          className="link-btn"
+          style={{ padding: "10px 14px", whiteSpace: "nowrap" }}
+          onClick={() => navigate("/planificaCorta")}
+        >
+          Planificación corta
+        </button>
+      </div>
 
       {/* FORMULARIO DEL COACH */}
       <form className="planificacion-form" onSubmit={handleSubmit}>
@@ -186,7 +192,9 @@ export const PlanificacionCoach = () => {
         </div>
       </form>
 
-      <div style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}>
+      <div
+        style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}
+      >
         <button className="link-btn" onClick={() => navigate("/usuarioPages")}>
           Volver al inicio
         </button>
