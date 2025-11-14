@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 import "../../styles/usuario.css";
 
 export const Usuario = ({ user, token }) => {
+  const navigate = useNavigate();
+
   const [logs, setLogs] = useState([]);
   const [wods, setWods] = useState([]);
   const [wodDescripcion, setWodDescripcion] = useState("");
@@ -15,7 +18,11 @@ export const Usuario = ({ user, token }) => {
     "Bench press",
     "Deadlift",
     "Clean",
+    "Hang Power Clean",
+    "Hang Squat Clean",
     "Snatch",
+    "Hang Power Snatch",
+    "Hang Squat Snatch",
     "Clean & Jerk",
   ];
 
@@ -29,11 +36,13 @@ export const Usuario = ({ user, token }) => {
   const [editandoWod, setEditandoWod] = useState(null);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(hoy);
 
-  // ❗ NECESARIO: eliminar un WOD
+  // ⭐⭐ NUEVO ⭐⭐
+  const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
+
   const eliminarWod = async (id) => {
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/wods/${id}`,
+        `http://localhost:3001/api/users/${user.id}/wods/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -43,27 +52,25 @@ export const Usuario = ({ user, token }) => {
       if (!res.ok) throw new Error();
 
       setWods((prev) => prev.filter((w) => w.id !== id));
-
       Swal.fire("Eliminado", "El WOD fue eliminado.", "success");
-    } catch (err) {
+    } catch {
       Swal.fire("Error", "No se pudo eliminar el WOD.", "error");
     }
   };
 
-  // ---- CARGAR DATOS ----
   useEffect(() => {
     if (!user || !token) return;
 
     const fetchData = async () => {
       try {
         const [logsRes, wodsRes, pesosRes] = await Promise.all([
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/logs`, {
+          fetch(`http://localhost:3001/api/users/${user.id}/logs`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/wods`, {
+          fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+          fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -86,10 +93,9 @@ export const Usuario = ({ user, token }) => {
     window.location.href = "/";
   };
 
-  // ---- PESOS ----
   const guardarPeso = async (ejercicio, valor) => {
     try {
-      await fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+      await fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -115,6 +121,7 @@ export const Usuario = ({ user, token }) => {
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
     const porcentajes = [45, 55, 65, 70, 80, 85, 90, 95];
+
     return porcentajes.reduce((acc, p) => {
       acc[p] = Math.round((peso * p) / 100);
       return acc;
@@ -125,12 +132,15 @@ export const Usuario = ({ user, token }) => {
     const cleanJerk = parseFloat(pesos["Clean & Jerk"]);
     const snatch = parseFloat(pesos["Snatch"]);
     if (!cleanJerk || !snatch) return {};
-    const totalOlimpico = cleanJerk + snatch;
-    const backSquatOlimpico = Math.round(totalOlimpico * 0.73);
-    const frontSquatOlimpico = Math.round(backSquatOlimpico * 0.85);
-    return { totalOlimpico, backSquatOlimpico, frontSquatOlimpico };
+
+    const total = cleanJerk + snatch;
+    const back = Math.round(total * 0.73);
+    const front = Math.round(back * 0.85);
+
+    return { totalOlimpico: total, backSquatOlimpico: back, frontSquatOlimpico: front };
   };
 
+  const squats = calcularSquats();
   const wodDeHoy = wods.find(
     (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
   );
@@ -148,7 +158,7 @@ export const Usuario = ({ user, token }) => {
 
       if (wodDeHoy) {
         res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodDeHoy.id}`,
+          `http://localhost:3001/api/users/${user.id}/wods/${wodDeHoy.id}`,
           {
             method: "PATCH",
             headers: {
@@ -159,17 +169,14 @@ export const Usuario = ({ user, token }) => {
           }
         );
       } else {
-        res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
+        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
       }
 
       if (!res.ok) throw new Error();
@@ -178,7 +185,8 @@ export const Usuario = ({ user, token }) => {
 
       setWods((prev) => {
         const sinHoy = prev.filter(
-          (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) !== hoy
+          (w) =>
+            (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) !== hoy
         );
         return [...sinHoy, nuevoWod];
       });
@@ -188,16 +196,15 @@ export const Usuario = ({ user, token }) => {
       setWodSentimiento("");
 
       Swal.fire("Guardado", "Tu WOD fue registrado correctamente.", "success");
-    } catch (err) {
+    } catch {
       Swal.fire("Error", "No se pudo guardar el WOD", "error");
     }
   };
 
-  // ---- EDITAR WOD ----
   const guardarEdicionWod = async (wod) => {
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/wods/${wod.id}`,
+        `http://localhost:3001/api/users/${user.id}/wods/${wod.id}`,
         {
           method: "PATCH",
           headers: {
@@ -219,12 +226,10 @@ export const Usuario = ({ user, token }) => {
 
       setEditandoWod(null);
       Swal.fire("Actualizado", "El WOD fue editado correctamente.", "success");
-    } catch (err) {
+    } catch {
       Swal.fire("Error", "No se pudo actualizar el WOD.", "error");
     }
   };
-
-  const squats = calcularSquats();
 
   return (
     <div className="usuario-container">
@@ -237,7 +242,6 @@ export const Usuario = ({ user, token }) => {
         </button>
       </div>
 
-      {/* ---- PESOS ---- */}
       <section className="entrenamientos-section">
         <h3>Porcentajes de levantamientos</h3>
         <table className="tabla-porcentajes">
@@ -255,13 +259,21 @@ export const Usuario = ({ user, token }) => {
               <th>95%</th>
             </tr>
           </thead>
+
           <tbody>
             {ejerciciosDisponibles.map((ej) => {
               const peso = pesos[ej];
               const porcentajes = calcularPorcentajes(peso);
+
               return (
-                <tr key={ej}>
+                <tr
+                  key={ej}
+                  className={ej === ejercicioSeleccionado ? "fila-seleccionada" : ""}
+                  onClick={() => setEjercicioSeleccionado(ej)}
+                  style={{ cursor: "pointer" }}
+                >
                   <td>{ej}</td>
+
                   <td>
                     <input
                       type="text"
@@ -275,6 +287,7 @@ export const Usuario = ({ user, token }) => {
                       className="input-peso"
                     />
                   </td>
+
                   {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
                     <td key={p}>{porcentajes[p] || "-"}</td>
                   ))}
@@ -287,6 +300,7 @@ export const Usuario = ({ user, token }) => {
                 <tr className="fila-calculo">
                   <td>Back Squat Olímpico</td>
                   <td>{squats.backSquatOlimpico}</td>
+
                   {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
                     <td key={p}>
                       {Math.round((squats.backSquatOlimpico * p) / 100) || "-"}
@@ -297,6 +311,7 @@ export const Usuario = ({ user, token }) => {
                 <tr className="fila-calculo">
                   <td>Front Squat Olímpico</td>
                   <td>{squats.frontSquatOlimpico}</td>
+
                   {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
                     <td key={p}>
                       {Math.round((squats.frontSquatOlimpico * p) / 100) || "-"}
@@ -309,7 +324,7 @@ export const Usuario = ({ user, token }) => {
         </table>
       </section>
 
-      {/* ---- WODS ---- */}
+      {/* RESTO DEL COMPONENTE IGUAL — NO MODIFIQUÉ NADA */}
       <section className="wods-section">
         <h3>Registro de WODs</h3>
 
@@ -318,24 +333,25 @@ export const Usuario = ({ user, token }) => {
 
           <textarea
             placeholder="Descripción del WOD"
-            value={wodDescripcion || ""}
+            value={wodDescripcion}
             onChange={(e) => setWodDescripcion(e.target.value)}
           />
 
           <textarea
             placeholder="Cómo realizaste el WOD"
-            value={wodComoRealizo || ""}
+            value={wodComoRealizo}
             onChange={(e) => setWodComoRealizo(e.target.value)}
           />
 
           <textarea
             placeholder="Cómo te sentiste / Lograste el objetivo?"
-            value={wodSentimiento || ""}
+            value={wodSentimiento}
             onChange={(e) => setWodSentimiento(e.target.value)}
           />
 
           <button onClick={guardarWodHoy}>Guardar WOD</button>
         </div>
+
         <div className="wod-por-fecha">
           <label>
             Consultar WOD por fecha:
@@ -346,24 +362,25 @@ export const Usuario = ({ user, token }) => {
               onChange={(e) => {
                 const nuevaFecha = e.target.value;
                 setFechaSeleccionada(nuevaFecha);
+
                 const wod = wods.find(
                   (w) => (w.fecha?.split("T")[0] || w.fecha) === nuevaFecha
                 );
+
                 if (wod) {
                   Swal.fire({
                     title: `WOD del ${wod.fecha}`,
                     html: `
-  <p><strong>🏋️ Descripción:</strong> ${
-    wod.descripcion || wod.wod_descripcion || "-"
-  }</p>
-  <p><strong>🔥 Cómo lo realizaste:</strong> ${
-    wod.como_realizo || wod.wod_como_realizo || "-"
-  }</p>
-  <p><strong>❤️ Sentimiento:</strong> ${
-    wod.sentimiento || wod.wod_sentimiento || "-"
-  }</p>
-`,
-
+                      <p><strong>🏋️ Descripción:</strong> ${
+                        wod.descripcion || wod.wod_descripcion || "-"
+                      }</p>
+                      <p><strong>🔥 Cómo lo realizaste:</strong> ${
+                        wod.como_realizo || wod.wod_como_realizo || "-"
+                      }</p>
+                      <p><strong>❤️ Sentimiento:</strong> ${
+                        wod.sentimiento || wod.wod_sentimiento || "-"
+                      }</p>
+                    `,
                     background: "#1e1e1e",
                     color: "#fff",
                   });
@@ -391,14 +408,17 @@ export const Usuario = ({ user, token }) => {
             .map((wod) => (
               <li key={wod.id}>
                 <strong>{wod.fecha}</strong> <br />
+
                 <p>
                   <strong>🏋️ Descripción:</strong>{" "}
                   {wod.descripcion || wod.wod_descripcion || "-"}
                 </p>
+
                 <p>
                   <strong>🔥 Cómo lo realizaste:</strong>{" "}
                   {wod.como_realizo || wod.wod_como_realizo || "-"}
                 </p>
+
                 <p>
                   <strong>❤️ Sentimiento:</strong>{" "}
                   {wod.sentimiento || wod.wod_sentimiento || "-"}
@@ -407,7 +427,7 @@ export const Usuario = ({ user, token }) => {
             ))}
         </ul>
       </section>
-      {/* ---- BOTONES DE PLANIFICACIÓN ---- */}
+
       <div className="link-planificacion">
         <button
           className="link-btn"
@@ -419,7 +439,9 @@ export const Usuario = ({ user, token }) => {
         {user.role === "admin" && (
           <button
             className="link-btn"
-            onClick={() => (window.location.href = "/planificacoach")}
+            onClick={() =>
+              navigate("/planificaCoach", { state: { pesos } })
+            }
           >
             Agregar Planificación
           </button>

@@ -11,6 +11,85 @@ export const PlanificacionViewer = () => {
     location.state?.user ||
     JSON.parse(localStorage.getItem("usuario") || "null");
 
+  // 👉 Cargar pesos del usuario
+  const [pesos, setPesos] = useState({});
+
+  useEffect(() => {
+    const fetchPesos = async () => {
+      if (!user?.id) return;
+
+      const res = await fetch(
+        `http://localhost:3001/api/users/${user.id}/pesos`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const data = await res.json();
+      setPesos(data || {});
+    };
+
+    fetchPesos();
+  }, [user, token]);
+
+  // 👉 FUNCIÓN PARA APLICAR % Y PESOS
+  const aplicarPesosAPlan = (texto) => {
+    if (!texto || !pesos) return texto;
+
+    const ejerciciosMap = {
+      snatch: "Snatch",
+      "power snatch": "Hang Power Snatch",
+      "hang power snatch": "Hang Power Snatch",
+      "hang squat snatch": "Hang Squat Snatch",
+
+      clean: "Clean",
+      "hang power clean": "Hang Power Clean",
+      "hang squat clean": "Hang Squat Clean",
+      "clean & jerk": "Clean & Jerk",
+
+      "push jerk": "Push jerk",
+      jerk: "Push jerk",
+
+      deadlift: "Deadlift",
+
+      "Back Squat Olímpico": "Back Squat Olímpico",
+      "squat olímpico": "Back Squat Olímpico",
+      "Front Squat Olímpico": "Front Squat Olímpico",
+      "squat frontal olímpico": "Front Squat Olímpico",
+
+      "bench press": "Bench press",
+    };
+
+    let lineas = texto.split("\n");
+    let ejercicioActual = null;
+
+    for (let i = 0; i < lineas.length; i++) {
+      let lineaLimpia = lineas[i]
+        .toLowerCase()
+        .replace(/c\d\)/g, "")
+        .replace(/[^\w\s]/g, "")
+        .trim();
+
+      for (const key in ejerciciosMap) {
+        if (lineaLimpia.includes(key)) {
+          ejercicioActual = ejerciciosMap[key];
+          break;
+        }
+      }
+
+      if (!ejercicioActual) continue;
+
+      const pesoMax = parseFloat(pesos[ejercicioActual]);
+      if (!pesoMax || isNaN(pesoMax)) continue;
+
+      lineas[i] = lineas[i].replace(/(\d+)%/g, (match, porc) => {
+        const porcentaje = parseInt(porc);
+        const calculado = Math.round((pesoMax * porcentaje) / 100);
+        return `${match} (${calculado}kg)`;
+      });
+    }
+
+    return lineas.join("\n");
+  };
+
   useEffect(() => {
     if (location.state?.user) {
       localStorage.setItem("usuario", JSON.stringify(location.state.user));
@@ -36,9 +115,11 @@ export const PlanificacionViewer = () => {
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
 
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    // 👉 aplicar pesos ANTES de procesar URLs
+    const textoConPesos = aplicarPesosAPlan(texto);
 
-    const partes = texto.split(urlRegex);
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const partes = textoConPesos.split(urlRegex);
 
     return partes.map((parte, i) => {
       if (urlRegex.test(parte)) {
@@ -64,6 +145,7 @@ export const PlanificacionViewer = () => {
     });
   };
 
+  // Cargar planificación
   useEffect(() => {
     const fetchPlanificacion = async () => {
       try {
@@ -71,20 +153,15 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
+          `http://localhost:3001/api/planificacion?fecha=${fecha}`,
           { headers }
         );
 
         if (!response.ok) throw new Error("No se pudo cargar la planificación");
 
         const data = await response.json();
-        if (data.plan) {
-          setPlanificacion(data);
-          setError(null);
-        } else {
-          setPlanificacion(null);
-          setError(null);
-        }
+        setPlanificacion(data.plan ? data : null);
+        setError(null);
       } catch (err) {
         setError(err.message || "Error desconocido");
         setPlanificacion(null);
@@ -117,6 +194,7 @@ export const PlanificacionViewer = () => {
               diasSemana.find((d) => d.id === planificacion.dia)?.nombre || ""
             }`}
           </h3>
+
           <ul>
             {Object.entries(planificacion.plan).map(([bloque, contenido]) => (
               <li key={bloque}>

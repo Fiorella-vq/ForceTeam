@@ -30,14 +30,11 @@ export const ResetPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/reset-password",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, new_password: password }),
-        }
-      );
+      const res = await fetch("http://localhost:3001/api/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, new_password: password }),
+      });
 
       const data = await res.json();
       if (res.ok) {

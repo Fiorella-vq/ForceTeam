@@ -274,3 +274,16 @@ body {
     width: 100%;
   }
 }
+
+.fila-seleccionada td {
+  background: #055236 !important;
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.fila-seleccionada input {
+  background: #055236 !important;
+  border-color: black !important;
+  color: #fff !important;
+}
+

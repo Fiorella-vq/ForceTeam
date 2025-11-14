@@ -26,7 +26,7 @@ export const Home = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://forceteam.onrender.com/api/login", {
+      const res = await fetch("http://localhost:3001/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -57,7 +57,7 @@ export const Home = () => {
   };
 
   const handleForgotPassword = () => {
-    navigate("/forgot-password"); // 🔗 redirige a la ruta de recuperación
+    navigate("/forgot-password"); // 
   };
 
   return (
@@ -65,7 +65,7 @@ export const Home = () => {
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
-      <h2>Planificación Tincho Soria</h2>
+      <h2>Planificación Martín Soria</h2>
 
       <form
         className="home-form"
