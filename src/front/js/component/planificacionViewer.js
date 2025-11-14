@@ -13,6 +13,9 @@ export const PlanificacionViewer = () => {
 
   const [pesos, setPesos] = useState({});
 
+  // ===============================
+  // 📌 Cargar Pesos del Usuario
+  // ===============================
   useEffect(() => {
     const controller = new AbortController();
 
@@ -36,52 +39,63 @@ export const PlanificacionViewer = () => {
     };
 
     fetchPesos();
-
     return () => controller.abort();
   }, [user, token]);
+
+  // ===============================
+  // 📌 FUNCIÓN CENTRAL (FIX REAL)
+  // ===============================
 
   const aplicarPesosAPlan = (texto) => {
     if (!texto || !pesos) return texto;
 
+    // Mapa ampliado y corregido
     const ejerciciosMap = {
-      snatch: "Snatch",
-      "power snatch": "Hang Power Snatch",
-      "hang power snatch": "Hang Power Snatch",
-      "hang squat snatch": "Hang Squat Snatch",
+      "clean & jerk": "Clean & Jerk",
+      "clean and jerk": "Clean & Jerk",
 
-      clean: "Clean",
       "hang power clean": "Hang Power Clean",
       "hang squat clean": "Hang Squat Clean",
-      "clean & jerk": "Clean & Jerk",
+      "hang clean": "Hang Power Clean",
+      clean: "Clean",
+
+      "hang power snatch": "Hang Power Snatch",
+      "hang squat snatch": "Hang Squat Snatch",
+      "hang snatch": "Hang Power Snatch",
+      snatch: "Snatch",
 
       "push jerk": "Push jerk",
       jerk: "Push jerk",
 
       deadlift: "Deadlift",
+      dl: "Deadlift",
 
-      "Back Squat Olímpico": "Back Squat Olímpico",
-      "squat olímpico": "Back Squat Olímpico",
-      "Front Squat Olímpico": "Front Squat Olímpico",
-      "squat frontal olímpico": "Front Squat Olímpico",
-
+      "press banca": "Bench press",
       "bench press": "Bench press",
+
+      "back squat olímpico": "Back Squat Olímpico",
+      "front squat olímpico": "Front Squat Olímpico",
+      "back squat": "Back Squat Olímpico",
+      "front squat": "Front Squat Olímpico",
     };
 
     let lineas = texto.split("\n");
     let ejercicioActual = null;
 
     for (let i = 0; i < lineas.length; i++) {
+      // 🧽 Limpieza NO destructiva
       let lineaLimpia = lineas[i]
         .toLowerCase()
-        .replace(/c\d\)/g, "")
-        .replace(/[^\w\s]/g, "")
+        .replace(/[^a-z0-9áéíóúüñ\s&]/gi, "") // conserva "&"
         .trim();
 
-      for (const key in ejerciciosMap) {
-        if (lineaLimpia.includes(key)) {
-          ejercicioActual = ejerciciosMap[key];
-          break;
-        }
+      // 🔍 Buscar coincidencia exacta del ejercicio
+      const encontrado = Object.keys(ejerciciosMap).find((key) =>
+        lineaLimpia.includes(key)
+      );
+
+      if (encontrado) {
+        ejercicioActual = ejerciciosMap[encontrado];
       }
 
       if (!ejercicioActual) continue;
@@ -89,6 +103,7 @@ export const PlanificacionViewer = () => {
       const pesoMax = parseFloat(pesos[ejercicioActual]);
       if (!pesoMax || isNaN(pesoMax)) continue;
 
+      // 🔥 Reemplazo final con kilos
       lineas[i] = lineas[i].replace(/(\d+)%/g, (match, porc) => {
         const porcentaje = parseInt(porc);
         const calculado = Math.round((pesoMax * porcentaje) / 100);
@@ -99,12 +114,18 @@ export const PlanificacionViewer = () => {
     return lineas.join("\n");
   };
 
+  // ===============================
+  // Guardar usuario en LS
+  // ===============================
   useEffect(() => {
     if (location.state?.user) {
       localStorage.setItem("usuario", JSON.stringify(location.state.user));
     }
   }, [location.state?.user]);
 
+  // ===============================
+  // Estados base
+  // ===============================
   const today = new Date();
   const initialFecha =
     location.state?.fecha || today.toISOString().split("T")[0];
@@ -124,6 +145,9 @@ export const PlanificacionViewer = () => {
     { id: 6, nombre: "Sábado" },
   ];
 
+  // ===============================
+  // Renderizar contenido
+  // ===============================
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
 
@@ -156,6 +180,9 @@ export const PlanificacionViewer = () => {
     });
   };
 
+  // ===============================
+  // Fetch Planificación
+  // ===============================
   useEffect(() => {
     const controller = new AbortController();
 
@@ -185,10 +212,12 @@ export const PlanificacionViewer = () => {
     };
 
     fetchPlanificacion();
-
     return () => controller.abort();
   }, [fecha, token, tipo]);
 
+  // ===============================
+  // Render Final
+  // ===============================
   return (
     <div className="plani-viewer-container">
       <h2>Planificación semanal ({tipo})</h2>
