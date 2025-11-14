@@ -196,18 +196,21 @@ def usuario():
 def crear_o_actualizar_planificacion():
     data = request.get_json() or {}
     fecha = data.get("fecha")
+    tipo = data.get("tipo", "normal")   # 👈 nuevo
     plan = data.get("plan")
 
     if not fecha or not plan or not all(k in plan for k in ("A","B","C","D","E")):
         return jsonify({"error": "Datos incompletos: fecha y plan con bloques A-E requeridos"}), 400
 
     dia = datetime.strptime(fecha, "%Y-%m-%d").isoweekday()
-    planificacion = Planificacion.query.filter_by(fecha=fecha).first()
+
+    planificacion = Planificacion.query.filter_by(fecha=fecha, tipo=tipo).first()
 
     if not planificacion:
         planificacion = Planificacion(
             fecha=fecha,
             dia=dia,
+            tipo=tipo,
             bloque_a=plan.get("A"),
             bloque_b=plan.get("B"),
             bloque_c=plan.get("C"),
@@ -225,51 +228,33 @@ def crear_o_actualizar_planificacion():
     db.session.commit()
     return jsonify({"message": "Planificación guardada exitosamente"}), 200
 
+
 @api.route('/planificacion', methods=['GET'])
 def get_planificacion():
     fecha = request.args.get("fecha")
-    semana = request.args.get('semana')
-    dia = request.args.get('dia')
+    tipo = request.args.get("tipo", "normal")  # 👈 nuevo
 
-    if fecha:
-        try:
-            fecha_dt = datetime.strptime(fecha, "%Y-%m-%d")
-        except ValueError:
-            return jsonify({"error": "Formato de fecha inválido"}), 400
-        dia = fecha_dt.isoweekday()
-        week_num = fecha_dt.isocalendar()[1]
-        semana = f"{fecha_dt.year}-W{str(week_num).zfill(2)}"
-        planificacion = Planificacion.query.filter_by(fecha=fecha).first()
-    else:
-        if not semana or not dia:
-            return jsonify({"error": "Faltan parámetros 'fecha' o 'semana' y 'dia'"}), 400
-        year, week = map(int, semana.split("-W"))
-        fecha_dt = datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%u") + timedelta(days=int(dia)-1)
-        planificacion = Planificacion.query.filter_by(fecha=fecha_dt.strftime("%Y-%m-%d")).first()
+    if not fecha:
+        return jsonify({"error": "La fecha es requerida"}), 400
+
+    planificacion = Planificacion.query.filter_by(fecha=fecha, tipo=tipo).first()
 
     if not planificacion:
-        return jsonify({"semana": semana, "dia": int(dia), "plan": {}}), 200
+        return jsonify({"plan": None}), 200
 
-    return jsonify({
-        "semana": semana,
-        "dia": int(dia),
-        "plan": {
-            "A": planificacion.bloque_a,
-            "B": planificacion.bloque_b,
-            "C": planificacion.bloque_c,
-            "D": planificacion.bloque_d,
-            "E": planificacion.bloque_e,
-        }
-    }), 200
+    return jsonify(planificacion.serialize()), 200
 
 @api.route('/planificacion', methods=['DELETE'])
 @admin_required
 def eliminar_planificacion():
     fecha = request.args.get('fecha')
+    tipo = request.args.get('tipo', 'normal')  # 👈 nuevo
+
     if not fecha:
         return jsonify({"error": "Parámetro 'fecha' es requerido"}), 400
 
-    planificacion = Planificacion.query.filter_by(fecha=fecha).first()
+    planificacion = Planificacion.query.filter_by(fecha=fecha, tipo=tipo).first()
+
     if not planificacion:
         return jsonify({"error": "Planificación no encontrada"}), 404
 

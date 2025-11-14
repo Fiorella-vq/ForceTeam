@@ -17,6 +17,7 @@ import { Usuario } from "./component/usuario";
 import {PlanificacionViewer} from './component/planificacionViewer';
 import { ForgotPassword } from "./component/forgotPassword";
 import { ResetPassword } from "./component/resetPassword";
+import { PlanificaCorta } from "./component/planificaCorta";
 
 
 
@@ -41,6 +42,7 @@ const Layout = () => {
             <Route element={<PlanificacionViewer />} path="/planificacionViewer" />
             <Route element={<ForgotPassword />} path="/forgot-password" />  
             <Route element={<ResetPassword />} path="/reset-password" />
+            <Route element={<PlanificaCorta />} path="/planificaCorta" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
           <Footer />

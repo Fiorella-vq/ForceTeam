@@ -14,7 +14,7 @@ const getTodayString = () => {
   return today.toISOString().split("T")[0];
 };
 
-export const PlanificacionCoach = () => {
+export const PlanificaCorta = () => {
   const [fecha, setFecha] = useState(getTodayString());
   const [plan, setPlan] = useState({ A: "", B: "", C: "", D: "", E: "" });
   const [loading, setLoading] = useState(false);
@@ -22,13 +22,13 @@ export const PlanificacionCoach = () => {
   const token = localStorage.getItem("token")?.trim();
   const navigate = useNavigate();
 
-  // Cargar planificación al cambiar la fecha
+
   const fetchPlanificacion = async (fechaParam) => {
     if (!fechaParam || !token) return;
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}`,
+        `http://localhost:3001/api/planificacion?fecha=${fechaParam}&tipo=corta`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -39,7 +39,13 @@ export const PlanificacionCoach = () => {
         setPlan({ A: "", B: "", C: "", D: "", E: "" });
       }
     } catch {
-      Swal.fire("Error", "No se pudo cargar la planificación", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo cargar la planificación corta",
+        background: "#1e1e1e",
+        color: "#fff"
+      });
     }
   };
 
@@ -55,7 +61,13 @@ export const PlanificacionCoach = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!token) return Swal.fire("Error", "No estás autenticado", "error");
+    if (!token)
+      return Swal.fire({
+        icon: "error",
+        text: "No estás autenticado",
+        background: "#1e1e1e",
+        color: "#fff"
+      });
 
     setLoading(true);
     try {
@@ -63,35 +75,59 @@ export const PlanificacionCoach = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ fecha, plan }),
+        body: JSON.stringify({ fecha, tipo: "corta", plan })
       });
 
-      const data = await res.json();
-
       if (res.ok) {
-        Swal.fire("¡Guardado!", "Planificación registrada.", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Guardado",
+          text: "Planificación corta guardada correctamente",
+          background: "#1e1e1e",
+          color: "#fff"
+        });
       } else {
-        Swal.fire("Error", data.error || "Algo salió mal", "error");
+        Swal.fire({
+          icon: "error",
+          text: "Error guardando planificación corta",
+          background: "#1e1e1e",
+          color: "#fff"
+        });
       }
     } catch {
-      Swal.fire("Error", "No se pudo conectar al servidor", "error");
+      Swal.fire({
+        icon: "error",
+        text: "Error de conexión",
+        background: "#1e1e1e",
+        color: "#fff"
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!token) return Swal.fire("Error", "No estás autenticado", "error");
+    if (!token)
+      return Swal.fire({
+        icon: "error",
+        text: "No estás autenticado",
+        background: "#1e1e1e",
+        color: "#fff"
+      });
 
+   
     const confirm = await Swal.fire({
-      title: "¿Estás seguro?",
-      text: `Se eliminará la planificación de la fecha ${fecha}.`,
+      title: "¿Eliminar planificación corta?",
+      text: `Se eliminará la planificación corta del ${fecha}.`,
       icon: "warning",
+      background: "#1e1e1e",
+      color: "#fff",
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
+      confirmButtonColor: "#d33"
     });
 
     if (!confirm.isConfirmed) return;
@@ -99,20 +135,34 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+        `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=corta`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const data = await res.json();
-
       if (res.ok) {
-        Swal.fire("Eliminado", "Planificación eliminada correctamente.", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Eliminada",
+          text: "Planificación corta eliminada",
+          background: "#1e1e1e",
+          color: "#fff"
+        });
         setPlan({ A: "", B: "", C: "", D: "", E: "" });
       } else {
-        Swal.fire("Error", data.error || "No se pudo eliminar", "error");
+        Swal.fire({
+          icon: "error",
+          text: "Error eliminando planificación",
+          background: "#1e1e1e",
+          color: "#fff"
+        });
       }
     } catch {
-      Swal.fire("Error", "No se pudo conectar al servidor", "error");
+      Swal.fire({
+        icon: "error",
+        text: "Error de conexión",
+        background: "#1e1e1e",
+        color: "#fff"
+      });
     } finally {
       setLoading(false);
     }
@@ -120,45 +170,32 @@ export const PlanificacionCoach = () => {
 
   return (
     <div className="planificacion-container">
-      <h2>Planificación Diaria</h2>
+      <h2>Planificación Corta</h2>
 
       <div
-  style={{
-    marginBottom: "15px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  }}
->
-  <input
-    type="date"
-    value={fecha}
-    onChange={(e) => setFecha(e.target.value)}
-    required
-    style={{ flex: 1, marginRight: "10px" }}
-  />
+        style={{
+          marginBottom: "15px",
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center"
+        }}
+      >
+        <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required />
 
-  <button
-    className="link-btn"
-    style={{ padding: "10px 14px", whiteSpace: "nowrap" }}
-    onClick={() => navigate("/planificaCorta")}
-  >
-    Planificación corta
-  </button>
-</div>
+        <button className="link-btn" onClick={() => navigate("/planificaCoach")}>
+           Volver a planificación normal
+        </button>
+      </div>
 
-
-      {/* FORMULARIO DEL COACH */}
       <form className="planificacion-form" onSubmit={handleSubmit}>
         {["A", "B", "C", "D", "E"].map((bloque) => (
           <div key={bloque}>
-            <label>Bloque {bloque}</label>
+            <label>Bloque {bloque} (corta)</label>
             <textarea
               name={bloque}
               value={plan[bloque] || ""}
               onChange={handleChange}
-              rows={4}
+              rows={3}
             />
             <div className="links-block">
               {extractUrls(plan[bloque]).map((url, i) => (
@@ -172,21 +209,21 @@ export const PlanificacionCoach = () => {
 
         <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
           <button type="submit" disabled={loading}>
-            {loading ? "Guardando..." : "Guardar Planificación"}
+            {loading ? "Guardando..." : "Guardar Corta"}
           </button>
 
           <button
             type="button"
+            className="btn-eliminar"
             onClick={handleDelete}
             disabled={loading}
-            className="btn-eliminar"
           >
-            {loading ? "Eliminando..." : "Eliminar Planificación"}
+            {loading ? "Eliminando..." : "Eliminar"}
           </button>
         </div>
       </form>
 
-      <div style={{ marginTop: "10px", display: "flex", justifyContent: "center" }}>
+      <div style={{ marginTop: "15px", display: "flex", justifyContent: "center" }}>
         <button className="link-btn" onClick={() => navigate("/usuarioPages")}>
           Volver al inicio
         </button>

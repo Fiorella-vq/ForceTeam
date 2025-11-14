@@ -11,7 +11,6 @@ export const PlanificacionViewer = () => {
     location.state?.user ||
     JSON.parse(localStorage.getItem("usuario") || "null");
 
-  // 👉 Cargar pesos del usuario
   const [pesos, setPesos] = useState({});
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export const PlanificacionViewer = () => {
     fetchPesos();
   }, [user, token]);
 
-  // 👉 FUNCIÓN PARA APLICAR % Y PESOS
+ 
   const aplicarPesosAPlan = (texto) => {
     if (!texto || !pesos) return texto;
 
@@ -100,6 +99,10 @@ export const PlanificacionViewer = () => {
   const initialFecha =
     location.state?.fecha || today.toISOString().split("T")[0];
   const [fecha, setFecha] = useState(initialFecha);
+
+  
+  const [tipo, setTipo] = useState("normal");
+
   const [planificacion, setPlanificacion] = useState(null);
   const [error, setError] = useState(null);
 
@@ -115,7 +118,6 @@ export const PlanificacionViewer = () => {
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
 
-    // 👉 aplicar pesos ANTES de procesar URLs
     const textoConPesos = aplicarPesosAPlan(texto);
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -145,7 +147,6 @@ export const PlanificacionViewer = () => {
     });
   };
 
-  // Cargar planificación
   useEffect(() => {
     const fetchPlanificacion = async () => {
       try {
@@ -153,7 +154,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `http://localhost:3001/api/planificacion?fecha=${fecha}`,
+          `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
           { headers }
         );
 
@@ -169,21 +170,28 @@ export const PlanificacionViewer = () => {
     };
 
     fetchPlanificacion();
-  }, [fecha, token]);
+  }, [fecha, token, tipo]);
 
   return (
     <div className="plani-viewer-container">
-      <h2>Planificación semanal</h2>
+      <h2>Planificación semanal ({tipo})</h2>
 
-      <label>
-        Fecha:
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
         <input
           type="date"
           value={fecha}
           onChange={(e) => setFecha(e.target.value)}
           className="plani-input"
         />
-      </label>
+
+       
+        <button
+          className="link-btn"
+          onClick={() => setTipo(tipo === "normal" ? "corta" : "normal")}
+        >
+          {tipo === "normal" ? "Ver planificación corta" : "Ver planificación normal"}
+        </button>
+      </div>
 
       {error && <p className="plani-error">{error}</p>}
 

@@ -54,11 +54,15 @@ class Planificacion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha = db.Column(db.String(10), nullable=False)
     dia = db.Column(db.Integer, nullable=False)
+    
+    tipo = db.Column(db.String(20), nullable=False, default="normal") 
+
     bloque_a = db.Column(db.Text, default="")
     bloque_b = db.Column(db.Text, default="")
     bloque_c = db.Column(db.Text, default="")
     bloque_d = db.Column(db.Text, default="")
     bloque_e = db.Column(db.Text, default="")
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -67,6 +71,8 @@ class Planificacion(db.Model):
             "id": self.id,
             "fecha": self.fecha,
             "dia": self.dia,
+            "tipo": self.tipo,  
+
             "plan": {
                 "A": self.bloque_a,
                 "B": self.bloque_b,
@@ -75,7 +81,6 @@ class Planificacion(db.Model):
                 "E": self.bloque_e,
             },
         }
-
 
 # ===========================
 # MODELO LOG DE LEVANTAMIENTOS
