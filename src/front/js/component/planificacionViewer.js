@@ -13,23 +13,34 @@ export const PlanificacionViewer = () => {
 
   const [pesos, setPesos] = useState({});
 
+ 
   useEffect(() => {
+    const controller = new AbortController(); 
+
     const fetchPesos = async () => {
       if (!user?.id) return;
 
-      const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/pesos`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      try {
+        const res = await fetch(
+          `http://localhost:3001/api/users/${user.id}/pesos`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            signal: controller.signal, 
+          }
+        );
 
-      const data = await res.json();
-      setPesos(data || {});
+        const data = await res.json();
+        setPesos(data || {});
+      } catch (err) {
+        if (err.name !== "AbortError") console.error(err);
+      }
     };
 
     fetchPesos();
+
+    return () => controller.abort(); 
   }, [user, token]);
 
- 
   const aplicarPesosAPlan = (texto) => {
     if (!texto || !pesos) return texto;
 
@@ -100,7 +111,6 @@ export const PlanificacionViewer = () => {
     location.state?.fecha || today.toISOString().split("T")[0];
   const [fecha, setFecha] = useState(initialFecha);
 
-  
   const [tipo, setTipo] = useState("normal");
 
   const [planificacion, setPlanificacion] = useState(null);
@@ -147,7 +157,10 @@ export const PlanificacionViewer = () => {
     });
   };
 
+  
   useEffect(() => {
+    const controller = new AbortController(); 
+
     const fetchPlanificacion = async () => {
       try {
         const headers = {};
@@ -155,7 +168,10 @@ export const PlanificacionViewer = () => {
 
         const response = await fetch(
           `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
-          { headers }
+          {
+            headers,
+            signal: controller.signal, 
+          }
         );
 
         if (!response.ok) throw new Error("No se pudo cargar la planificación");
@@ -164,12 +180,15 @@ export const PlanificacionViewer = () => {
         setPlanificacion(data.plan ? data : null);
         setError(null);
       } catch (err) {
+        if (err.name === "AbortError") return;
         setError(err.message || "Error desconocido");
         setPlanificacion(null);
       }
     };
 
     fetchPlanificacion();
+
+    return () => controller.abort();
   }, [fecha, token, tipo]);
 
   return (
@@ -184,12 +203,13 @@ export const PlanificacionViewer = () => {
           className="plani-input"
         />
 
-       
         <button
           className="link-btn"
           onClick={() => setTipo(tipo === "normal" ? "corta" : "normal")}
         >
-          {tipo === "normal" ? "Ver planificación corta" : "Ver planificación normal"}
+          {tipo === "normal"
+            ? "Ver planificación corta"
+            : "Ver planificación normal"}
         </button>
       </div>
 
