@@ -14,17 +14,17 @@ export const PlanificacionViewer = () => {
   const [pesos, setPesos] = useState({});
 
   // ===============================
-  // 📌 Cargar Pesos del Usuario
+  // 📌 Cargar Pesos del Usuario (FIX LOOP)
   // ===============================
   useEffect(() => {
+    if (!user?.id) return;
+
     const controller = new AbortController();
 
     const fetchPesos = async () => {
-      if (!user?.id) return;
-
       try {
         const res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
+          `http://localhost:3001/api/users/${user.id}/pesos`,
           {
             headers: { Authorization: `Bearer ${token}` },
             signal: controller.signal,
@@ -40,16 +40,14 @@ export const PlanificacionViewer = () => {
 
     fetchPesos();
     return () => controller.abort();
-  }, [user, token]);
+  }, [user?.id]); // ← FIX definitivo
 
   // ===============================
-  // 📌 FUNCIÓN CENTRAL (FIX REAL)
+  // 📌 FUNCIÓN CENTRAL (PESOS)
   // ===============================
-
   const aplicarPesosAPlan = (texto) => {
     if (!texto || !pesos) return texto;
 
-    // Mapa ampliado y corregido
     const ejerciciosMap = {
       "clean & jerk": "Clean & Jerk",
       "clean and jerk": "Clean & Jerk",
@@ -83,27 +81,22 @@ export const PlanificacionViewer = () => {
     let ejercicioActual = null;
 
     for (let i = 0; i < lineas.length; i++) {
-      // 🧽 Limpieza NO destructiva
       let lineaLimpia = lineas[i]
         .toLowerCase()
-        .replace(/[^a-z0-9áéíóúüñ\s&]/gi, "") // conserva "&"
+        .replace(/[^a-z0-9áéíóúüñ\s&]/gi, "")
         .trim();
 
-      // 🔍 Buscar coincidencia exacta del ejercicio
       const encontrado = Object.keys(ejerciciosMap).find((key) =>
         lineaLimpia.includes(key)
       );
 
-      if (encontrado) {
-        ejercicioActual = ejerciciosMap[encontrado];
-      }
+      if (encontrado) ejercicioActual = ejerciciosMap[encontrado];
 
       if (!ejercicioActual) continue;
 
       const pesoMax = parseFloat(pesos[ejercicioActual]);
       if (!pesoMax || isNaN(pesoMax)) continue;
 
-      // 🔥 Reemplazo final con kilos
       lineas[i] = lineas[i].replace(/(\d+)%/g, (match, porc) => {
         const porcentaje = parseInt(porc);
         const calculado = Math.round((pesoMax * porcentaje) / 100);
@@ -115,7 +108,7 @@ export const PlanificacionViewer = () => {
   };
 
   // ===============================
-  // Guardar usuario en LS
+  // Guardar usuario en LocalStorage
   // ===============================
   useEffect(() => {
     if (location.state?.user) {
@@ -146,7 +139,7 @@ export const PlanificacionViewer = () => {
   ];
 
   // ===============================
-  // Renderizar contenido
+  // Renderizar contenido con links + pesos
   // ===============================
   const renderContenido = (texto) => {
     if (!texto) return "Sin plan";
@@ -181,7 +174,7 @@ export const PlanificacionViewer = () => {
   };
 
   // ===============================
-  // Fetch Planificación
+  // Fetch de Planificación (sin loops)
   // ===============================
   useEffect(() => {
     const controller = new AbortController();
@@ -192,7 +185,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
+          `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
           {
             headers,
             signal: controller.signal,
@@ -213,7 +206,7 @@ export const PlanificacionViewer = () => {
 
     fetchPlanificacion();
     return () => controller.abort();
-  }, [fecha, token, tipo]);
+  }, [fecha, tipo]); // ← IMPORTANTE: YA NO DEPENDE DE PESOS NI TOKEN NI USER
 
   // ===============================
   // Render Final

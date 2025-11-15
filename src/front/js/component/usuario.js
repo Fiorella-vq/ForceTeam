@@ -42,7 +42,7 @@ export const Usuario = ({ user, token }) => {
   const eliminarWod = async (id) => {
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/wods/${id}`,
+        `http://localhost:3001/api/users/${user.id}/wods/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -64,13 +64,13 @@ export const Usuario = ({ user, token }) => {
     const fetchData = async () => {
       try {
         const [logsRes, wodsRes, pesosRes] = await Promise.all([
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/logs`, {
+          fetch(`http://localhost:3001/api/users/${user.id}/logs`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/wods`, {
+          fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+          fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -95,7 +95,7 @@ export const Usuario = ({ user, token }) => {
 
   const guardarPeso = async (ejercicio, valor) => {
     try {
-      await fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+      await fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -162,7 +162,7 @@ export const Usuario = ({ user, token }) => {
 
       if (wodDeHoy) {
         res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodDeHoy.id}`,
+          `http://localhost:3001/api/users/${user.id}/wods/${wodDeHoy.id}`,
           {
             method: "PATCH",
             headers: {
@@ -173,17 +173,14 @@ export const Usuario = ({ user, token }) => {
           }
         );
       } else {
-        res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
+        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
       }
 
       if (!res.ok) throw new Error();
@@ -210,7 +207,7 @@ export const Usuario = ({ user, token }) => {
   const guardarEdicionWod = async (wod) => {
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/wods/${wod.id}`,
+        `http://localhost:3001/api/users/${user.id}/wods/${wod.id}`,
         {
           method: "PATCH",
           headers: {
