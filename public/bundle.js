@@ -13117,7 +13117,8 @@
                           f(!0),
                           (e.prev = 1),
                           (e.next = 4),
-                          fetch("http://localhost:3001/api/login", {
+                          fetch("https://forceteam.onrender.com/api
+/login", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ email: n, password: a }),
@@ -13333,7 +13334,8 @@
                             return (
                               (e.prev = 3),
                               (e.next = 6),
-                              fetch("http://localhost:3001/api/usuario", {
+                              fetch("https://forceteam.onrender.com/api
+/usuario", {
                                 headers: { Authorization: "Bearer ".concat(t) },
                               })
                             );
@@ -13381,7 +13383,8 @@
                             return (
                               (e.prev = 0),
                               (e.next = 3),
-                              fetch("http://localhost:3001/api/login", {
+                              fetch("https://forceteam.onrender.com/api
+/login", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({ email: t, password: n }),
@@ -13651,7 +13654,8 @@
                                   (e.next = 3),
                                   Promise.all([
                                     fetch(
-                                      "http://localhost:3001/api/users/".concat(
+                                      "https://forceteam.onrender.com/api
+/users/".concat(
                                         n.id,
                                         "/logs"
                                       ),
@@ -13662,7 +13666,8 @@
                                       }
                                     ),
                                     fetch(
-                                      "http://localhost:3001/api/users/".concat(
+                                      "https://forceteam.onrender.com/api
+/users/".concat(
                                         n.id,
                                         "/wods"
                                       ),
@@ -13673,7 +13678,8 @@
                                       }
                                     ),
                                     fetch(
-                                      "http://localhost:3001/api/users/".concat(
+                                      "https://forceteam.onrender.com/api
+/users/".concat(
                                         n.id,
                                         "/pesos"
                                       ),
@@ -13756,7 +13762,8 @@
                             (e.prev = 0),
                             (e.next = 3),
                             fetch(
-                              "http://localhost:3001/api/users/".concat(
+                              "https://forceteam.onrender.com/api
+/users/".concat(
                                 n.id,
                                 "/pesos"
                               ),
@@ -13859,7 +13866,8 @@
                             return (
                               (e.next = 5),
                               fetch(
-                                "http://localhost:3001/api/users/"
+                                "https://forceteam.onrender.com/api
+/users/"
                                   .concat(n.id, "/wods/")
                                   .concat(z.id),
                                 {
@@ -13879,7 +13887,8 @@
                             return (
                               (e.next = 10),
                               fetch(
-                                "http://localhost:3001/api/users/".concat(
+                                "https://forceteam.onrender.com/api
+/users/".concat(
                                   n.id,
                                   "/wods"
                                 ),
@@ -14292,7 +14301,8 @@
                                   return (
                                     (t.prev = 0),
                                     (t.next = 3),
-                                    fetch("http://localhost:3001/api/usuario", {
+                                    fetch("https://forceteam.onrender.com/api
+/usuario", {
                                       headers: {
                                         Authorization: "Bearer ".concat(e),
                                       },
@@ -14428,7 +14438,8 @@
                               T(!0),
                               (t.prev = 5),
                               (t.next = 8),
-                              fetch("http://localhost:3001/api/register", {
+                              fetch("https://forceteam.onrender.com/api
+/register", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({
@@ -14656,7 +14667,8 @@
                               (e.prev = 2),
                               (e.next = 5),
                               fetch(
-                                "http://localhost:3001/api/planificacion?fecha=".concat(
+                                "https://forceteam.onrender.com/api
+/planificacion?fecha=".concat(
                                   t
                                 ),
                                 {
@@ -14747,7 +14759,8 @@
                               u(!0),
                               (e.prev = 4),
                               (e.next = 7),
-                              fetch("http://localhost:3001/api/planificacion", {
+                              fetch("https://forceteam.onrender.com/api
+/planificacion", {
                                 method: "POST",
                                 headers: {
                                   "Content-Type": "application/json",
@@ -14846,7 +14859,8 @@
                               (e.prev = 8),
                               (e.next = 11),
                               fetch(
-                                "http://localhost:3001/api/planificacion?fecha=".concat(
+                                "https://forceteam.onrender.com/api
+/planificacion?fecha=".concat(
                                   r
                                 ),
                                 {
@@ -15066,7 +15080,8 @@
                                   (t.prev = 2),
                                   (t.next = 5),
                                   fetch(
-                                    "http://localhost:3001/api/users/".concat(
+                                    "https://forceteam.onrender.com/api
+/users/".concat(
                                       u.id,
                                       "/pesos"
                                     ),
@@ -15158,7 +15173,8 @@
                                       (n.Authorization = "Bearer ".concat(c)),
                                     (t.next = 5),
                                     fetch(
-                                      "http://localhost:3001/api/planificacion?fecha="
+                                      "https://forceteam.onrender.com/api
+/planificacion?fecha="
                                         .concat(w, "&tipo=")
                                         .concat(y),
                                       { headers: n, signal: e.signal }
@@ -15454,7 +15470,8 @@
                               (e.prev = 4),
                               (e.next = 7),
                               fetch(
-                                "http://localhost:3001/api/forgot-password",
+                                "https://forceteam.onrender.com/api
+/forgot-password",
                                 {
                                   method: "POST",
                                   headers: {
@@ -15669,7 +15686,8 @@
                               (e.prev = 8),
                               (e.next = 11),
                               fetch(
-                                "http://localhost:3001/api/reset-password",
+                                "https://forceteam.onrender.com/api
+/reset-password",
                                 {
                                   method: "POST",
                                   headers: {
@@ -15857,7 +15875,8 @@
                             (e.prev = 2),
                             (e.next = 5),
                             fetch(
-                              "http://localhost:3001/api/planificacion?fecha=".concat(
+                              "https://forceteam.onrender.com/api
+/planificacion?fecha=".concat(
                                 t,
                                 "&tipo=corta"
                               ),
@@ -15947,7 +15966,8 @@
                             u(!0),
                             (e.prev = 4),
                             (e.next = 7),
-                            fetch("http://localhost:3001/api/planificacion", {
+                            fetch("https://forceteam.onrender.com/api
+/planificacion", {
                               method: "POST",
                               headers: {
                                 "Content-Type": "application/json",
@@ -16054,7 +16074,8 @@
                             (e.prev = 8),
                             (e.next = 11),
                             fetch(
-                              "http://localhost:3001/api/planificacion?fecha=".concat(
+                              "https://forceteam.onrender.com/api
+/planificacion?fecha=".concat(
                                 r,
                                 "&tipo=corta"
                               ),

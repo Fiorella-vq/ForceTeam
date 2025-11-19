@@ -39,7 +39,8 @@ export const Usuario = ({ user, token }) => {
   const eliminarWod = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/wods/${id}`,
+        `https://forceteam.onrender.com/api
+/users/${user.id}/wods/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +58,6 @@ export const Usuario = ({ user, token }) => {
         color: "#fff",
         confirmButtonColor: "#4fa3ff",
       });
-
     } catch {
       Swal.fire({
         icon: "error",
@@ -75,22 +75,33 @@ export const Usuario = ({ user, token }) => {
     const fetchData = async () => {
       try {
         const [logsRes, wodsRes, pesosRes] = await Promise.all([
-          fetch(`http://localhost:3001/api/users/${user.id}/logs`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          fetch(
+            `https://forceteam.onrender.com/api
+/users/${user.id}/logs`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
+          fetch(
+            `https://forceteam.onrender.com/api
+/users/${user.id}/wods`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
+          fetch(
+            `https://forceteam.onrender.com/api
+/users/${user.id}/pesos`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          ),
         ]);
 
         setLogs(await logsRes.json());
         setWods(await wodsRes.json());
         const pesosData = await pesosRes.json();
         if (pesosData && typeof pesosData === "object") setPesos(pesosData);
-
       } catch (err) {
         Swal.fire({
           icon: "error",
@@ -112,14 +123,18 @@ export const Usuario = ({ user, token }) => {
 
   const guardarPeso = async (ejercicio, valor) => {
     try {
-      await fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ ejercicio, valor }),
-      });
+      await fetch(
+        `https://forceteam.onrender.com/api
+/users/${user.id}/pesos`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ ejercicio, valor }),
+        }
+      );
     } catch (err) {}
   };
 
@@ -165,7 +180,8 @@ export const Usuario = ({ user, token }) => {
 
       if (wodDeHoy) {
         res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods/${wodDeHoy.id}`,
+          `https://forceteam.onrender.com/api
+/users/${user.id}/wods/${wodDeHoy.id}`,
           {
             method: "PATCH",
             headers: {
@@ -176,14 +192,18 @@ export const Usuario = ({ user, token }) => {
           }
         );
       } else {
-        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await fetch(
+          `https://forceteam.onrender.com/api
+/users/${user.id}/wods`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          }
+        );
       }
 
       if (!res.ok) throw new Error();
@@ -211,7 +231,6 @@ export const Usuario = ({ user, token }) => {
         timer: 1500,
         showConfirmButton: false,
       });
-
     } catch {
       Swal.fire({
         icon: "error",
@@ -225,11 +244,16 @@ export const Usuario = ({ user, token }) => {
 
   return (
     <div className="usuario-container">
-
       <div className="usuario-welcome-card">
-        <h3>{obtenerSaludo()} {user.name} 💪</h3>
-        <p className="usuario-welcome-sub">Último acceso: {new Date().toLocaleDateString("es-ES")}</p>
-        <p className="usuario-welcome-text">Recordá registrar tu WOD del día para seguir mejorando 🚀</p>
+        <h3>
+          {obtenerSaludo()} {user.name} 💪
+        </h3>
+        <p className="usuario-welcome-sub">
+          Último acceso: {new Date().toLocaleDateString("es-ES")}
+        </p>
+        <p className="usuario-welcome-text">
+          Recordá registrar tu WOD del día para seguir mejorando 🚀
+        </p>
       </div>
 
       <div className="usuario-header">
@@ -244,9 +268,18 @@ export const Usuario = ({ user, token }) => {
       {wodDeHoy && (
         <div className="usuario-resumen-hoy">
           <h3>Resumen del día 🗓️</h3>
-          <p><strong>WOD:</strong> {wodDeHoy.descripcion || wodDeHoy.wod_descripcion}</p>
-          <p><strong>Cómo lo realizaste:</strong> {wodDeHoy.como_realizo || wodDeHoy.wod_como_realizo}</p>
-          <p><strong>Sentimiento:</strong> {wodDeHoy.sentimiento || wodDeHoy.wod_sentimiento}</p>
+          <p>
+            <strong>WOD:</strong>{" "}
+            {wodDeHoy.descripcion || wodDeHoy.wod_descripcion}
+          </p>
+          <p>
+            <strong>Cómo lo realizaste:</strong>{" "}
+            {wodDeHoy.como_realizo || wodDeHoy.wod_como_realizo}
+          </p>
+          <p>
+            <strong>Sentimiento:</strong>{" "}
+            {wodDeHoy.sentimiento || wodDeHoy.wod_sentimiento}
+          </p>
         </div>
       )}
 
@@ -367,9 +400,18 @@ export const Usuario = ({ user, token }) => {
             .map((wod) => (
               <li key={wod.id}>
                 <strong>{wod.fecha}</strong> <br />
-                <p><strong>🏋️ Descripción:</strong> {wod.descripcion || wod.wod_descripcion || "-"}</p>
-                <p><strong>🔥 Cómo lo realizaste:</strong> {wod.como_realizo || wod.wod_como_realizo || "-"}</p>
-                <p><strong>❤️ Sentimiento:</strong> {wod.sentimiento || wod.wod_sentimiento || "-"}</p>
+                <p>
+                  <strong>🏋️ Descripción:</strong>{" "}
+                  {wod.descripcion || wod.wod_descripcion || "-"}
+                </p>
+                <p>
+                  <strong>🔥 Cómo lo realizaste:</strong>{" "}
+                  {wod.como_realizo || wod.wod_como_realizo || "-"}
+                </p>
+                <p>
+                  <strong>❤️ Sentimiento:</strong>{" "}
+                  {wod.sentimiento || wod.wod_sentimiento || "-"}
+                </p>
               </li>
             ))}
         </ul>

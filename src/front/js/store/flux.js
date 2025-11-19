@@ -45,7 +45,8 @@ const getState = ({ getStore, getActions, setStore }) => {
         if (!token) return;
 
         try {
-          const res = await fetch("http://localhost:3001/api/usuario", {
+          const res = await fetch("https://forceteam.onrender.com/api
+/usuario", {
             headers: { Authorization: `Bearer ${token}` },
           });
 
@@ -66,7 +67,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       // --- Función de login con fetch ---
       loginFetch: async (email, password) => {
         try {
-          const response = await fetch("http://localhost:3001/api/login", {
+          const response = await fetch("https://forceteam.onrender.com/api
+/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
