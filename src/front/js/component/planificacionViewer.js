@@ -22,8 +22,7 @@ export const PlanificacionViewer = () => {
     const fetchPesos = async () => {
       try {
         const res = await fetch(
-          `https://forceteam.onrender.com/api
-/users/${user.id}/pesos`,
+          `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
           {
             headers: { Authorization: `Bearer ${token}` },
             signal: controller.signal,
@@ -44,8 +43,7 @@ export const PlanificacionViewer = () => {
   const guardarPeso = async (ejercicio, valor) => {
     try {
       await fetch(
-        `https://forceteam.onrender.com/api
-/users/${user.id}/pesos`,
+        `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
         {
           method: "PATCH",
           headers: {
@@ -228,8 +226,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `https://forceteam.onrender.com/api
-/planificacion?fecha=${fecha}&tipo=${tipo}`,
+          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
           { headers, signal: controller.signal }
         );
 

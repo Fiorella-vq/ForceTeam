@@ -28,8 +28,7 @@ export const PlanificacionCoach = () => {
 
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api
-/planificacion?fecha=${fechaParam}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -60,8 +59,7 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("https://forceteam.onrender.com/api
-/planificacion", {
+      const res = await fetch("https://forceteam.onrender.com/api/planificacion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,8 +99,7 @@ export const PlanificacionCoach = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api
-/planificacion?fecha=${fecha}`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 
