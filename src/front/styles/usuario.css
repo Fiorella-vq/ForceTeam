@@ -1,4 +1,3 @@
-
 html,
 body {
   margin: 0;
@@ -8,7 +7,6 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-
 .usuario-container {
   max-width: 720px;
   margin: 30px auto;
@@ -17,8 +15,41 @@ body {
   border-radius: 12px;
   color: #eaeaea;
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.05);
+  animation: fadeIn 0.6s ease;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.usuario-welcome-card {
+  background: linear-gradient(135deg, #222, #111);
+  padding: 18px 22px;
+  border-radius: 12px;
+  text-align: left;
+  border: 1px solid #333;
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.05);
+  margin-bottom: 20px;
+}
+
+.usuario-welcome-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.usuario-welcome-sub {
+  margin: 6px 0 0 0;
+  font-size: 0.85rem;
+  color: #bbb;
+}
+
+.usuario-welcome-text {
+  margin-top: 10px;
+  color: #ddd;
+  font-size: 0.9rem;
+}
 
 .usuario-header {
   display: flex;
@@ -38,11 +69,10 @@ body {
   color: #f5f5f5;
 }
 
-
 .logout-btn {
-  background: linear-gradient(135deg, #333, #000);
+  background: linear-gradient(135deg, #444, #000);
   border: none;
-  padding: 8px 14px;
+  padding: 9px 15px;
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
@@ -51,29 +81,39 @@ body {
 }
 
 .logout-btn:hover {
-  background: linear-gradient(135deg, #000, #333);
+  background: linear-gradient(135deg, #000, #444);
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
 }
 
+.usuario-resumen-hoy {
+  background: #181818;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.05);
+}
+
+.usuario-resumen-hoy h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: #4fa3ff;
+}
 
 .entrenamientos-section,
 .wods-section {
   margin-top: 35px;
 }
 
-
-.inputs-wods,
-.inputs-entrenamientos {
+.inputs-wods {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
 .inputs-wods textarea,
-.inputs-wods input[type="date"],
-.inputs-entrenamientos input,
-.inputs-entrenamientos select {
+.inputs-wods input[type="date"] {
   width: 100%;
   padding: 12px 14px;
   background: #222;
@@ -81,23 +121,28 @@ body {
   border: 2px solid #333;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+  transition: 0.3s ease;
 }
 
-.inputs-wods textarea {
-  min-height: 65px;
-  resize: vertical;
-}
-
-.inputs-wods input:focus,
 .inputs-wods textarea:focus,
-.inputs-entrenamientos input:focus,
-.inputs-entrenamientos select:focus {
+.inputs-wods input:focus {
   border-color: #777;
   background-color: #0d0d0d;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }
 
+.sentimiento-box {
+  position: relative;
+}
+
+.emoji-sentimiento {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-size: 1.5rem;
+  pointer-events: none;
+  opacity: 0.9;
+}
 
 .inputs-wods button {
   padding: 14px;
@@ -118,38 +163,21 @@ body {
   box-shadow: 0 6px 16px rgba(255, 255, 255, 0.12);
 }
 
-
-.tabla-porcentajes {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
-  overflow-x: auto;
-  display: block;
-}
-
-.tabla-porcentajes th,
-.tabla-porcentajes td {
-  border: 1px solid #333;
-  padding: 8px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.tabla-porcentajes th {
-  background-color: #333;
-  font-weight: 600;
-}
-
-.input-peso {
-  width: 70px;
-  padding: 8px;
-  background: #222;
+.button-icon {
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #444, #000);
   color: #fff;
-  border: 1px solid #444;
-  border-radius: 6px;
-  text-align: center;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
+.button-icon:hover {
+  background: linear-gradient(135deg, #000, #444);
+  transform: scale(1.05);
+}
 
 .lista-wods {
   background: #181818;
@@ -165,25 +193,6 @@ body {
   border-radius: 10px;
   border: 1px solid #444;
 }
-
-
-.button-icon {
-  padding: 8px 12px;
-  background: linear-gradient(135deg, #444, #000);
-  color: #fff;
-  font-weight: bold;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  margin-top: 12px;
-  transition: 0.3s ease;
-}
-
-.button-icon:hover {
-  background: linear-gradient(135deg, #000, #444);
-  transform: scale(1.05);
-}
-
 
 .input-date-dark {
   width: 100%;
@@ -208,7 +217,6 @@ body {
   outline: none;
 }
 
-/* Label */
 .wod-por-fecha label {
   display: flex;
   flex-direction: column;
@@ -218,48 +226,56 @@ body {
   font-weight: bold;
 }
 
+.link-planificacion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.link-btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.link-btn:hover {
+  background-color: #4fa3ff;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
+}
 
 @media (max-width: 768px) {
-  .usuario-container {
-    max-width: 95%;
-    padding: 20px;
-  }
-
-  .usuario-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .input-peso {
-    width: 55px;
-  }
+  .usuario-container { max-width: 95%; padding: 20px; }
+  .usuario-header { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
 
 @media (max-width: 480px) {
-  .logout-btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .lista-wods li {
-    font-size: 0.9rem;
-  }
-
-  .input-peso {
-    width: 100%;
-  }
+  .logout-btn { width: 100%; text-align: center; }
+  .lista-wods li { font-size: 0.9rem; }
 }
 
-.fila-seleccionada td {
-  background: #055236 !important;
+.swal2-container {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  bottom: auto !important;
+  padding: 20px !important;
+  z-index: 999999 !important;
+  pointer-events: none;
+}
+
+.swal2-popup {
+  pointer-events: all;
+  border-radius: 12px !important;
+  background: #1e1e1e !important;
   color: #fff !important;
-  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6) !important;
 }
-
-.fila-seleccionada input {
-  background: #055236 !important;
-  border-color: black !important;
-  color: #fff !important;
-}
-
