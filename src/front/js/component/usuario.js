@@ -23,7 +23,7 @@ export const Usuario = ({ user, token }) => {
     "Snatch",
     "Hang Power Snatch",
     "Hang Squat Snatch",
-    "Clean & Jerk",
+    "Clean & Jerk"
   ];
 
   const [pesos, setPesos] = useState(
@@ -33,7 +33,6 @@ export const Usuario = ({ user, token }) => {
     }, {})
   );
 
-  const [editandoWod, setEditandoWod] = useState(null);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(hoy);
 
   const eliminarWod = async (id) => {
@@ -42,7 +41,7 @@ export const Usuario = ({ user, token }) => {
         `https://forceteam.onrender.com/api/users/${user.id}/wods/${id}`,
         {
           method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` }
         }
       );
 
@@ -55,7 +54,7 @@ export const Usuario = ({ user, token }) => {
         title: "WOD eliminado",
         background: "#1e1e1e",
         color: "#fff",
-        confirmButtonColor: "#4fa3ff",
+        confirmButtonColor: "#4fa3ff"
       });
     } catch {
       Swal.fire({
@@ -63,7 +62,7 @@ export const Usuario = ({ user, token }) => {
         title: "Error",
         text: "No se pudo eliminar el WOD.",
         background: "#1e1e1e",
-        color: "#fff",
+        color: "#fff"
       });
     }
   };
@@ -74,37 +73,28 @@ export const Usuario = ({ user, token }) => {
     const fetchData = async () => {
       try {
         const [logsRes, wodsRes, pesosRes] = await Promise.all([
-          fetch(
-            `https://forceteam.onrender.com/api/users/${user.id}/logs`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          ),
-          fetch(
-            `https://forceteam.onrender.com/api/users/${user.id}/wods`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          ),
-          fetch(
-            `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          ),
+          fetch(`https://forceteam.onrender.com/api/users/${user.id}/logs`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          fetch(`https://forceteam.onrender.com/api/users/${user.id}/wods`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }),
+          fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
         ]);
 
         setLogs(await logsRes.json());
         setWods(await wodsRes.json());
         const pesosData = await pesosRes.json();
         if (pesosData && typeof pesosData === "object") setPesos(pesosData);
-      } catch (err) {
+      } catch {
         Swal.fire({
           icon: "error",
           title: "Error",
           text: "No se pudieron cargar los datos.",
           background: "#1e1e1e",
-          color: "#fff",
+          color: "#fff"
         });
       }
     };
@@ -119,18 +109,15 @@ export const Usuario = ({ user, token }) => {
 
   const guardarPeso = async (ejercicio, valor) => {
     try {
-      await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ ejercicio, valor }),
-        }
-      );
-    } catch (err) {}
+      await fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ ejercicio, valor })
+      });
+    } catch {}
   };
 
   useEffect(() => {
@@ -167,7 +154,7 @@ export const Usuario = ({ user, token }) => {
       wod_fecha: hoy,
       wod_descripcion: wodDescripcion.trim() || "WOD del día",
       wod_como_realizo: wodComoRealizo.trim() || "No especificado",
-      wod_sentimiento: wodSentimiento.trim() || "No especificado",
+      wod_sentimiento: wodSentimiento.trim() || "No especificado"
     };
 
     try {
@@ -180,9 +167,9 @@ export const Usuario = ({ user, token }) => {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(payload)
           }
         );
       } else {
@@ -192,9 +179,9 @@ export const Usuario = ({ user, token }) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(payload)
           }
         );
       }
@@ -205,7 +192,8 @@ export const Usuario = ({ user, token }) => {
 
       setWods((prev) => {
         const sinHoy = prev.filter(
-          (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) !== hoy
+          (w) =>
+            (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) !== hoy
         );
         return [...sinHoy, nuevoWod];
       });
@@ -222,7 +210,7 @@ export const Usuario = ({ user, token }) => {
         background: "#1e1e1e",
         color: "#fff",
         timer: 1500,
-        showConfirmButton: false,
+        showConfirmButton: false
       });
     } catch {
       Swal.fire({
@@ -230,17 +218,16 @@ export const Usuario = ({ user, token }) => {
         title: "Error",
         text: "No se pudo guardar el WOD",
         background: "#1e1e1e",
-        color: "#fff",
+        color: "#fff"
       });
     }
   };
 
   return (
     <div className="usuario-container">
+      
       <div className="usuario-welcome-card">
-        <h3>
-          {obtenerSaludo()} {user.name} 💪
-        </h3>
+        <h3>{obtenerSaludo()} {user.name} 💪</h3>
         <p className="usuario-welcome-sub">
           Último acceso: {new Date().toLocaleDateString("es-ES")}
         </p>
@@ -250,29 +237,32 @@ export const Usuario = ({ user, token }) => {
       </div>
 
       <div className="usuario-header">
-        <h2>
-          Atleta: {user.name} {user.last_name}
-        </h2>
+        <h2>Atleta: {user.name} {user.last_name}</h2>
         <button className="logout-btn" onClick={cerrarSesion}>
           Cerrar sesión
         </button>
       </div>
 
       {wodDeHoy && (
-        <div className="usuario-resumen-hoy">
-          <h3>Resumen del día 🗓️</h3>
-          <p>
-            <strong>WOD:</strong>{" "}
-            {wodDeHoy.descripcion || wodDeHoy.wod_descripcion}
-          </p>
-          <p>
-            <strong>Cómo lo realizaste:</strong>{" "}
-            {wodDeHoy.como_realizo || wodDeHoy.wod_como_realizo}
-          </p>
-          <p>
-            <strong>Sentimiento:</strong>{" "}
-            {wodDeHoy.sentimiento || wodDeHoy.wod_sentimiento}
-          </p>
+        <div className="usuario-wod-hoy">
+          <h3>WOD de hoy 🗓️ ({hoy})</h3>
+
+          <div className="wod-hoy-card">
+            <p>
+              <strong>🏋️ Descripción:</strong>{" "}
+              {wodDeHoy.descripcion || wodDeHoy.wod_descripcion || "-"}
+            </p>
+
+            <p>
+              <strong>🔥 Cómo lo realizaste:</strong>{" "}
+              {wodDeHoy.como_realizo || wodDeHoy.wod_como_realizo || "-"}
+            </p>
+
+            <p className="sentimiento-linea">
+              <strong>❤️ Sentimiento:</strong>{" "}
+              {wodDeHoy.sentimiento || wodDeHoy.wod_sentimiento || "-"}{" "}
+            </p>
+          </div>
         </div>
       )}
 
@@ -313,12 +303,12 @@ export const Usuario = ({ user, token }) => {
                 .slice(0, 5)
                 .map(
                   (w) => `
-                    <p>
-                      <strong>${w.fecha.split("T")[0]}</strong><br/>
-                      ${w.descripcion}<br/>
-                      😃 ${w.sentimiento}
-                    </p>
-                  `
+          <p>
+            <strong>${(w.fecha || w.wod_fecha).split("T")[0]}</strong><br/>
+            ${w.descripcion || w.wod_descripcion || "-"}<br/>
+            😃 ${w.sentimiento || w.wod_sentimiento || "-"}
+          </p>
+        `
                 )
                 .join("");
 
@@ -327,7 +317,7 @@ export const Usuario = ({ user, token }) => {
                 html: ultimos,
                 background: "#1e1e1e",
                 color: "#fff",
-                confirmButtonColor: "#4fa3ff",
+                confirmButtonColor: "#4fa3ff"
               });
             }}
           >
@@ -366,7 +356,7 @@ export const Usuario = ({ user, token }) => {
                     `,
                     background: "#1e1e1e",
                     color: "#fff",
-                    confirmButtonColor: "#4fa3ff",
+                    confirmButtonColor: "#4fa3ff"
                   });
                 } else {
                   Swal.fire({
@@ -375,39 +365,13 @@ export const Usuario = ({ user, token }) => {
                     icon: "info",
                     background: "#1e1e1e",
                     color: "#fff",
-                    confirmButtonColor: "#4fa3ff",
+                    confirmButtonColor: "#4fa3ff"
                   });
                 }
               }}
             />
           </label>
         </div>
-
-        <ul className="lista-wods">
-          {wods
-            .filter(
-              (w) =>
-                (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
-            )
-            .slice(0, 1)
-            .map((wod) => (
-              <li key={wod.id}>
-                <strong>{wod.fecha}</strong> <br />
-                <p>
-                  <strong>🏋️ Descripción:</strong>{" "}
-                  {wod.descripcion || wod.wod_descripcion || "-"}
-                </p>
-                <p>
-                  <strong>🔥 Cómo lo realizaste:</strong>{" "}
-                  {wod.como_realizo || wod.wod_como_realizo || "-"}
-                </p>
-                <p>
-                  <strong>❤️ Sentimiento:</strong>{" "}
-                  {wod.sentimiento || wod.wod_sentimiento || "-"}
-                </p>
-              </li>
-            ))}
-        </ul>
       </section>
 
       <div className="link-planificacion">
