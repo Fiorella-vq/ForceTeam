@@ -141,7 +141,11 @@ class UserPeso(db.Model):
     valor = db.Column(db.Float, nullable=True)
     fecha = db.Column(db.String(10), default=lambda: datetime.utcnow().strftime("%Y-%m-%d"))
 
-    user = db.relationship("User", backref="pesos")
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'ejercicio', name='uix_user_ejercicio'),
+    )
+
+    user = db.relationship("User", backref=db.backref("pesos", cascade="all, delete-orphan"))
 
     def serialize(self):
         return {
@@ -151,3 +155,4 @@ class UserPeso(db.Model):
             "valor": self.valor,
             "fecha": self.fecha,
         }
+
