@@ -68,8 +68,12 @@
   line-height: 1.5;
   border: 1px solid #222;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+
+  /* deja libres los bordes para los colores */
+  border-left: 6px solid transparent !important;
 }
 
+/*** ENLACES ***/
 .bloque-texto a {
   color: #4fa3ff;
   text-decoration: underline;
@@ -98,7 +102,10 @@
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
-/* CARD PARA LA TABLA */
+/*************************************************
+  TABLA PORCENTAJES
+*************************************************/
+
 .tabla-porcentajes-card {
   margin-top: 25px;
   padding: 16px 14px;
@@ -116,7 +123,6 @@
   color: #f5f5f5;
 }
 
-/* TABLA DE PORCENTAJES */
 .tabla-porcentajes {
   width: 100%;
   margin-top: 10px;
@@ -160,82 +166,51 @@
   color: #fff !important;
 }
 
-/* TABLETS */
-@media (max-width: 768px) {
-  .plani-viewer-container {
-    max-width: 90%;
-    margin: 30px auto;
-    padding: 25px 20px;
-  }
+/*************************************************
+  BLOQUES – BORDES COLOR
+*************************************************/
 
-  .plani-viewer-container h2 {
-    font-size: 1rem;
-  }
-
-  .plani-input {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-  }
-
-  .plan-content h3 {
-    font-size: 0.95rem;
-  }
-
-  .plan-content li {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-
-  .link-btn {
-    width: 100%;
-  }
-
-  .tabla-porcentajes-card {
-    padding: 12px 10px;
-  }
-
-  .tabla-porcentajes {
-    font-size: 0.85rem;
-  }
-
-  .input-peso {
-    width: 55px;
-  }
+.bloque-item {
+  background: #1a1a1a;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border-left: 6px solid #444;
 }
 
-/* CELULARES */
-@media (max-width: 480px) {
-  .plani-viewer-container {
-    max-width: 95%;
-    padding: 20px 15px;
-    margin: 20px auto;
-  }
+.bloque-A {
+  border-left-color: #4fa3ff !important;
+}
 
-  .plani-viewer-container h2 {
-    font-size: 0.9rem;
-  }
+.bloque-B {
+  border-left-color: #27ff52 !important;
+}
 
-  .plani-input {
-    font-size: 0.85rem;
-    padding: 10px;
-  }
+.bloque-C {
+  border-left-color: #9b59b6 !important;
+}
 
-  .plan-content li {
-    font-size: 0.85rem;
-    padding: 8px;
-  }
+.bloque-D {
+  border-left-color: #f39c12 !important;
+}
 
-  .link-btn {
-    font-size: 0.85rem;
-    padding: 10px;
-  }
+.bloque-E {
+  border-left-color: #e74c3c !important;
+}
 
-  .tabla-porcentajes {
-    font-size: 0.8rem;
-  }
 
-  .input-peso {
-    width: 100%;
-  }
+.bloque-titulo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Contenido */
+.bloque-texto {
+  font-size: 1rem;
+  color: #ddd;
+  line-height: 1.5;
+  white-space: pre-wrap;
 }

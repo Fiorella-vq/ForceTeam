@@ -5,13 +5,13 @@ import "../../styles/usuario.css";
 
 export const Usuario = ({ user, token }) => {
   const navigate = useNavigate();
-const obtenerSaludo = () => {
+  const obtenerSaludo = () => {
     const h = new Date().getHours();
     if (h < 12) return "¡Buen día!";
     if (h < 18) return "¡Vamos con todo!";
     return "¡A cerrar el día fuerte!";
   };
- 
+
   const [logs, setLogs] = useState([]);
   const [wods, setWods] = useState([]);
 
@@ -42,38 +42,33 @@ const obtenerSaludo = () => {
   const [busqueda, setBusqueda] = useState("");
   const [usuariosRegistrados, setUsuariosRegistrados] = useState([]);
 
-  
   const usuariosFiltrados = usuariosRegistrados
     .filter((u) =>
       (u.name + " " + u.last_name)
         .toLowerCase()
         .includes(busqueda.toLowerCase())
     )
-    .sort((a, b) =>
-      (a.name + a.last_name).localeCompare(b.name + b.last_name)
-    );
+    .sort((a, b) => (a.name + a.last_name).localeCompare(b.name + b.last_name));
 
-  
   const frases = [
-  "La fuerza no viene de ganar, viene del esfuerzo 💪🔥",
-  "Hoy entrenás, mañana sos más fuerte 🏋️",
-  "Las repeticiones construyen campeones 🦾",
-  "Tu único rival sos vos mismo 😤🔥",
-  "El dolor es temporal, el orgullo es para siempre 🏆",
-];
+    "La fuerza no viene de ganar, viene del esfuerzo 💪🔥",
+    "Hoy entrenás, mañana sos más fuerte 🏋️",
+    "Las repeticiones construyen campeones 🦾",
+    "Tu único rival sos vos mismo 😤🔥",
+    "El dolor es temporal, el orgullo es para siempre 🏆",
+  ];
 
-const [fraseMotivacional, setFraseMotivacional] = useState("");
+  const [fraseMotivacional, setFraseMotivacional] = useState("");
 
-useEffect(() => {
-  const f = frases[Math.floor(Math.random() * frases.length)];
-  setFraseMotivacional(f);
-}, []);
+  useEffect(() => {
+    const f = frases[Math.floor(Math.random() * frases.length)];
+    setFraseMotivacional(f);
+  }, []);
 
- 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/usuarios");
+        const res = await fetch("https://forceteam.onrender.com/api/usuarios");
         setUsuariosRegistrados(await res.json());
       } catch (e) {
         console.error("Error cargando usuarios:", e);
@@ -82,11 +77,10 @@ useEffect(() => {
     fetchUsers();
   }, []);
 
- 
   const eliminarWod = async (id) => {
     try {
       const res = await fetch(
-        `http://localhost:3001/api/users/${user.id}/wods/${id}`,
+        `https://forceteam.onrender.com/api/users/${user.id}/wods/${id}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -112,20 +106,19 @@ useEffect(() => {
     }
   };
 
- 
   useEffect(() => {
     if (!user || !token) return;
 
     const fetchData = async () => {
       try {
         const [logsRes, wodsRes, pesosRes] = await Promise.all([
-          fetch(`http://localhost:3001/api/users/${user.id}/logs`, {
+          fetch(`https://forceteam.onrender.com/api/users/${user.id}/logs`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
+          fetch(`https://forceteam.onrender.com/api/users/${user.id}/wods`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
+          fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -135,7 +128,6 @@ useEffect(() => {
 
         const pesosData = await pesosRes.json();
         if (pesosData && typeof pesosData === "object") setPesos(pesosData);
-
       } catch {
         Swal.fire({
           icon: "error",
@@ -150,17 +142,15 @@ useEffect(() => {
     fetchData();
   }, [user, token]);
 
-  
   const cerrarSesion = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/";
   };
 
- 
   const guardarPeso = async (ejercicio, valor) => {
     try {
-      await fetch(`http://localhost:3001/api/users/${user.id}/pesos`, {
+      await fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -181,7 +171,6 @@ useEffect(() => {
     return () => clearTimeout(timer);
   }, [pesos]);
 
- 
   const wodDeHoy = wods.find(
     (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
   );
@@ -199,7 +188,7 @@ useEffect(() => {
 
       if (wodDeHoy) {
         res = await fetch(
-          `http://localhost:3001/api/users/${user.id}/wods/${wodDeHoy.id}`,
+          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodDeHoy.id}`,
           {
             method: "PATCH",
             headers: {
@@ -210,14 +199,17 @@ useEffect(() => {
           }
         );
       } else {
-        res = await fetch(`http://localhost:3001/api/users/${user.id}/wods`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await fetch(
+          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(payload),
+          }
+        );
       }
 
       if (!res.ok) throw new Error();
@@ -245,7 +237,6 @@ useEffect(() => {
         timer: 1500,
         showConfirmButton: false,
       });
-
     } catch {
       Swal.fire({
         icon: "error",
@@ -257,31 +248,29 @@ useEffect(() => {
     }
   };
 
- 
   return (
     <div className="usuario-container">
-      
-     
       <div className="usuario-welcome-card">
-        <h3>{obtenerSaludo()} {user.name} 💪</h3>
+        <h3>
+          {obtenerSaludo()} {user.name} 💪
+        </h3>
         <p className="usuario-welcome-sub">
           Último acceso: {new Date().toLocaleDateString("es-ES")}
         </p>
       </div>
 
-    
       <div className="usuario-header">
-        <h2>Atleta: {user.name} {user.last_name}</h2>
+        <h2>
+          Atleta: {user.name} {user.last_name}
+        </h2>
         <button className="logout-btn" onClick={cerrarSesion}>
           Cerrar sesión
         </button>
       </div>
 
-      
       <section className="wods-section">
         <h3>Registrar WOD del día</h3>
 
-        
         <div className="wod-por-fecha">
           <label>
             Consultar WOD por fecha:
@@ -330,7 +319,6 @@ useEffect(() => {
           </label>
         </div>
 
-    
         {wodDeHoy && (
           <div className="usuario-wod-hoy">
             <h3>WOD de hoy 🗓️ ({hoy})</h3>
@@ -354,7 +342,6 @@ useEffect(() => {
           </div>
         )}
 
-     
         <div className="inputs-wods">
           <h4>WOD de hoy ({hoy})</h4>
 
@@ -380,7 +367,6 @@ useEffect(() => {
         </div>
       </section>
 
-    
       <div className="link-planificacion">
         <button
           className="link-btn"
@@ -399,19 +385,14 @@ useEffect(() => {
         )}
       </div>
 
-    
       <div className="motivacional-card">
         <p>⚡ {fraseMotivacional}</p>
-
       </div>
 
-     
       <div className="usuarios-conectados-card">
         <h4>Usuarios registrados 🟣</h4>
 
-        <p className="usuario-total">
-          Total: {usuariosRegistrados.length}
-        </p>
+        <p className="usuario-total">Total: {usuariosRegistrados.length}</p>
 
         <input
           type="text"
@@ -439,7 +420,6 @@ useEffect(() => {
 
             return (
               <li key={u.id} className="usuario-item">
-
                 <div
                   className={`usuario-avatar ${
                     u.role === "admin" ? "admin-avatar" : ""
@@ -463,9 +443,7 @@ useEffect(() => {
                 </span>
 
                 <div
-                  className={
-                    Math.random() > 0.5 ? "dot-online" : "dot-offline"
-                  }
+                  className={u.id % 2 === 0 ? "dot-online" : "dot-offline"}
                 />
               </li>
             );

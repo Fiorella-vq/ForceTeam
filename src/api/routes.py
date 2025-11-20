@@ -19,7 +19,7 @@ CORS(api, supports_credentials=True)
 
 @api.after_request
 def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Origin", "https://forceteam.onrender.com")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
     return response
@@ -470,7 +470,7 @@ def forgot_password():
 
     reset_token = generar_jwt({"user_id": user.id}, expiracion_minutos=30)
 
-    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    frontend_url = os.getenv("FRONTEND_URL", "https://forceteam.onrender.com")
     reset_link = f"{frontend_url}/reset-password?token={reset_token}"
 
     mensaje = f"""
