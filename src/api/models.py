@@ -18,6 +18,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     role = db.Column(db.String(20), nullable=False, default="user")
+    foto = db.Column(db.String(255), nullable=True)
+
 
     # Relaciones
     logs = db.relationship("UserLog", backref="user", lazy=True, cascade="all, delete-orphan")
@@ -41,6 +43,7 @@ class User(db.Model):
             "role": self.role,
             "logs": [log.serialize() for log in self.logs] if self.logs else [],
             "wods": [wod.serialize() for wod in self.wods] if self.wods else [],
+            "foto": self.foto,
 
         }
 
@@ -135,7 +138,7 @@ class UserPeso(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
     ejercicio = db.Column(db.String(50), nullable=False)
-    valor = db.Column(db.Float, nullable=False)
+    valor = db.Column(db.Float, nullable=True)
     fecha = db.Column(db.String(10), default=lambda: datetime.utcnow().strftime("%Y-%m-%d"))
 
     user = db.relationship("User", backref="pesos")

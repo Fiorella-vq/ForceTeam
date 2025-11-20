@@ -11,9 +11,18 @@ import os
 from functools import wraps
 import jwt
 from threading import Thread
+from werkzeug.utils import secure_filename
 
 api = Blueprint('api', __name__)
-CORS(api, origins=["https://forceteam.onrender.com"], supports_credentials=True)
+CORS(api, supports_credentials=True)
+
+
+@api.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
+    return response
 
 
 # ======================================
@@ -21,10 +30,12 @@ CORS(api, origins=["https://forceteam.onrender.com"], supports_credentials=True)
 # ======================================
 SECRET_KEY = os.getenv('SECRET_KEY', 'mi_clave_secreta_super_segura')
 
+
 def generar_jwt(payload, expiracion_minutos=60):
     payload = payload.copy()
     payload['exp'] = datetime.utcnow() + timedelta(minutes=expiracion_minutos)
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
 
 def verificar_jwt(token):
     try:
@@ -35,6 +46,7 @@ def verificar_jwt(token):
     except jwt.InvalidTokenError as e:
         current_app.logger.error(f"Token JWT inválido: {e}")
         return None
+
 
 def admin_required(f):
     @wraps(f)
@@ -51,12 +63,14 @@ def admin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
+
 # ======================================
 # Utilidades
 # ======================================
 def generate_token(length=32):
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
+
 
 def enviar_email_smtp(destino, asunto, mensaje):
     smtp_user = os.getenv("SMTP_USERNAME")
@@ -86,6 +100,7 @@ def enviar_email_smtp(destino, asunto, mensaje):
         current_app.logger.error(f"Error enviando correo a {destino}: {e}")
         return False, str(e)
 
+
 def send_async_email(destino, asunto, mensaje):
     from flask import current_app
     app = current_app._get_current_object()
@@ -99,6 +114,7 @@ def send_async_email(destino, asunto, mensaje):
                 app.logger.error(f"❌ Error enviando correo a {destino}: {info}")
 
     Thread(target=send).start()
+
 
 # ======================================
 # Registro y Login
@@ -130,10 +146,15 @@ def register():
         }
         token = generar_jwt(payload, expiracion_minutos=1440)
 
-        return jsonify({"message": "Usuario creado correctamente", "user": new_user.serialize(), "token": token}), 201
+        return jsonify({
+            "message": "Usuario creado correctamente",
+            "user": new_user.serialize(),
+            "token": token
+        }), 201
     except Exception as e:
         current_app.logger.error(f"Error en register: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
+
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -161,6 +182,7 @@ def login():
         current_app.logger.error(f"Error en login: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
 
+
 @api.route('/usuario', methods=['GET'])
 def usuario():
     auth_header = request.headers.get('Authorization', '')
@@ -179,6 +201,42 @@ def usuario():
 
     return jsonify({'user': user.serialize()}), 200
 
+
+# ======================================
+# Subir foto de usuario
+# ======================================
+@api.route('/users/<int:user_id>/foto', methods=['POST'])
+def subir_foto(user_id):
+    user = User.query.get_or_404(user_id)
+
+    if 'foto' not in request.files:
+        return jsonify({"error": "No se envió ninguna foto"}), 400
+
+    file = request.files['foto']
+    if file.filename == '':
+        return jsonify({"error": "Nombre de archivo vacío"}), 400
+
+    filename = secure_filename(file.filename)
+
+    upload_folder = current_app.config.get(
+        'UPLOAD_FOLDER',
+        os.path.join(os.getcwd(), "src", "uploads")
+    )
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder, exist_ok=True)
+
+    filepath = os.path.join(upload_folder, filename)
+    file.save(filepath)
+
+    user.foto = f"/uploads/{filename}"
+    db.session.commit()
+
+    return jsonify({
+        "message": "Foto subida correctamente",
+        "foto_url": user.foto
+    }), 200
+
+
 # ======================================
 # Planificación
 # ======================================
@@ -187,10 +245,10 @@ def usuario():
 def crear_o_actualizar_planificacion():
     data = request.get_json() or {}
     fecha = data.get("fecha")
-    tipo = data.get("tipo", "normal")   # 👈 nuevo
+    tipo = data.get("tipo", "normal")
     plan = data.get("plan")
 
-    if not fecha or not plan or not all(k in plan for k in ("A","B","C","D","E")):
+    if not fecha or not plan or not all(k in plan for k in ("A", "B", "C", "D", "E")):
         return jsonify({"error": "Datos incompletos: fecha y plan con bloques A-E requeridos"}), 400
 
     dia = datetime.strptime(fecha, "%Y-%m-%d").isoweekday()
@@ -223,7 +281,7 @@ def crear_o_actualizar_planificacion():
 @api.route('/planificacion', methods=['GET'])
 def get_planificacion():
     fecha = request.args.get("fecha")
-    tipo = request.args.get("tipo", "normal")  # 👈 nuevo
+    tipo = request.args.get("tipo", "normal")
 
     if not fecha:
         return jsonify({"error": "La fecha es requerida"}), 400
@@ -235,11 +293,12 @@ def get_planificacion():
 
     return jsonify(planificacion.serialize()), 200
 
+
 @api.route('/planificacion', methods=['DELETE'])
 @admin_required
 def eliminar_planificacion():
     fecha = request.args.get('fecha')
-    tipo = request.args.get('tipo', 'normal')  # 👈 nuevo
+    tipo = request.args.get('tipo', 'normal')
 
     if not fecha:
         return jsonify({"error": "Parámetro 'fecha' es requerido"}), 400
@@ -253,18 +312,21 @@ def eliminar_planificacion():
     db.session.commit()
     return jsonify({"message": "Planificación eliminada exitosamente"}), 200
 
+
 # ======================================
-# Logs de levantamientos
+# LOGS DE LEVANTAMIENTOS
 # ======================================
 @api.route('/users/<int:user_id>/logs', methods=['GET'])
 def get_user_logs(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify([log.serialize() for log in user.logs]), 200
 
+
 @api.route('/users/<int:user_id>/logs', methods=['POST'])
 def add_user_log(user_id):
     user = User.query.get_or_404(user_id)
     data = request.get_json() or {}
+
     fecha = data.get('fecha')
     ejercicio = data.get('ejercicio')
     peso = data.get('peso')
@@ -277,6 +339,7 @@ def add_user_log(user_id):
     db.session.commit()
     return jsonify(log.serialize()), 201
 
+
 @api.route('/users/<int:user_id>/logs/<int:log_id>', methods=['DELETE'])
 def delete_user_log(user_id, log_id):
     log = UserLog.query.filter_by(user_id=user_id, id=log_id).first_or_404()
@@ -284,13 +347,15 @@ def delete_user_log(user_id, log_id):
     db.session.commit()
     return jsonify({"message": "Log eliminado"}), 200
 
+
 # ======================================
-# WODs
+# WODS
 # ======================================
 @api.route('/users/<int:user_id>/wods', methods=['GET'])
 def get_user_wods(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify([wod.serialize() for wod in user.wods]), 200
+
 
 @api.route('/users/<int:user_id>/wods', methods=['POST'])
 def add_user_wod(user_id):
@@ -308,9 +373,8 @@ def add_user_wod(user_id):
     try:
         datetime.strptime(wod_fecha, "%Y-%m-%d")
     except ValueError:
-        return jsonify({"error": "Formato de fecha inválido, usar YYYY-MM-DD"}), 400
+        return jsonify({"error": "Formato de fecha inválido"}), 400
 
-    # ⚠️ Usar nombres de campo correctos del modelo
     wod = UserWod(
         user_id=user.id,
         fecha=wod_fecha,
@@ -323,6 +387,7 @@ def add_user_wod(user_id):
     db.session.commit()
 
     return jsonify(wod.serialize()), 201
+
 
 @api.route('/users/<int:user_id>/wods/<int:wod_id>', methods=['PATCH', 'OPTIONS'])
 def update_user_wod(user_id, wod_id):
@@ -341,9 +406,53 @@ def update_user_wod(user_id, wod_id):
         db.session.commit()
         return jsonify(wod.serialize()), 200
     except Exception as e:
-        current_app.logger.error(f"Error actualizando WOD id={wod_id}: {e}")
+        current_app.logger.error(f"Error actualizando WOD {wod_id}: {e}")
         db.session.rollback()
         return jsonify({"error": "Error al actualizar el WOD"}), 500
+
+
+# ======================================
+# PESOS (AUTOSAVE FUNCIONAL)
+# ======================================
+@api.route('/users/<int:user_id>/pesos', methods=['GET', 'PATCH'])
+def user_pesos_handler(user_id):
+    user = User.query.get_or_404(user_id)
+
+    if request.method == 'GET':
+        pesos = UserPeso.query.filter_by(user_id=user_id).all()
+        return jsonify({p.ejercicio: p.valor for p in pesos}), 200
+
+    if request.method == 'PATCH':
+        data = request.get_json() or {}
+        ejercicio = data.get('ejercicio')
+        valor = data.get('valor')
+
+        if not ejercicio:
+            return jsonify({"error": "Ejercicio faltante"}), 400
+
+        if valor == "" or valor is None:
+            valor = None
+        else:
+            try:
+                valor = float(valor)
+            except Exception:
+                return jsonify({"error": "Valor inválido"}), 400
+
+        peso = UserPeso.query.filter_by(user_id=user_id, ejercicio=ejercicio).first()
+
+        if peso:
+            peso.valor = valor
+        else:
+            peso = UserPeso(
+                user_id=user_id,
+                ejercicio=ejercicio,
+                valor=valor
+            )
+            db.session.add(peso)
+
+        db.session.commit()
+        return jsonify({"message": "Peso guardado correctamente"}), 200
+
 
 # ======================================
 # Recuperación de contraseña
@@ -357,13 +466,11 @@ def forgot_password():
 
     user = User.query.filter_by(email=email).first()
     if not user:
-    
         return jsonify({"message": "Si el email está registrado, recibirás instrucciones"}), 200
 
-    
     reset_token = generar_jwt({"user_id": user.id}, expiracion_minutos=30)
 
-    frontend_url = os.getenv("FRONTEND_URL", "https://forceteam.onrender.com")
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
     reset_link = f"{frontend_url}/reset-password?token={reset_token}"
 
     mensaje = f"""
@@ -381,6 +488,7 @@ Tu equipo de ForceTeam
     send_async_email(user.email, "Recuperar contraseña", mensaje)
 
     return jsonify({"message": "Si el email está registrado, recibirás instrucciones"}), 200
+
 
 @api.route('/reset-password', methods=['POST'])
 def reset_password():
@@ -404,37 +512,17 @@ def reset_password():
     db.session.commit()
     return jsonify({"message": "Contraseña actualizada correctamente"}), 200
 
+
 @api.route('/test-email', methods=['GET'])
 def test_email():
     success, info = enviar_email_smtp("tuemail@test.com", "Prueba", "Esto es un test")
     return jsonify({"success": success, "info": info})
 
+
 # =======================
-# PESOS
+# USUARIOS (ADMIN)
 # =======================
-@api.route('/users/<int:user_id>/pesos', methods=['GET', 'PATCH'])
-def user_pesos(user_id):
-    user = User.query.get_or_404(user_id)
-
-    if request.method == 'GET':
-        pesos = UserPeso.query.filter_by(user_id=user_id).all()
-        return jsonify({p.ejercicio: p.valor for p in pesos})
-
-    if request.method == 'PATCH':
-        data = request.json or {}
-        ejercicio = data.get('ejercicio')
-        valor = data.get('valor')
-
-        if not ejercicio or valor is None:
-            return jsonify({"error": "Datos incompletos"}), 400
-
-        peso = UserPeso.query.filter_by(user_id=user_id, ejercicio=ejercicio).first()
-
-        if peso:
-            peso.valor = valor
-        else:
-            peso = UserPeso(user_id=user_id, ejercicio=ejercicio, valor=valor)
-            db.session.add(peso)
-
-        db.session.commit()
-        return jsonify({"message": "Peso guardado"}), 200
+@api.route('/usuarios', methods=['GET'])
+def obtener_usuarios():
+    users = User.query.all()
+    return jsonify([u.serialize() for u in users]), 200

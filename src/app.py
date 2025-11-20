@@ -2,19 +2,21 @@ import os
 from flask import Flask, jsonify, send_from_directory
 from flask_migrate import Migrate
 from api.models import db
-from api import api
 from api.routes import api
-
 from api.admin import setup_admin
 from api.commands import setup_commands
 from api.utils import APIException, generate_sitemap
 
+# ======================================
+# CONFIGURACIÓN GENERAL
+# ======================================
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+# Base de datos
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
@@ -29,12 +31,19 @@ db.init_app(app)
 setup_admin(app)
 setup_commands(app)
 
+# Registrar rutas API
 app.register_blueprint(api, url_prefix='/api')
 
+# ======================================
+# MANEJO DE ERRORES
+# ======================================
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
+# ======================================
+# SITEMAP + FRONTEND
+# ======================================
 @app.route('/')
 def sitemap():
     if ENV == "development":
@@ -49,7 +58,26 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0
     return response
 
+# ======================================
+# CONFIGURAR CARPETA DE SUBIDAS
+# ======================================
+UPLOAD_FOLDER = os.path.join(os.getcwd(), "src", "uploads")
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
+
+# ======================================
+# RUTA PARA ACCESAR ARCHIVOS SUBIDOS
+# ======================================
+@app.route('/uploads/<path:filename>')
+def uploaded_files(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+# ======================================
+# INICIO DEL SERVIDOR
+# ======================================
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)

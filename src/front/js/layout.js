@@ -22,7 +22,8 @@ import { PlanificaCorta } from "./component/planificaCorta";
 
 
 const Layout = () => {
-  const basename = process.env.BASENAME || "";
+  const basename = "/";
+
 
   if(!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
