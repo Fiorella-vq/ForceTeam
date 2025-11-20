@@ -18,7 +18,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     role = db.Column(db.String(20), nullable=False, default="user")
-    foto = db.Column(db.String(255), nullable=True)
+ 
 
 
     # Relaciones
@@ -43,7 +43,7 @@ class User(db.Model):
             "role": self.role,
             "logs": [log.serialize() for log in self.logs] if self.logs else [],
             "wods": [wod.serialize() for wod in self.wods] if self.wods else [],
-            "foto": self.foto,
+       
 
         }
 
