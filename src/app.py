@@ -11,19 +11,12 @@ from api.utils import APIException, generate_sitemap
 # CONFIGURACIÓN GENERAL
 # ======================================
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
-
-# 👉 Carpeta donde está el build de React (DIST)
-static_file_dir = os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    '../dist'
-)
+static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-# ======================================
-# BASE DE DATOS
-# ======================================
+# Base de datos
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
@@ -35,11 +28,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
-# Admin + comandos
 setup_admin(app)
 setup_commands(app)
 
-# Registrar API
+# Registrar rutas API
 app.register_blueprint(api, url_prefix='/api')
 
 # ======================================
@@ -50,26 +42,21 @@ def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
 # ======================================
-# FRONTEND: SERVIR REACT
+# SITEMAP + FRONTEND
 # ======================================
 @app.route('/')
-def serve_root():
+def sitemap():
     if ENV == "development":
         return generate_sitemap(app)
-
     return send_from_directory(static_file_dir, 'index.html')
 
-
-@app.route('/<path:path>')
-def serve_static(path):
-    full_path = os.path.join(static_file_dir, path)
-
-    # 🟢 Si el archivo existe (bundle.js, imágenes, css)
-    if os.path.isfile(full_path):
-        return send_from_directory(static_file_dir, path)
-
-    # 🔵 Si NO existe, React Router devuelve index.html
-    return send_from_directory(static_file_dir, 'index.html')
+@app.route('/<path:path>', methods=['GET'])
+def serve_any_other_file(path):
+    if not os.path.isfile(os.path.join(static_file_dir, path)):
+        path = 'index.html'
+    response = send_from_directory(static_file_dir, path)
+    response.cache_control.max_age = 0
+    return response
 
 # ======================================
 # CONFIGURAR CARPETA DE SUBIDAS
@@ -89,7 +76,7 @@ def uploaded_files(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # ======================================
-# INICIO DEL SERVIDOR LOCAL
+# INICIO DEL SERVIDOR
 # ======================================
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
