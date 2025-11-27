@@ -125,6 +125,7 @@ export const PlanificacionViewer = () => {
     { id: 6, nombre: "Sábado" },
   ];
 
+ 
   const aplicarPesosAPlan = (texto) => {
     if (!texto || !pesos) return texto;
 
@@ -169,10 +170,9 @@ export const PlanificacionViewer = () => {
     let ejActual = null;
 
     for (let i = 0; i < lineas.length; i++) {
-      let limpio = lineas[i]
-        .toLowerCase()
-        .replace(/[^a-z0-9áéíóúüñ\s&]/gi, "")
-        .trim();
+      const original = lineas[i]; 
+
+      const limpio = original.toLowerCase();
 
       const encontrado = Object.keys(ejerciciosMap).find((key) =>
         limpio.includes(key)
@@ -184,7 +184,8 @@ export const PlanificacionViewer = () => {
       const max = parseFloat(pesosExtendidos[ejActual]);
       if (!max) continue;
 
-      lineas[i] = lineas[i].replace(/(\d+)%/g, (match, porc) => {
+      // Reemplazo de porcentajes sin destruir el texto
+      lineas[i] = original.replace(/(\d+)%/g, (match, porc) => {
         const por = parseInt(porc);
         return `${por}% (${Math.round((max * por) / 100)}kg)`;
       });
@@ -374,9 +375,7 @@ export const PlanificacionViewer = () => {
               return (
                 <li key={bloque} className={`bloque-item bloque-${nombre}`}>
                   <strong className="bloque-titulo">Bloque {nombre}:</strong>
-                  <div className="bloque-texto">
-                    {renderContenido(contenido)}
-                  </div>
+                  <div className="bloque-texto">{renderContenido(contenido)}</div>
                 </li>
               );
             })}
