@@ -36,16 +36,17 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def serialize(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "last_name": self.last_name,
-            "email": self.email,
-            "role": self.role,
-            "logs": [log.serialize() for log in self.logs] if self.logs else [],
-            "wods": [wod.serialize() for wod in self.wods] if self.wods else [],
-            "last_active": self.last_active.isoformat() if self.last_active else None,
-        }
+     return {
+        "id": self.id,
+        "name": self.name,
+        "last_name": self.last_name,
+        "email": self.email,
+        "role": self.role,
+        "logs": [log.serialize() for log in self.logs] if self.logs else [],
+        "wods": [wod.serialize() for wod in self.wods] if self.wods else [],
+        "is_online": self.is_online,
+        "last_online": self.last_online.isoformat() if self.last_online else None,
+    }
 
 
 # ===========================

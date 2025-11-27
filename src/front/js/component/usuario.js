@@ -399,7 +399,7 @@ export const Usuario = ({ user, token }) => {
       </div>
 
       <div className="usuarios-conectados-card">
-        <h4>Usuarios registrados 🟣</h4>
+        <h4>Usuarios registrados</h4>
 
         <p className="usuario-total">Total: {usuariosRegistrados.length}</p>
 
