@@ -1,6 +1,6 @@
 import os
 from flask import Flask, jsonify, send_from_directory
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from api.models import db
 from api.routes import api
 from api.admin import setup_admin
@@ -25,13 +25,26 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-MIGRATE = Migrate(app, db, compare_type=True)
+# Inicialización DB + Migraciones
 db.init_app(app)
+MIGRATE = Migrate(app, db, compare_type=True)
 
+# ======================================
+# EJECUTAR MIGRACIONES AUTOMÁTICAMENTE EN RENDER
+# ======================================
+@app.before_first_request
+def run_migrations():
+    try:
+        upgrade()
+        print("💚 Alembic migrations executed successfully on Render")
+    except Exception as e:
+        print("💥 Error running migrations:", e)
+
+# ======================================
+# ADMIN + COMANDOS + RUTAS
+# ======================================
 setup_admin(app)
 setup_commands(app)
-
-# Registrar rutas API
 app.register_blueprint(api, url_prefix='/api')
 
 # ======================================
@@ -68,15 +81,12 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
-# ======================================
-# RUTA PARA ACCESAR ARCHIVOS SUBIDOS
-# ======================================
 @app.route('/uploads/<path:filename>')
 def uploaded_files(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # ======================================
-# INICIO DEL SERVIDOR
+# INICIO DEL SERVIDOR (SOLO LOCAL)
 # ======================================
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
