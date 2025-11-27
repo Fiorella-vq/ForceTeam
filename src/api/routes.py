@@ -471,7 +471,7 @@ def forgot_password():
 
     reset_token = generar_jwt({"user_id": user.id}, expiracion_minutos=30)
 
-    frontend_url = os.getenv("FRONTEND_URL", "https://forceteam.onrender.com")
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
     reset_link = f"{frontend_url}/reset-password?token={reset_token}"
 
     mensaje = f"""
