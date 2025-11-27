@@ -27,7 +27,7 @@ export const PlanificaCorta = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fechaParam}&tipo=corta`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}&tipo=corta`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -70,14 +70,17 @@ export const PlanificaCorta = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/planificacion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ fecha, tipo: "corta", plan }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/planificacion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ fecha, tipo: "corta", plan }),
+        }
+      );
 
       if (res.ok) {
         Swal.fire({
@@ -133,7 +136,7 @@ export const PlanificaCorta = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3001/api/planificacion?fecha=${fecha}&tipo=corta`,
+        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=corta`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 

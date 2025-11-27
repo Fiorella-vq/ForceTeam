@@ -28,11 +28,14 @@ export const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const res = await fetch(
+        "https://forceteam.onrender.com/api/forgot-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {

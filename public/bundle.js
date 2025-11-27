@@ -43,7 +43,7 @@
           i = n.n(a)()(o());
         i.push([
           e.id,
-          '.plani-viewer-container {\r\n  max-width: 700px;\r\n  margin: 40px auto;\r\n  padding: 30px 25px;\r\n  background-color: #121212;\r\n  color: #f0f0f0;\r\n  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;\r\n  border-radius: 12px;\r\n  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);\r\n  text-align: center;\r\n}\r\n\r\n.plani-viewer-container h2 {\r\n  font-size: 1.2rem;\r\n  margin-bottom: 20px;\r\n  text-transform: uppercase;\r\n  letter-spacing: 1px;\r\n  color: #fff;\r\n}\r\n\r\n.plani-input {\r\n  padding: 10px 12px;\r\n  margin-left: 10px;\r\n  font-size: 0.9rem;\r\n  border: 2px solid #333;\r\n  border-radius: 8px;\r\n  background-color: #1e1e1e;\r\n  color: #f0f0f0;\r\n  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;\r\n  max-width: 250px;\r\n}\r\n\r\n.plani-input:focus {\r\n  border-color: #4fa3ff;\r\n  box-shadow: 0 0 8px rgba(79, 163, 255, 0.4);\r\n  outline: none;\r\n  background-color: #0d0d0d;\r\n}\r\n\r\n.plani-error {\r\n  color: #ff4d4f;\r\n  margin-top: 15px;\r\n  font-size: 0.9rem;\r\n}\r\n\r\n.plan-content {\r\n  margin-top: 20px;\r\n  text-align: left;\r\n}\r\n\r\n.plan-content h3 {\r\n  font-size: 1rem;\r\n  margin-bottom: 15px;\r\n  color: #4fa3ff;\r\n}\r\n\r\n.plan-content ul {\r\n  list-style: none;\r\n  padding: 0;\r\n  margin: 0;\r\n}\r\n\r\n.plan-content li {\r\n  margin-bottom: 12px;\r\n  background-color: #1e1e1e;\r\n  padding: 12px;\r\n  border-radius: 10px;\r\n  line-height: 1.5;\r\n  border: 1px solid #222;\r\n  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\r\n\r\n  /* deja libres los bordes para los colores */\r\n  border-left: 6px solid transparent !important;\r\n}\r\n\r\n/*** ENLACES ***/\r\n.bloque-texto a {\r\n  color: #4fa3ff;\r\n  text-decoration: underline;\r\n  word-break: break-word;\r\n}\r\n\r\n.link-coach {\r\n  margin-top: 25px;\r\n}\r\n\r\n.link-btn {\r\n  padding: 12px 20px;\r\n  font-size: 0.9rem;\r\n  font-weight: 700;\r\n  border-radius: 10px;\r\n  border: none;\r\n  background-color: #2a2a2a;\r\n  color: #f0f0f0;\r\n  cursor: pointer;\r\n  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;\r\n}\r\n\r\n.link-btn:hover {\r\n  background-color: #4fa3ff;\r\n  color: #fff;\r\n  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);\r\n}\r\n\r\n/*************************************************\r\n  TABLA PORCENTAJES\r\n*************************************************/\r\n\r\n.tabla-porcentajes-card {\r\n  margin-top: 25px;\r\n  padding: 16px 14px;\r\n  background: #181818;\r\n  border-radius: 12px;\r\n  border: 1px solid #333;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);\r\n  text-align: left;\r\n}\r\n\r\n.tabla-porcentajes-card h3 {\r\n  margin: 0 0 10px;\r\n  font-size: 1rem;\r\n  font-weight: 600;\r\n  color: #f5f5f5;\r\n}\r\n\r\n.tabla-porcentajes {\r\n  width: 100%;\r\n  margin-top: 10px;\r\n  border-collapse: collapse;\r\n  overflow-x: auto;\r\n  display: block;\r\n}\r\n\r\n.tabla-porcentajes th,\r\n.tabla-porcentajes td {\r\n  border: 1px solid #333;\r\n  padding: 8px;\r\n  text-align: center;\r\n  white-space: nowrap;\r\n}\r\n\r\n.tabla-porcentajes th {\r\n  background-color: #333;\r\n  font-weight: 600;\r\n}\r\n\r\n.input-peso {\r\n  width: 70px;\r\n  padding: 8px;\r\n  background: #222;\r\n  color: #fff;\r\n  border: 1px solid #444;\r\n  border-radius: 6px;\r\n  text-align: center;\r\n}\r\n\r\n.fila-seleccionada td {\r\n  background: #055236 !important;\r\n  color: #fff !important;\r\n  font-weight: bold;\r\n}\r\n\r\n.fila-seleccionada input {\r\n  background: #055236 !important;\r\n  border-color: black !important;\r\n  color: #fff !important;\r\n}\r\n\r\n/*************************************************\r\n  BLOQUES – BORDES COLOR\r\n*************************************************/\r\n\r\n.bloque-item {\r\n  background: #1a1a1a;\r\n  padding: 15px;\r\n  margin-bottom: 15px;\r\n  border-radius: 12px;\r\n  border-left: 6px solid #444;\r\n}\r\n\r\n.bloque-A {\r\n  border-left-color: #4fa3ff !important;\r\n}\r\n\r\n.bloque-B {\r\n  border-left-color: #27ff52 !important;\r\n}\r\n\r\n.bloque-C {\r\n  border-left-color: #9b59b6 !important;\r\n}\r\n\r\n.bloque-D {\r\n  border-left-color: #f39c12 !important;\r\n}\r\n\r\n.bloque-E {\r\n  border-left-color: #e74c3c !important;\r\n}\r\n\r\n\r\n.bloque-titulo {\r\n  font-size: 1.2rem;\r\n  font-weight: bold;\r\n  color: white;\r\n  margin-bottom: 10px;\r\n  display: block;\r\n}\r\n\r\n/* Contenido */\r\n.bloque-texto {\r\n  font-size: 1rem;\r\n  color: #ddd;\r\n  line-height: 1.5;\r\n  white-space: pre-wrap;\r\n}\r\n',
+          '\r\n.plani-viewer-container {\r\n  max-width: 700px;\r\n  margin: 40px auto;\r\n  padding: 30px 25px;\r\n  background-color: #121212;\r\n  color: #f0f0f0;\r\n  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;\r\n  border-radius: 12px;\r\n  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);\r\n  text-align: center;\r\n}\r\n\r\n.plani-viewer-container h2 {\r\n  font-size: 1.2rem;\r\n  margin-bottom: 20px;\r\n  text-transform: uppercase;\r\n  letter-spacing: 1px;\r\n  color: #fff;\r\n}\r\n\r\n\r\n.plani-input {\r\n  padding: 10px 12px;\r\n  margin-left: 10px;\r\n  font-size: 0.9rem;\r\n  border: 2px solid #333;\r\n  border-radius: 8px;\r\n  background-color: #1e1e1e;\r\n  color: #f0f0f0;\r\n  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;\r\n  max-width: 250px;\r\n}\r\n\r\n.plani-input:focus {\r\n  border-color: #4fa3ff;\r\n  box-shadow: 0 0 8px rgba(79, 163, 255, 0.4);\r\n  outline: none;\r\n  background-color: #0d0d0d;\r\n}\r\n\r\n.plani-error {\r\n  color: #ff4d4f;\r\n  margin-top: 15px;\r\n  font-size: 0.9rem;\r\n}\r\n\r\n\r\n.plan-content {\r\n  margin-top: 20px;\r\n  text-align: left;\r\n}\r\n\r\n.plan-content h3 {\r\n  font-size: 1rem;\r\n  margin-bottom: 15px;\r\n  color: #4fa3ff;\r\n}\r\n\r\n.plan-content ul {\r\n  list-style: none;\r\n  padding: 0;\r\n  margin: 0;\r\n}\r\n\r\n\r\n.plan-content li {\r\n  background-color: #1e1e1e;\r\n  padding: 15px;\r\n  border-radius: 12px;\r\n  margin-bottom: 15px;\r\n  line-height: 1.5;\r\n  border: 1px solid #222;\r\n  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\r\n  border-left: 6px solid #444; \r\n}\r\n\r\n\r\n.bloque-texto a {\r\n  color: #4fa3ff;\r\n  text-decoration: underline;\r\n  word-break: break-word;\r\n}\r\n\r\n\r\n.link-coach {\r\n  margin-top: 25px;\r\n}\r\n\r\n.link-btn {\r\n  padding: 12px 20px;\r\n  font-size: 0.9rem;\r\n  font-weight: 700;\r\n  border-radius: 10px;\r\n  border: none;\r\n  background-color: #2a2a2a;\r\n  color: #f0f0f0;\r\n  cursor: pointer;\r\n  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;\r\n}\r\n\r\n.link-btn:hover {\r\n  background-color: #4fa3ff;\r\n  color: #fff;\r\n  box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);\r\n}\r\n\r\n\r\n.tabla-porcentajes-card {\r\n  margin-top: 25px;\r\n  padding: 16px 14px;\r\n  background: #181818;\r\n  border-radius: 12px;\r\n  border: 1px solid #333;\r\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);\r\n  text-align: left;\r\n}\r\n\r\n.tabla-porcentajes-card h3 {\r\n  margin: 0 0 10px;\r\n  font-size: 1rem;\r\n  font-weight: 600;\r\n  color: #f5f5f5;\r\n}\r\n\r\n.tabla-porcentajes {\r\n  width: 100%;\r\n  margin-top: 10px;\r\n  border-collapse: collapse;\r\n  overflow-x: auto;\r\n  display: block;\r\n}\r\n\r\n.tabla-porcentajes th,\r\n.tabla-porcentajes td {\r\n  border: 1px solid #333;\r\n  padding: 8px;\r\n  text-align: center;\r\n  white-space: nowrap;\r\n}\r\n\r\n.tabla-porcentajes th {\r\n  background-color: #333;\r\n  font-weight: 600;\r\n}\r\n\r\n.input-peso {\r\n  width: 70px;\r\n  padding: 8px;\r\n  background: #222;\r\n  color: #fff;\r\n  border: 1px solid #444;\r\n  border-radius: 6px;\r\n  text-align: center;\r\n}\r\n\r\n.fila-seleccionada td {\r\n  background: #055236 !important;\r\n  color: #fff !important;\r\n  font-weight: bold;\r\n}\r\n\r\n.fila-seleccionada input {\r\n  background: #055236 !important;\r\n  border-color: black !important;\r\n  color: #fff !important;\r\n}\r\n\r\n.bloque-A {\r\n  border-left-color: #4fa3ff !important;\r\n}\r\n\r\n.bloque-B {\r\n  border-left-color: #27ff52 !important;\r\n}\r\n\r\n.bloque-C {\r\n  border-left-color: #9b59b6 !important;\r\n}\r\n\r\n.bloque-D {\r\n  border-left-color: #f39c12 !important;\r\n}\r\n\r\n.bloque-E {\r\n  border-left-color: #e74c3c !important;\r\n}\r\n\r\n.bloque-titulo {\r\n  font-size: 1.2rem;\r\n  font-weight: bold;\r\n  color: white;\r\n  margin-bottom: 10px;\r\n  display: block;\r\n}\r\n\r\n.bloque-texto {\r\n  font-size: 1rem;\r\n  color: #ddd;\r\n  line-height: 1.5;\r\n  white-space: pre-wrap;\r\n}\r\n',
           "",
         ]);
         const l = i;
@@ -85,7 +85,7 @@
           i = n.n(a)()(o());
         i.push([
           e.id,
-          '\r\nhtml, body {\r\n  margin: 0;\r\n  padding: 0;\r\n  background-color: #0d0d0d;\r\n  color: #eee;\r\n  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;\r\n}\r\n\r\n\r\n.usuario-container {\r\n  max-width: 750px;\r\n  margin: 35px auto;\r\n  padding: 30px;\r\n  background: #151515;\r\n  border-radius: 14px;\r\n  box-shadow: 0 0 25px rgba(0,0,0,0.35);\r\n  animation: fadeIn 0.7s ease;\r\n}\r\n\r\n@keyframes fadeIn {\r\n  from { opacity: 0; transform: translateY(10px); }\r\n  to   { opacity: 1; transform: translateY(0); }\r\n}\r\n\r\n\r\n.usuario-welcome-card {\r\n  background: linear-gradient(135deg, #222, #111);\r\n  border: 1px solid #333;\r\n  padding: 18px 20px;\r\n  border-radius: 12px;\r\n  margin-bottom: 25px;\r\n}\r\n\r\n.usuario-welcome-card h3 {\r\n  margin: 0;\r\n  font-size: 1.35rem;\r\n  color: #fff;\r\n}\r\n\r\n.usuario-welcome-sub {\r\n  margin-top: 6px;\r\n  font-size: 0.9rem;\r\n  color: #aaa;\r\n}\r\n\r\n\r\n.usuario-header {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  padding: 14px 20px;\r\n  background: #1b1b1b;\r\n  border: 1px solid #333;\r\n  border-radius: 12px;\r\n  margin-bottom: 35px;\r\n}\r\n\r\n.usuario-header h2 {\r\n  margin: 0;\r\n  color: #fff;\r\n  font-size: 1.25rem;\r\n  font-weight: 700;\r\n}\r\n\r\n.logout-btn {\r\n  padding: 10px 18px;\r\n  border-radius: 8px;\r\n  border: none;\r\n  background: linear-gradient(135deg, #333, #000);\r\n  color: white;\r\n  cursor: pointer;\r\n  font-weight: bold;\r\n  transition: 0.25s ease;\r\n}\r\n\r\n.logout-btn:hover {\r\n  background: #4fa3ff;\r\n  transform: scale(1.05);\r\n}\r\n\r\n.wods-section h3 {\r\n  font-size: 1.4rem;\r\n  color: #fff;\r\n}\r\n\r\n.wod-por-fecha {\r\n  margin: 20px 0 15px;\r\n}\r\n\r\n.input-date-dark {\r\n  width: 100%;\r\n  padding: 12px 14px;\r\n  margin-top: 8px;\r\n  border-radius: 8px;\r\n  background: #222;\r\n  border: 2px solid #333;\r\n  color: #eee;\r\n  font-size: 1rem;\r\n}\r\n\r\n.input-date-dark::-webkit-calendar-picker-indicator {\r\n  filter: invert(1);\r\n  cursor: pointer;\r\n}\r\n\r\n.inputs-wods textarea {\r\n  width: 100%;\r\n  background: #1e1e1e;\r\n  padding: 14px;\r\n  border: 2px solid #333;\r\n  border-radius: 10px;\r\n  color: #ddd;\r\n  font-size: 1rem;\r\n  margin-bottom: 12px;\r\n  resize: none;\r\n  min-height: 85px;\r\n}\r\n\r\n.inputs-wods textarea:focus {\r\n  background: #101010;\r\n  border-color: #4fa3ff;\r\n}\r\n\r\n.inputs-wods button {\r\n  width: 100%;\r\n  padding: 15px;\r\n  font-size: 1.1rem;\r\n  border-radius: 10px;\r\n  font-weight: bold;\r\n  border: none;\r\n  cursor: pointer;\r\n  color: white;\r\n  background: linear-gradient(135deg, #333, #000);\r\n  transition: 0.3s ease;\r\n}\r\n\r\n.inputs-wods button:hover {\r\n  background: #4fa3ff;\r\n  transform: scale(1.02);\r\n}\r\n\r\n\r\n.usuario-wod-hoy {\r\n  background: #181818;\r\n  padding: 18px;\r\n  border-radius: 12px;\r\n  margin-top: 25px;\r\n  border: 1px solid #333;\r\n}\r\n\r\n.wod-hoy-card {\r\n  margin-top: 12px;\r\n  background: #202020;\r\n  padding: 16px;\r\n  border-radius: 10px;\r\n  border: 1px solid #333;\r\n}\r\n\r\n\r\n.link-planificacion {\r\n  margin: 35px 0;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 12px;\r\n}\r\n\r\n.link-btn {\r\n  padding: 14px;\r\n  border: none;\r\n  border-radius: 12px;\r\n  background: #2a2a2a;\r\n  color: #eee;\r\n  font-weight: bold;\r\n  cursor: pointer;\r\n  transition: 0.25s ease;\r\n}\r\n\r\n.link-btn:hover {\r\n  background: #4fa3ff;\r\n  color: white;\r\n}\r\n\r\n\r\n.motivacional-card {\r\n  background: linear-gradient(135deg, #222, #111);\r\n  padding: 18px;\r\n  text-align: center;\r\n  border-radius: 12px;\r\n  border: 1px solid #333;\r\n  margin-top: 35px;\r\n}\r\n\r\n\r\n.usuarios-conectados-card {\r\n  padding: 20px;\r\n  background: #181818;\r\n  border-radius: 14px;\r\n  border: 1px solid #333;\r\n  margin-top: 30px;\r\n}\r\n\r\n.usuario-buscador {\r\n  width: 100%;\r\n  padding: 10px;\r\n  background: #222;\r\n  border: 1px solid #333;\r\n  border-radius: 10px;\r\n  color: #eee;\r\n  margin-bottom: 18px;\r\n  font-size: 0.9rem;\r\n}\r\n\r\n.usuario-item {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 10px;\r\n  background: #202020;\r\n  border-radius: 12px;\r\n  border: 1px solid #333;\r\n  margin-bottom: 10px;\r\n  gap: 10px;\r\n}\r\n\r\n.usuario-avatar {\r\n  width: 40px;\r\n  height: 40px;\r\n  font-size: 0.9rem;\r\n  border-radius: 50%;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  color: white;\r\n}\r\n\r\n.admin-avatar {\r\n  border: 2px solid gold;\r\n  box-shadow: 0 0 10px gold;\r\n}\r\n\r\n.usuario-nombre {\r\n  font-size: 0.9rem;\r\n  margin-right: auto;\r\n}\r\n\r\n.dot-online,\r\n.dot-offline {\r\n  width: 9px;\r\n  height: 9px;\r\n  border-radius: 50%;\r\n}\r\n\r\n.dot-online { background: #27ff52; }\r\n.dot-offline { background: #777; }\r\n\r\n\r\n@media (max-width: 768px) {\r\n  .usuario-container { max-width: 92%; padding: 20px; }\r\n  .usuario-header { flex-direction: column; gap: 10px; text-align: center; }\r\n  .logout-btn { width: 100%; }\r\n}\r\n',
+          'html, body {\r\n  margin: 0;\r\n  padding: 0;\r\n  background-color: #0b0b0b;\r\n  color: #e5e5e5;\r\n  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;\r\n}\r\n\r\n.usuario-container {\r\n  max-width: 820px;\r\n  margin: 45px auto;\r\n  padding: 40px;\r\n  background: #121212;\r\n  border-radius: 18px;\r\n  border: 1px solid #1f1f1f;\r\n  box-shadow: 0 0 12px rgba(0,0,0,0.25);\r\n  animation: fadeIn 0.6s ease;\r\n}\r\n\r\n@keyframes fadeIn {\r\n  from { opacity: 0; transform: translateY(14px); }\r\n  to   { opacity: 1; transform: translateY(0); }\r\n}\r\n\r\n.usuario-welcome-card {\r\n  background: #141414;\r\n  border: 1px solid #222;\r\n  padding: 24px 26px;\r\n  border-radius: 14px;\r\n  margin-bottom: 32px;\r\n}\r\n\r\n.usuario-welcome-card h3 {\r\n  margin: 0;\r\n  font-size: 1.5rem;\r\n  color: #fff;\r\n  font-weight: 600;\r\n}\r\n\r\n.usuario-welcome-sub {\r\n  margin-top: 10px;\r\n  font-size: 0.92rem;\r\n  color: #9b9b9b;\r\n  letter-spacing: 0.2px;\r\n}\r\n\r\n.usuario-header {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  padding: 18px 24px;\r\n  background: #141414;\r\n  border: 1px solid #1f1f1f;\r\n  border-radius: 14px;\r\n  margin-bottom: 40px;\r\n}\r\n\r\n.usuario-header h2 {\r\n  margin: 0;\r\n  color: #fff;\r\n  font-size: 1.45rem;\r\n  font-weight: 600;\r\n}\r\n\r\n.logout-btn {\r\n  padding: 11px 22px;\r\n  border-radius: 10px;\r\n  border: 1px solid #222;\r\n  background: #161616;\r\n  color: #eee;\r\n  cursor: pointer;\r\n  font-weight: 500;\r\n  font-size: 0.95rem;\r\n  transition: 0.2s ease;\r\n}\r\n\r\n.logout-btn:hover {\r\n  background: #4fa3ff;\r\n  border-color: #4fa3ff;\r\n  color: #fff;\r\n}\r\n\r\n.wods-section h3 {\r\n  font-size: 1.4rem;\r\n  color: #fff;\r\n  margin-top: 5px;\r\n}\r\n\r\n.wod-por-fecha {\r\n  margin: 20px 0 18px;\r\n}\r\n\r\n.input-date-dark {\r\n  width: 100%;\r\n  padding: 14px 16px;\r\n  margin-top: 8px;\r\n  border-radius: 10px;\r\n  background: #121212;\r\n  border: 1px solid #2b2b2b;\r\n  color: #eee;\r\n  font-size: 0.95rem;\r\n  transition: 0.2s ease;\r\n}\r\n\r\n.input-date-dark:focus {\r\n  border-color: #4fa3ff;\r\n  background: #0b0b0b;\r\n}\r\n\r\n.input-date-dark::-webkit-calendar-picker-indicator {\r\n  filter: invert(1);\r\n  cursor: pointer;\r\n}\r\n\r\n.inputs-wods textarea {\r\n  width: 100%;\r\n  background: #151515;\r\n  padding: 16px;\r\n  border: 1px solid #242424;\r\n  border-radius: 12px;\r\n  color: #dfdfdf;\r\n  font-size: 0.95rem;\r\n  margin-bottom: 14px;\r\n  resize: none;\r\n  min-height: 95px;\r\n  transition: 0.2s ease;\r\n}\r\n\r\n.inputs-wods textarea:focus {\r\n  background: #0c0c0c;\r\n  border-color: #4fa3ff;\r\n}\r\n\r\n.inputs-wods button {\r\n  width: 100%;\r\n  padding: 15px;\r\n  font-size: 1rem;\r\n  border-radius: 12px;\r\n  font-weight: 600;\r\n  border: 1px solid #222;\r\n  cursor: pointer;\r\n  color: white;\r\n  background: #171717;\r\n  transition: 0.22s ease;\r\n}\r\n\r\n.inputs-wods button:hover {\r\n  background: #4fa3ff;\r\n  border-color: #4fa3ff;\r\n}\r\n\r\n.usuario-wod-hoy {\r\n  background: #141414;\r\n  padding: 22px;\r\n  border-radius: 14px;\r\n  margin-top: 30px;\r\n  border: 1px solid #222;\r\n}\r\n\r\n.wod-hoy-card {\r\n  margin-top: 14px;\r\n  background: #171717;\r\n  padding: 18px;\r\n  border-radius: 12px;\r\n  border: 1px solid #1f1f1f;\r\n}\r\n\r\n.link-planificacion {\r\n  margin: 40px 0 25px;\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 14px;\r\n}\r\n\r\n.link-btn {\r\n  padding: 15px;\r\n  border: 1px solid #222;\r\n  border-radius: 12px;\r\n  background: #161616;\r\n  color: #dcdcdc;\r\n  font-weight: 600;\r\n  cursor: pointer;\r\n  font-size: 1rem;\r\n  transition: 0.2s ease;\r\n}\r\n\r\n.link-btn:hover {\r\n  background: #4fa3ff;\r\n  color: #fff;\r\n  border-color: #4fa3ff;\r\n}\r\n\r\n.motivacional-card {\r\n  background: #141414;\r\n  padding: 20px;\r\n  text-align: center;\r\n  border-radius: 14px;\r\n  border: 1px solid #222;\r\n  margin-top: 40px;\r\n  font-size: 1rem;\r\n  color: #d4d4d4;\r\n}\r\n\r\n.usuarios-conectados-card {\r\n  padding: 22px;\r\n  background: #141414;\r\n  border-radius: 16px;\r\n  border: 1px solid #222;\r\n  margin-top: 35px;\r\n}\r\n\r\n.usuario-buscador {\r\n  width: 100%;\r\n  padding: 12px;\r\n  background: #131313;\r\n  border: 1px solid #2a2a2a;\r\n  border-radius: 12px;\r\n  color: #eee;\r\n  margin-bottom: 20px;\r\n  font-size: 0.95rem;\r\n  transition: 0.2s ease;\r\n}\r\n\r\n.usuario-buscador:focus {\r\n  background: #0c0c0c;\r\n  border-color: #4fa3ff;\r\n}\r\n\r\n.usuario-item {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 12px;\r\n  background: #171717;\r\n  border-radius: 14px;\r\n  border: 1px solid #202020;\r\n  margin-bottom: 12px;\r\n  gap: 12px;\r\n  transition: 0.18s ease;\r\n}\r\n\r\n.usuario-item:hover {\r\n  background: #1d1d1d;\r\n}\r\n\r\n.usuario-avatar {\r\n  width: 46px;\r\n  height: 46px;\r\n  border-radius: 50%;\r\n  background: #2b2b2b;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  color: white;\r\n  font-size: 0.95rem;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.admin-avatar {\r\n  border: 2px solid #ffd700;\r\n  box-shadow: 0 0 12px #ffd70099;\r\n}\r\n\r\n.usuario-nombre {\r\n  font-size: 1rem;\r\n  margin-right: auto;\r\n  color: #e5e5e5;\r\n}\r\n\r\n.dot-online,\r\n.dot-offline {\r\n  width: 10px;\r\n  height: 10px;\r\n  border-radius: 50%;\r\n}\r\n\r\n.dot-online { background: #32ff6a; }\r\n.dot-offline { background: #777; }\r\n\r\n@media (max-width: 768px) {\r\n  .usuario-container { max-width: 93%; padding: 26px; }\r\n  .usuario-header { flex-direction: column; gap: 16px; text-align: center; padding: 16px; }\r\n  .logout-btn { width: 100%; padding: 13px; }\r\n  .input-date-dark { padding: 12px 14px; }\r\n  .inputs-wods textarea { font-size: 0.9rem; padding: 14px; }\r\n  .inputs-wods button { padding: 13px; font-size: 0.95rem; }\r\n  .usuario-item { padding: 10px; gap: 10px; }\r\n  .usuario-buscador { padding: 10px; font-size: 0.9rem; }\r\n  .usuario-avatar { width: 42px; height: 42px; font-size: 0.85rem; }\r\n  .admin-avatar { box-shadow: 0 0 10px #ffd70088; }\r\n}\r\n',
           "",
         ]);
         const l = i;
@@ -392,7 +392,7 @@
         function L(e) {
           N ? (_ ? _.push(e) : (_ = [e])) : (N = e);
         }
-        function j() {
+        function z() {
           if (N) {
             var e = N,
               t = _;
@@ -400,18 +400,18 @@
               for (e = 0; e < t.length; e++) A(t[e]);
           }
         }
-        function z(e, t) {
+        function j(e, t) {
           return e(t);
         }
         function I(e, t, n, r, o) {
           return e(t, n, r, o);
         }
         function R() {}
-        var D = z,
+        var D = j,
           B = !1,
           M = !1;
         function F() {
-          (null === N && null === _) || (R(), j());
+          (null === N && null === _) || (R(), z());
         }
         function $(e, t, n) {
           if (M) return e(t, n);
@@ -897,14 +897,14 @@
               (e.defaultValue = n)),
             null != r && (e.defaultValue = "" + r);
         }
-        function je(e) {
+        function ze(e) {
           var t = e.textContent;
           t === e._wrapperState.initialValue &&
             "" !== t &&
             null !== t &&
             (e.value = t);
         }
-        function ze(e) {
+        function je(e) {
           switch (e) {
             case "svg":
               return "http://www.w3.org/2000/svg";
@@ -916,7 +916,7 @@
         }
         function Ie(e, t) {
           return null == e || "http://www.w3.org/1999/xhtml" === e
-            ? ze(t)
+            ? je(t)
             : "http://www.w3.org/2000/svg" === e && "foreignObject" === t
             ? "http://www.w3.org/1999/xhtml"
             : e;
@@ -1339,7 +1339,7 @@
         function Lt(e, t, n) {
           At(e) && n.delete(t);
         }
-        function jt() {
+        function zt() {
           for (wt = !1; 0 < bt.length; ) {
             var e = bt[0];
             if (null !== e.blockedOn) {
@@ -1360,28 +1360,28 @@
             kt.forEach(Lt),
             Et.forEach(Lt);
         }
-        function zt(e, t) {
+        function jt(e, t) {
           e.blockedOn === t &&
             ((e.blockedOn = null),
             wt ||
               ((wt = !0),
-              a.unstable_scheduleCallback(a.unstable_NormalPriority, jt)));
+              a.unstable_scheduleCallback(a.unstable_NormalPriority, zt)));
         }
         function It(e) {
           function t(t) {
-            return zt(t, e);
+            return jt(t, e);
           }
           if (0 < bt.length) {
-            zt(bt[0], e);
+            jt(bt[0], e);
             for (var n = 1; n < bt.length; n++) {
               var r = bt[n];
               r.blockedOn === e && (r.blockedOn = null);
             }
           }
           for (
-            null !== vt && zt(vt, e),
-              null !== yt && zt(yt, e),
-              null !== xt && zt(xt, e),
+            null !== vt && jt(vt, e),
+              null !== yt && jt(yt, e),
+              null !== xt && jt(xt, e),
               kt.forEach(t),
               Et.forEach(t),
               n = 0;
@@ -1880,13 +1880,13 @@
         function Ln(e) {
           return e[Pn] || null;
         }
-        function jn(e) {
+        function zn(e) {
           do {
             e = e.return;
           } while (e && 5 !== e.tag);
           return e || null;
         }
-        function zn(e, t) {
+        function jn(e, t) {
           var n = e.stateNode;
           if (!n) return null;
           var r = m(n);
@@ -1921,13 +1921,13 @@
           return n;
         }
         function In(e, t, n) {
-          (t = zn(e, n.dispatchConfig.phasedRegistrationNames[t])) &&
+          (t = jn(e, n.dispatchConfig.phasedRegistrationNames[t])) &&
             ((n._dispatchListeners = nt(n._dispatchListeners, t)),
             (n._dispatchInstances = nt(n._dispatchInstances, e)));
         }
         function Rn(e) {
           if (e && e.dispatchConfig.phasedRegistrationNames) {
-            for (var t = e._targetInst, n = []; t; ) n.push(t), (t = jn(t));
+            for (var t = e._targetInst, n = []; t; ) n.push(t), (t = zn(t));
             for (t = n.length; 0 < t--; ) In(n[t], "captured", e);
             for (t = 0; t < n.length; t++) In(n[t], "bubbled", e);
           }
@@ -1936,7 +1936,7 @@
           e &&
             n &&
             n.dispatchConfig.registrationName &&
-            (t = zn(e, n.dispatchConfig.registrationName)) &&
+            (t = jn(e, n.dispatchConfig.registrationName)) &&
             ((n._dispatchListeners = nt(n._dispatchListeners, t)),
             (n._dispatchInstances = nt(n._dispatchInstances, e)));
         }
@@ -2287,7 +2287,7 @@
             else {
               B = !0;
               try {
-                z(gr, e);
+                j(gr, e);
               } finally {
                 (B = !1), F();
               }
@@ -2358,8 +2358,8 @@
         }
         var Ar = 0,
           Lr = 0,
-          jr = !1,
           zr = !1,
+          jr = !1,
           Ir = Pr.extend({
             screenX: null,
             screenY: null,
@@ -2385,11 +2385,11 @@
               var t = Ar;
               return (
                 (Ar = e.screenX),
-                jr
+                zr
                   ? "mousemove" === e.type
                     ? e.screenX - t
                     : 0
-                  : ((jr = !0), 0)
+                  : ((zr = !0), 0)
               );
             },
             movementY: function (e) {
@@ -2397,11 +2397,11 @@
               var t = Lr;
               return (
                 (Lr = e.screenY),
-                zr
+                jr
                   ? "mousemove" === e.type
                     ? e.screenY - t
                     : 0
-                  : ((zr = !0), 0)
+                  : ((jr = !0), 0)
               );
             },
           }),
@@ -2488,13 +2488,13 @@
                 (r = i) && u)
               )
                 e: {
-                  for (c = u, i = 0, e = l = r; e; e = jn(e)) i++;
-                  for (e = 0, t = c; t; t = jn(t)) e++;
-                  for (; 0 < i - e; ) (l = jn(l)), i--;
-                  for (; 0 < e - i; ) (c = jn(c)), e--;
+                  for (c = u, i = 0, e = l = r; e; e = zn(e)) i++;
+                  for (e = 0, t = c; t; t = zn(t)) e++;
+                  for (; 0 < i - e; ) (l = zn(l)), i--;
+                  for (; 0 < e - i; ) (c = zn(c)), e--;
                   for (; i--; ) {
                     if (l === c || l === c.alternate) break e;
-                    (l = jn(l)), (c = jn(c));
+                    (l = zn(l)), (c = zn(c));
                   }
                   l = null;
                 }
@@ -2504,13 +2504,13 @@
                 r && r !== c && (null === (i = r.alternate) || i !== c);
 
               )
-                l.push(r), (r = jn(r));
+                l.push(r), (r = zn(r));
               for (
                 r = [];
                 u && u !== c && (null === (i = u.alternate) || i !== c);
 
               )
-                r.push(u), (u = jn(u));
+                r.push(u), (u = zn(u));
               for (u = 0; u < l.length; u++) Dn(l[u], "bubbled", s);
               for (u = r.length; 0 < u--; ) Dn(r[u], "captured", n);
               return 0 == (64 & o) ? [s] : [s, n];
@@ -2961,8 +2961,8 @@
           _o = a.unstable_ImmediatePriority,
           Ao = a.unstable_UserBlockingPriority,
           Lo = a.unstable_NormalPriority,
-          jo = a.unstable_LowPriority,
-          zo = a.unstable_IdlePriority,
+          zo = a.unstable_LowPriority,
+          jo = a.unstable_IdlePriority,
           Io = {},
           Ro = a.unstable_shouldYield,
           Do = void 0 !== Po ? Po : function () {},
@@ -2984,9 +2984,9 @@
               return 98;
             case Lo:
               return 97;
-            case jo:
-              return 96;
             case zo:
+              return 96;
+            case jo:
               return 95;
             default:
               throw Error(i(332));
@@ -3001,9 +3001,9 @@
             case 97:
               return Lo;
             case 96:
-              return jo;
-            case 95:
               return zo;
+            case 95:
+              return jo;
             default:
               throw Error(i(332));
           }
@@ -3455,7 +3455,7 @@
           }
           function s(e, t, n, r) {
             return null === t || 6 !== t.tag
-              ? (((t = js(n, e.mode, r)).return = e), t)
+              ? (((t = zs(n, e.mode, r)).return = e), t)
               : (((t = o(t, n)).return = e), t);
           }
           function c(e, t, n, r) {
@@ -3474,7 +3474,7 @@
               4 !== t.tag ||
               t.stateNode.containerInfo !== n.containerInfo ||
               t.stateNode.implementation !== n.implementation
-              ? (((t = zs(n, e.mode, r)).return = e), t)
+              ? (((t = js(n, e.mode, r)).return = e), t)
               : (((t = o(t, n.children || [])).return = e), t);
           }
           function d(e, t, n, r, a) {
@@ -3484,7 +3484,7 @@
           }
           function f(e, t, n) {
             if ("string" == typeof t || "number" == typeof t)
-              return ((t = js("" + t, e.mode, n)).return = e), t;
+              return ((t = zs("" + t, e.mode, n)).return = e), t;
             if ("object" == typeof t && null !== t) {
               switch (t.$$typeof) {
                 case ee:
@@ -3498,7 +3498,7 @@
                     n
                   );
                 case te:
-                  return ((t = zs(t, e.mode, n)).return = e), t;
+                  return ((t = js(t, e.mode, n)).return = e), t;
               }
               if (Ea(t) || he(t))
                 return ((t = Ls(t, e.mode, n, null)).return = e), t;
@@ -3710,7 +3710,7 @@
                       }
                       t(e, r), (r = r.sibling);
                     }
-                    ((r = zs(a, e.mode, s)).return = e), (e = r);
+                    ((r = js(a, e.mode, s)).return = e), (e = r);
                   }
                   return l(e);
               }
@@ -3719,7 +3719,7 @@
                 (a = "" + a),
                 null !== r && 6 === r.tag
                   ? (n(e, r.sibling), ((r = o(r, a)).return = e), (e = r))
-                  : (n(e, r), ((r = js(a, e.mode, s)).return = e), (e = r)),
+                  : (n(e, r), ((r = zs(a, e.mode, s)).return = e), (e = r)),
                 l(e)
               );
             if (Ea(a)) return h(e, r, a, s);
@@ -3742,11 +3742,11 @@
           _a = { current: Na },
           Aa = { current: Na },
           La = { current: Na };
-        function ja(e) {
+        function za(e) {
           if (e === Na) throw Error(i(174));
           return e;
         }
-        function za(e, t) {
+        function ja(e, t) {
           switch ((fo(La, t), fo(Aa, e), fo(_a, Na), (e = t.nodeType))) {
             case 9:
             case 11:
@@ -3764,8 +3764,8 @@
           uo(_a), uo(Aa), uo(La);
         }
         function Ra(e) {
-          ja(La.current);
-          var t = ja(_a.current),
+          za(La.current);
+          var t = za(_a.current),
             n = Ie(t, e.type);
           t !== n && (fo(Aa, e), fo(_a, n));
         }
@@ -4376,17 +4376,17 @@
         }
         var Ai = Z.ReactCurrentOwner,
           Li = !1;
-        function ji(e, t, n, r) {
+        function zi(e, t, n, r) {
           t.child = null === e ? Oa(t, null, n, r) : Pa(t, e.child, n, r);
         }
-        function zi(e, t, n, r, o) {
+        function ji(e, t, n, r, o) {
           n = n.render;
           var a = t.ref;
           return (
             aa(t, o),
             (r = Za(e, t, n, r, a, o)),
             null === e || Li
-              ? ((t.effectTag |= 1), ji(e, t, r, o), t.child)
+              ? ((t.effectTag |= 1), zi(e, t, r, o), t.child)
               : ((t.updateQueue = e.updateQueue),
                 (t.effectTag &= -517),
                 e.expirationTime <= o && (e.expirationTime = 0),
@@ -4438,7 +4438,7 @@
             aa(t, o),
             (n = Za(e, t, n, r, a, o)),
             null === e || Li
-              ? ((t.effectTag |= 1), ji(e, t, n, o), t.child)
+              ? ((t.effectTag |= 1), zi(e, t, n, o), t.child)
               : ((t.updateQueue = e.updateQueue),
                 (t.effectTag &= -517),
                 e.expirationTime <= o && (e.expirationTime = 0),
@@ -4574,7 +4574,7 @@
             null !== e && i
               ? ((t.child = Pa(t, e.child, null, a)),
                 (t.child = Pa(t, null, l, a)))
-              : ji(e, t, l, a),
+              : zi(e, t, l, a),
             (t.memoizedState = r.state),
             o && Eo(t, n, !0),
             t.child
@@ -4585,7 +4585,7 @@
           t.pendingContext
             ? yo(0, t.pendingContext, t.pendingContext !== t.context)
             : t.context && yo(0, t.context, !1),
-            za(e, t.containerInfo);
+            ja(e, t.containerInfo);
         }
         var Ui,
           Hi,
@@ -4720,7 +4720,7 @@
           var r = t.pendingProps,
             o = r.revealOrder,
             a = r.tail;
-          if ((ji(e, t, r.children, n), 0 != (2 & (r = Ba.current))))
+          if ((zi(e, t, r.children, n), 0 != (2 & (r = Ba.current))))
             (r = (1 & r) | 2), (t.effectTag |= 64);
           else {
             if (null !== e && 0 != (64 & e.effectTag))
@@ -4836,7 +4836,7 @@
                 null
               );
             case 5:
-              Da(t), (n = ja(La.current));
+              Da(t), (n = za(La.current));
               var a = t.type;
               if (null !== e && null != t.stateNode)
                 Hi(e, t, a, r, n), e.ref !== t.ref && (t.effectTag |= 128);
@@ -4845,7 +4845,7 @@
                   if (null === t.stateNode) throw Error(i(166));
                   return null;
                 }
-                if (((e = ja(_a.current)), Ni(t))) {
+                if (((e = za(_a.current)), Ni(t))) {
                   (r = t.stateNode), (a = t.type);
                   var l = t.memoizedProps;
                   switch (((r[Tn] = t), (r[Pn] = l), a)) {
@@ -4899,7 +4899,7 @@
                       ye(r), Te(r, l, !0);
                       break;
                     case "textarea":
-                      ye(r), je(r);
+                      ye(r), ze(r);
                       break;
                     case "select":
                     case "option":
@@ -4913,7 +4913,7 @@
                 } else {
                   switch (
                     ((s = 9 === n.nodeType ? n : n.ownerDocument),
-                    e === an && (e = ze(a)),
+                    e === an && (e = je(a)),
                     e === an
                       ? "script" === a
                         ? (((e = s.createElement("div")).innerHTML =
@@ -5008,7 +5008,7 @@
                       ye(e), Te(e, r, !1);
                       break;
                     case "textarea":
-                      ye(e), je(e);
+                      ye(e), ze(e);
                       break;
                     case "option":
                       null != r.value &&
@@ -5034,8 +5034,8 @@
               else {
                 if ("string" != typeof r && null === t.stateNode)
                   throw Error(i(166));
-                (n = ja(La.current)),
-                  ja(_a.current),
+                (n = za(La.current)),
+                  za(_a.current),
                   Ni(t)
                     ? ((n = t.stateNode),
                       (r = t.memoizedProps),
@@ -5231,7 +5231,7 @@
               var l,
                 s,
                 c = t.stateNode;
-              switch ((ja(_a.current), (e = null), n)) {
+              switch ((za(_a.current), (e = null), n)) {
                 case "input":
                   (i = ke(c, i)), (r = ke(c, r)), (e = []);
                   break;
@@ -5828,8 +5828,8 @@
           _l = 0,
           Al = Sl,
           Ll = null,
-          jl = 1073741823,
           zl = 1073741823,
+          jl = 1073741823,
           Il = null,
           Rl = 0,
           Dl = !1,
@@ -6013,7 +6013,7 @@
                       (Ds(e, n),
                       n === (r = e.lastSuspendedTime) &&
                         (e.nextKnownPendingLevel = hs(o)),
-                      1073741823 === jl && 10 < (o = Bl + 500 - Uo()))
+                      1073741823 === zl && 10 < (o = Bl + 500 - Uo()))
                     ) {
                       if (Dl) {
                         var a = e.lastPingedTime;
@@ -6048,11 +6048,11 @@
                       break;
                     }
                     if (
-                      (1073741823 !== zl
-                        ? (r = 10 * (1073741821 - zl) - Uo())
-                        : 1073741823 === jl
+                      (1073741823 !== jl
+                        ? (r = 10 * (1073741821 - jl) - Uo())
+                        : 1073741823 === zl
                         ? (r = 0)
-                        : ((r = 10 * (1073741821 - jl) - 5e3),
+                        : ((r = 10 * (1073741821 - zl) - 5e3),
                           0 > (r = (o = Uo()) - r) && (r = 0),
                           (n = 10 * (1073741821 - n) - o) <
                             (r =
@@ -6077,8 +6077,8 @@
                     gs(e);
                     break;
                   case 5:
-                    if (1073741823 !== jl && null !== Il) {
-                      a = jl;
+                    if (1073741823 !== zl && null !== Il) {
+                      a = zl;
                       var l = Il;
                       if (
                         (0 >= (r = 0 | l.busyMinDurationMs)
@@ -6183,7 +6183,7 @@
             (_l = t),
             (Al = Sl),
             (Ll = null),
-            (zl = jl = 1073741823),
+            (jl = zl = 1073741823),
             (Il = null),
             (Rl = 0),
             (Dl = !1);
@@ -6327,8 +6327,8 @@
           return (kl.current = bi), null === e ? bi : e;
         }
         function cs(e, t) {
-          e < jl && 2 < e && (jl = e),
-            null !== t && e < zl && 2 < e && ((zl = e), (Il = t));
+          e < zl && 2 < e && (zl = e),
+            null !== t && e < jl && 2 < e && ((jl = e), (Il = t));
         }
         function us(e) {
           e > Rl && (Rl = e);
@@ -6710,7 +6710,7 @@
           var r = e.pingCache;
           null !== r && r.delete(t),
             Ol === e && _l === n
-              ? Al === Tl || (Al === Cl && 1073741823 === jl && Uo() - Bl < 500)
+              ? Al === Tl || (Al === Cl && 1073741823 === zl && Uo() - Bl < 500)
                 ? is(e, _l)
                 : (Dl = !0)
               : Rs(e, n) &&
@@ -6744,7 +6744,7 @@
                     bo(t.type) && ko(t);
                     break;
                   case 4:
-                    za(t, t.stateNode.containerInfo);
+                    ja(t, t.stateNode.containerInfo);
                     break;
                   case 10:
                     (r = t.memoizedProps.value),
@@ -6818,7 +6818,7 @@
                   (o._reactInternalFiber = t),
                   ka(t, r, e, n),
                   (t = Fi(null, t, r, !0, a, n));
-              } else (t.tag = 0), ji(null, t, o, n), (t = t.child);
+              } else (t.tag = 0), zi(null, t, o, n), (t = t.child);
               return t;
             case 16:
               e: {
@@ -6874,7 +6874,7 @@
                     t = Mi(null, t, o, e, n);
                     break e;
                   case 11:
-                    t = zi(null, t, o, e, n);
+                    t = ji(null, t, o, e, n);
                     break e;
                   case 14:
                     t = Ii(null, t, o, Go(o.type, e), r, n);
@@ -6916,7 +6916,7 @@
                 )
                   for (n = Oa(t, null, r, n), t.child = n; n; )
                     (n.effectTag = (-3 & n.effectTag) | 1024), (n = n.sibling);
-                else ji(e, t, r, n), _i();
+                else zi(e, t, r, n), _i();
                 t = t.child;
               }
               return t;
@@ -6934,7 +6934,7 @@
                 Di(e, t),
                 4 & t.mode && 1 !== n && o.hidden
                   ? ((t.expirationTime = t.childExpirationTime = 1), (t = null))
-                  : (ji(e, t, l, n), (t = t.child)),
+                  : (zi(e, t, l, n), (t = t.child)),
                 t
               );
             case 6:
@@ -6943,22 +6943,22 @@
               return Wi(e, t, n);
             case 4:
               return (
-                za(t, t.stateNode.containerInfo),
+                ja(t, t.stateNode.containerInfo),
                 (r = t.pendingProps),
-                null === e ? (t.child = Pa(t, null, r, n)) : ji(e, t, r, n),
+                null === e ? (t.child = Pa(t, null, r, n)) : zi(e, t, r, n),
                 t.child
               );
             case 11:
               return (
                 (r = t.type),
                 (o = t.pendingProps),
-                zi(e, t, r, (o = t.elementType === r ? o : Go(r, o)), n)
+                ji(e, t, r, (o = t.elementType === r ? o : Go(r, o)), n)
               );
             case 7:
-              return ji(e, t, t.pendingProps, n), t.child;
+              return zi(e, t, t.pendingProps, n), t.child;
             case 8:
             case 12:
-              return ji(e, t, t.pendingProps.children, n), t.child;
+              return zi(e, t, t.pendingProps.children, n), t.child;
             case 10:
               e: {
                 (r = t.type._context),
@@ -7023,7 +7023,7 @@
                         }
                       s = l;
                     }
-                ji(e, t, o.children, n), (t = t.child);
+                zi(e, t, o.children, n), (t = t.child);
               }
               return t;
             case 9:
@@ -7033,7 +7033,7 @@
                 aa(t, n),
                 (r = r((o = ia(o, a.unstable_observedBits)))),
                 (t.effectTag |= 1),
-                ji(e, t, r, n),
+                zi(e, t, r, n),
                 t.child
               );
             case 14:
@@ -7200,10 +7200,10 @@
         function Ls(e, t, n, r) {
           return ((e = Os(7, e, r, t)).expirationTime = n), e;
         }
-        function js(e, t, n) {
+        function zs(e, t, n) {
           return ((e = Os(6, e, null, t)).expirationTime = n), e;
         }
-        function zs(e, t, n) {
+        function js(e, t, n) {
           return (
             ((t = Os(
               4,
@@ -7476,7 +7476,7 @@
                 null != (t = n.value) && Ne(e, !!n.multiple, t, !1);
             }
           }),
-          (z = os),
+          (j = os),
           (I = function (e, t, n, r, o) {
             var a = Pl;
             Pl |= 4;
@@ -7521,7 +7521,7 @@
               rt(e, Bn);
             },
             L,
-            j,
+            z,
             Zt,
             it,
             vs,
@@ -7777,7 +7777,7 @@
             (e.count = 0),
             10 > _.length && _.push(e);
         }
-        function j(e, t, n, r) {
+        function z(e, t, n, r) {
           var o = typeof e;
           ("undefined" !== o && "boolean" !== o) || (e = null);
           var l = !1;
@@ -7799,7 +7799,7 @@
           if (((l = 0), (t = "" === t ? "." : t + ":"), Array.isArray(e)))
             for (var s = 0; s < e.length; s++) {
               var c = t + I((o = e[s]), s);
-              l += j(o, c, n, r);
+              l += z(o, c, n, r);
             }
           else if (
             "function" ==
@@ -7811,7 +7811,7 @@
                 : null)
           )
             for (e = c.call(e), s = 0; !(o = e.next()).done; )
-              l += j((o = o.value), (c = t + I(o, s++)), n, r);
+              l += z((o = o.value), (c = t + I(o, s++)), n, r);
           else if ("object" === o)
             throw (
               ((n = "" + e),
@@ -7827,8 +7827,8 @@
             );
           return l;
         }
-        function z(e, t, n) {
-          return null == e ? 0 : j(e, "", t, n);
+        function j(e, t, n) {
+          return null == e ? 0 : z(e, "", t, n);
         }
         function I(e, t) {
           return "object" == typeof e && null !== e && null != e.key
@@ -7878,7 +7878,7 @@
         function B(e, t, n, r, o) {
           var a = "";
           null != n && (a = ("" + n).replace(N, "$&/") + "/"),
-            z(e, D, (t = A(t, a, r, o))),
+            j(e, D, (t = A(t, a, r, o))),
             L(t);
         }
         var M = { current: null };
@@ -7902,10 +7902,10 @@
           },
           forEach: function (e, t, n) {
             if (null == e) return e;
-            z(e, R, (t = A(null, null, t, n))), L(t);
+            j(e, R, (t = A(null, null, t, n))), L(t);
           },
           count: function (e) {
-            return z(
+            return j(
               e,
               function () {
                 return null;
@@ -8598,8 +8598,8 @@
           _ = 1,
           A = null,
           L = 3,
-          j = !1,
           z = !1,
+          j = !1,
           I = !1;
         function R(e) {
           for (var t = C(N); null !== t; ) {
@@ -8612,15 +8612,15 @@
           }
         }
         function D(e) {
-          if (((I = !1), R(e), !z))
-            if (null !== C(O)) (z = !0), n(B);
+          if (((I = !1), R(e), !j))
+            if (null !== C(O)) (j = !0), n(B);
             else {
               var t = C(N);
               null !== t && r(D, t.startTime - e);
             }
         }
         function B(e, n) {
-          (z = !1), I && ((I = !1), o()), (j = !0);
+          (j = !1), I && ((I = !1), o()), (z = !0);
           var i = L;
           try {
             for (
@@ -8647,7 +8647,7 @@
             }
             return c;
           } finally {
-            (A = null), (L = i), (j = !1);
+            (A = null), (L = i), (z = !1);
           }
         }
         function M(e) {
@@ -8675,7 +8675,7 @@
             e.callback = null;
           }),
           (t.unstable_continueExecution = function () {
-            z || j || ((z = !0), n(B));
+            j || z || ((j = !0), n(B));
           }),
           (t.unstable_getCurrentPriorityLevel = function () {
             return L;
@@ -8744,7 +8744,7 @@
                   null === C(O) &&
                     e === C(N) &&
                     (I ? o() : (I = !0), r(D, s - l)))
-                : ((e.sortIndex = i), S(O, e), z || j || ((z = !0), n(B))),
+                : ((e.sortIndex = i), S(O, e), j || z || ((j = !0), n(B))),
               e
             );
           }),
@@ -9095,8 +9095,8 @@
             _ = () => b(`.${i.loader}`),
             A = () => v(i.actions),
             L = () => v(i.footer),
-            j = () => v(i["timer-progress-bar"]),
-            z = () => v(i.close),
+            z = () => v(i["timer-progress-bar"]),
+            j = () => v(i.close),
             I = () => {
               const e = y();
               if (!e) return [];
@@ -9267,7 +9267,7 @@
               return n > 0 || r > 0;
             },
             ne = (e, t = !1) => {
-              const n = j();
+              const n = z();
               n &&
                 X(n) &&
                 (t && ((n.style.transition = "none"), (n.style.width = "100%")),
@@ -9703,8 +9703,8 @@
             _e = 0,
             Ae = 0,
             Le = 0,
-            je = 0;
-          const ze = (e) => {
+            ze = 0;
+          const je = (e) => {
               const t = y();
               if (e.target === t || x().contains(e.target)) {
                 Ne = !0;
@@ -9712,7 +9712,7 @@
                 (_e = n.clientX),
                   (Ae = n.clientY),
                   (Le = parseInt(t.style.insetInlineStart) || 0),
-                  (je = parseInt(t.style.insetBlockStart) || 0),
+                  (ze = parseInt(t.style.insetBlockStart) || 0),
                   V(t, "swal2-dragging");
               }
             },
@@ -9721,7 +9721,7 @@
               if (Ne) {
                 let { clientX: n, clientY: r } = De(e);
                 (t.style.insetInlineStart = `${Le + (n - _e)}px`),
-                  (t.style.insetBlockStart = `${je + (r - Ae)}px`);
+                  (t.style.insetBlockStart = `${ze + (r - Ae)}px`);
               }
             },
             Re = () => {
@@ -9756,19 +9756,19 @@
                   t.draggable && !t.toast
                     ? (V(r, i.draggable),
                       ((e) => {
-                        e.addEventListener("mousedown", ze),
+                        e.addEventListener("mousedown", je),
                           document.body.addEventListener("mousemove", Ie),
                           e.addEventListener("mouseup", Re),
-                          e.addEventListener("touchstart", ze),
+                          e.addEventListener("touchstart", je),
                           document.body.addEventListener("touchmove", Ie),
                           e.addEventListener("touchend", Re);
                       })(r))
                     : (q(r, i.draggable),
                       ((e) => {
-                        e.removeEventListener("mousedown", ze),
+                        e.removeEventListener("mousedown", je),
                           document.body.removeEventListener("mousemove", Ie),
                           e.removeEventListener("mouseup", Re),
-                          e.removeEventListener("touchstart", ze),
+                          e.removeEventListener("touchstart", je),
                           document.body.removeEventListener("touchmove", Ie),
                           e.removeEventListener("touchend", Re);
                       })(r));
@@ -9874,7 +9874,7 @@
                     F(n, t, "title"));
                 })(0, t),
                 ((e, t) => {
-                  const n = z();
+                  const n = j();
                   n &&
                     (B(n, t.closeButtonHtml || ""),
                     F(n, t, "closeButton"),
@@ -10392,12 +10392,12 @@
                       .catch((t) => At(e || void 0, t)))
                   : _t(e, t);
             };
-          function jt() {
+          function zt() {
             const e = pe.innerParams.get(this);
             if (!e) return;
             const t = pe.domCache.get(this);
             Y(t.loader),
-              D() ? e.icon && K(x()) : zt(t),
+              D() ? e.icon && K(x()) : jt(t),
               q([t.popup, t.actions], i.loading),
               t.popup.removeAttribute("aria-busy"),
               t.popup.removeAttribute("data-loading"),
@@ -10405,7 +10405,7 @@
               (t.denyButton.disabled = !1),
               (t.cancelButton.disabled = !1);
           }
-          const zt = (e) => {
+          const jt = (e) => {
             const t = e.popup.getElementsByClassName(
               e.loader.getAttribute("data-button-to-replace")
             );
@@ -10753,12 +10753,12 @@
             closeToast: ut,
             disableButtons: Mt,
             disableInput: $t,
-            disableLoading: jt,
+            disableLoading: zt,
             enableButtons: Bt,
             enableInput: Ft,
             getInput: It,
             handleAwaitingPromise: pt,
-            hideLoading: jt,
+            hideLoading: zt,
             rejectPromise: ft,
             resetValidationMessage: Ht,
             showValidationMessage: Ut,
@@ -10813,7 +10813,7 @@
               if (r.timeout)
                 return (
                   (() => {
-                    const e = j();
+                    const e = z();
                     if (!e) return;
                     const t = parseInt(window.getComputedStyle(e).width);
                     e.style.removeProperty("transition"),
@@ -10919,7 +10919,7 @@
             },
             getActions: A,
             getCancelButton: O,
-            getCloseButton: z,
+            getCloseButton: j,
             getConfirmButton: P,
             getContainer: w,
             getDenyButton: N,
@@ -10934,7 +10934,7 @@
             getPopup: y,
             getProgressSteps: C,
             getTimerLeft: () => r.timeout && r.timeout.getTimerLeft(),
-            getTimerProgressBar: j,
+            getTimerProgressBar: z,
             getTitle: k,
             getValidationMessage: T,
             increaseTimer: (e) => {
@@ -11172,7 +11172,7 @@
                   ]);
               });
             },
-            jn = (e) => {
+            zn = (e) => {
               const t = w(),
                 n = y();
               "function" == typeof e.willOpen && e.willOpen(n),
@@ -11203,20 +11203,20 @@
                   setTimeout(() => e.didOpen(n)),
                 r.eventEmitter.emit("didOpen", n);
             },
-            zn = (e) => {
+            jn = (e) => {
               const t = y();
               if (e.target !== t) return;
               const n = w();
-              t.removeEventListener("animationend", zn),
-                t.removeEventListener("transitionend", zn),
+              t.removeEventListener("animationend", jn),
+                t.removeEventListener("transitionend", jn),
                 (n.style.overflowY = "auto"),
                 q(n, i["no-transition"]);
             },
             In = (e, t) => {
               te(t)
                 ? ((e.style.overflowY = "hidden"),
-                  t.addEventListener("animationend", zn),
-                  t.addEventListener("transitionend", zn))
+                  t.addEventListener("animationend", jn),
+                  t.addEventListener("transitionend", jn))
                 : (e.style.overflowY = "auto");
             },
             Rn = (e, t, n) => {
@@ -11385,7 +11385,7 @@
                         (m(t.inputValue) || g(t.inputValue)) &&
                         (bt(P()), St(e, t));
                   })(e, n),
-                  jn(n),
+                  zn(n),
                   Qn(r, n, i),
                   Kn(t, n),
                   setTimeout(() => {
@@ -11432,14 +11432,14 @@
                 denyButton: N(),
                 cancelButton: O(),
                 loader: _(),
-                closeButton: z(),
+                closeButton: j(),
                 validationMessage: T(),
                 progressSteps: C(),
               };
               return pe.domCache.set(e, t), t;
             },
             Qn = (e, t, n) => {
-              const r = j();
+              const r = z();
               Y(r),
                 t.timer &&
                   ((e.timeout = new kn(() => {
@@ -11484,8 +11484,8 @@
             (Hn.prototype.getInput = It),
             (Hn.prototype.disableInput = $t),
             (Hn.prototype.enableInput = Ft),
-            (Hn.prototype.hideLoading = jt),
-            (Hn.prototype.disableLoading = jt),
+            (Hn.prototype.hideLoading = zt),
+            (Hn.prototype.disableLoading = zt),
             (Hn.prototype.showValidationMessage = Ut),
             (Hn.prototype.resetValidationMessage = Ht),
             (Hn.prototype.close = ut),
@@ -11736,7 +11736,7 @@
             ),
             _(e.children, t, s, l)),
             (null != e.path || e.index) &&
-              t.push({ path: l, score: z(l, e.index), routesMeta: s });
+              t.push({ path: l, score: j(l, e.index), routesMeta: s });
         };
         return (
           e.forEach((e, t) => {
@@ -11771,15 +11771,15 @@
       })(O || (O = {})),
         new Set(["lazy", "caseSensitive", "path", "id", "index", "children"]);
       const L = /^:[\w-]+$/,
-        j = (e) => "*" === e;
-      function z(e, t) {
+        z = (e) => "*" === e;
+      function j(e, t) {
         let n = e.split("/"),
           r = n.length;
         return (
-          n.some(j) && (r += -2),
+          n.some(z) && (r += -2),
           t && (r += 2),
           n
-            .filter((e) => !j(e))
+            .filter((e) => !z(e))
             .reduce((e, t) => e + (L.test(t) ? 3 : "" === t ? 1 : 10), r)
         );
       }
@@ -12872,7 +12872,7 @@
           Le(e)
         );
       }
-      function je(e, t) {
+      function ze(e, t) {
         if (t && ("object" === Le(t) || "function" == typeof t)) return t;
         if (void 0 !== t)
           throw new TypeError(
@@ -12886,14 +12886,14 @@
           return e;
         })(e);
       }
-      function ze(e) {
+      function je(e) {
         return (
-          (ze = Object.setPrototypeOf
+          (je = Object.setPrototypeOf
             ? Object.getPrototypeOf
             : function (e) {
                 return e.__proto__ || Object.getPrototypeOf(e);
               }),
-          ze(e)
+          je(e)
         );
       }
       (function (e) {
@@ -12945,12 +12945,12 @@
             })()),
             function () {
               var e,
-                t = ze(r);
+                t = je(r);
               if (o) {
-                var n = ze(this).constructor;
+                var n = je(this).constructor;
                 e = Reflect.construct(t, arguments, n);
               } else e = t.apply(this, arguments);
-              return je(this, e);
+              return ze(this, e);
             });
         function i() {
           return Ne(this, i), a.apply(this, arguments);
@@ -13117,7 +13117,7 @@
                           f(!0),
                           (e.prev = 1),
                           (e.next = 4),
-                          fetch("http://localhost:3001/api/login", {
+                          fetch("https://forceteam.onrender.com/api/login", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ email: n, password: a }),
@@ -13333,9 +13333,14 @@
                             return (
                               (e.prev = 3),
                               (e.next = 6),
-                              fetch("http://localhost:3001/api/usuario", {
-                                headers: { Authorization: "Bearer ".concat(t) },
-                              })
+                              fetch(
+                                "https://forceteam.onrender.com/api/usuario",
+                                {
+                                  headers: {
+                                    Authorization: "Bearer ".concat(t),
+                                  },
+                                }
+                              )
                             );
                           case 6:
                             return (n = e.sent), (e.next = 9), n.json();
@@ -13381,11 +13386,19 @@
                             return (
                               (e.prev = 0),
                               (e.next = 3),
-                              fetch("http://localhost:3001/api/login", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ email: t, password: n }),
-                              })
+                              fetch(
+                                "https://forceteam.onrender.com/api/login",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    email: t,
+                                    password: n,
+                                  }),
+                                }
+                              )
                             );
                           case 3:
                             return (o = e.sent), (e.next = 6), o.json();
@@ -13636,14 +13649,14 @@
             _ = He((0, t.useState)([]), 2),
             A = _[0],
             L = _[1],
-            j = A.filter(function (e) {
+            z = A.filter(function (e) {
               return (e.name + " " + e.last_name)
                 .toLowerCase()
                 .includes(O.toLowerCase());
             }).sort(function (e, t) {
               return (e.name + e.last_name).localeCompare(t.name + t.last_name);
             }),
-            z = [
+            j = [
               "La fuerza no viene de ganar, viene del esfuerzo 💪🔥",
               "Hoy entrenás, mañana sos más fuerte 🏋️",
               "Las repeticiones construyen campeones 🦾",
@@ -13654,7 +13667,7 @@
             R = I[0],
             D = I[1];
           (0, t.useEffect)(function () {
-            var e = z[Math.floor(Math.random() * z.length)];
+            var e = j[Math.floor(Math.random() * j.length)];
             D(e);
           }, []),
             (0, t.useEffect)(function () {
@@ -13670,7 +13683,9 @@
                               return (
                                 (e.prev = 0),
                                 (e.next = 3),
-                                fetch("http://localhost:3001/api/usuarios")
+                                fetch(
+                                  "https://forceteam.onrender.com/api/usuarios"
+                                )
                               );
                             case 3:
                               return (
@@ -13717,7 +13732,7 @@
                                     (e.next = 3),
                                     Promise.all([
                                       fetch(
-                                        "http://localhost:3001/api/users/".concat(
+                                        "https://forceteam.onrender.com/api/users/".concat(
                                           n.id,
                                           "/logs"
                                         ),
@@ -13728,7 +13743,7 @@
                                         }
                                       ),
                                       fetch(
-                                        "http://localhost:3001/api/users/".concat(
+                                        "https://forceteam.onrender.com/api/users/".concat(
                                           n.id,
                                           "/wods"
                                         ),
@@ -13739,7 +13754,7 @@
                                         }
                                       ),
                                       fetch(
-                                        "http://localhost:3001/api/users/".concat(
+                                        "https://forceteam.onrender.com/api/users/".concat(
                                           n.id,
                                           "/pesos"
                                         ),
@@ -13812,60 +13827,112 @@
               [n, r]
             );
           var B = (function () {
-            var e = Fe(
-              qe().mark(function e(t, o) {
-                return qe().wrap(
-                  function (e) {
-                    for (;;)
-                      switch ((e.prev = e.next)) {
-                        case 0:
-                          return (
-                            (e.prev = 0),
-                            (e.next = 3),
-                            fetch(
-                              "http://localhost:3001/api/users/".concat(
-                                n.id,
-                                "/pesos"
-                              ),
-                              {
-                                method: "PATCH",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  Authorization: "Bearer ".concat(r),
-                                },
-                                body: JSON.stringify({
-                                  ejercicio: t,
-                                  valor: o,
-                                }),
-                              }
-                            )
-                          );
-                        case 3:
-                          e.next = 7;
-                          break;
-                        case 5:
-                          (e.prev = 5), (e.t0 = e.catch(0));
-                        case 7:
-                        case "end":
-                          return e.stop();
-                      }
-                  },
-                  e,
-                  null,
-                  [[0, 5]]
-                );
-              })
-            );
-            return function (t, n) {
-              return e.apply(this, arguments);
-            };
-          })();
+              var e = Fe(
+                qe().mark(function e() {
+                  return qe().wrap(
+                    function (e) {
+                      for (;;)
+                        switch ((e.prev = e.next)) {
+                          case 0:
+                            return (
+                              (e.prev = 0),
+                              (e.next = 3),
+                              fetch(
+                                "https://forceteam.onrender.com/api/logout",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    Authorization: "Bearer ".concat(r),
+                                  },
+                                }
+                              )
+                            );
+                          case 3:
+                            e.next = 8;
+                            break;
+                          case 5:
+                            (e.prev = 5),
+                              (e.t0 = e.catch(0)),
+                              console.error("Error en logout:", e.t0);
+                          case 8:
+                            return (
+                              (e.prev = 8),
+                              localStorage.removeItem("token"),
+                              localStorage.removeItem("user"),
+                              localStorage.removeItem("usuario"),
+                              (window.location.href = "/"),
+                              e.finish(8)
+                            );
+                          case 14:
+                          case "end":
+                            return e.stop();
+                        }
+                    },
+                    e,
+                    null,
+                    [[0, 5, 8, 14]]
+                  );
+                })
+              );
+              return function () {
+                return e.apply(this, arguments);
+              };
+            })(),
+            M = (function () {
+              var e = Fe(
+                qe().mark(function e(t, o) {
+                  return qe().wrap(
+                    function (e) {
+                      for (;;)
+                        switch ((e.prev = e.next)) {
+                          case 0:
+                            return (
+                              (e.prev = 0),
+                              (e.next = 3),
+                              fetch(
+                                "https://forceteam.onrender.com/api/users/".concat(
+                                  n.id,
+                                  "/pesos"
+                                ),
+                                {
+                                  method: "PATCH",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer ".concat(r),
+                                  },
+                                  body: JSON.stringify({
+                                    ejercicio: t,
+                                    valor: o,
+                                  }),
+                                }
+                              )
+                            );
+                          case 3:
+                            e.next = 7;
+                            break;
+                          case 5:
+                            (e.prev = 5), (e.t0 = e.catch(0));
+                          case 7:
+                          case "end":
+                            return e.stop();
+                        }
+                    },
+                    e,
+                    null,
+                    [[0, 5]]
+                  );
+                })
+              );
+              return function (t, n) {
+                return e.apply(this, arguments);
+              };
+            })();
           (0, t.useEffect)(
             function () {
               var e = setTimeout(function () {
                 y.forEach(function (e) {
                   var t = k[e];
-                  "" === t || isNaN(t) || B(e, parseFloat(t));
+                  "" === t || isNaN(t) || M(e, parseFloat(t));
                 });
               }, 700);
               return function () {
@@ -13874,8 +13941,8 @@
             },
             [k]
           );
-          var M,
-            F = s.find(function (e) {
+          var F,
+            $ = s.find(function (e) {
               var t, n;
               return (
                 ((null === (t = e.fecha) ||
@@ -13888,7 +13955,7 @@
                   e.wod_fecha) === v
               );
             }),
-            $ = (function () {
+            U = (function () {
               var e = Fe(
                 qe().mark(function e() {
                   var t, o, a;
@@ -13905,7 +13972,7 @@
                                 wod_sentimiento: w.trim() || "No especificado",
                               }),
                               (e.prev = 1),
-                              !F)
+                              !$)
                             ) {
                               e.next = 8;
                               break;
@@ -13913,9 +13980,9 @@
                             return (
                               (e.next = 5),
                               fetch(
-                                "http://localhost:3001/api/users/"
+                                "https://forceteam.onrender.com/api/users/"
                                   .concat(n.id, "/wods/")
-                                  .concat(F.id),
+                                  .concat($.id),
                                 {
                                   method: "PATCH",
                                   headers: {
@@ -13933,7 +14000,7 @@
                             return (
                               (e.next = 10),
                               fetch(
-                                "http://localhost:3001/api/users/".concat(
+                                "https://forceteam.onrender.com/api/users/".concat(
                                   n.id,
                                   "/wods"
                                 ),
@@ -14044,9 +14111,9 @@
               t.createElement(
                 "h3",
                 null,
-                (M = new Date().getHours()) < 12
+                (F = new Date().getHours()) < 12
                   ? "¡Buen día!"
-                  : M < 18
+                  : F < 18
                   ? "¡Vamos con todo!"
                   : "¡A cerrar el día fuerte!",
                 " ",
@@ -14066,14 +14133,7 @@
               t.createElement("h2", null, "Atleta: ", n.name, " ", n.last_name),
               t.createElement(
                 "button",
-                {
-                  className: "logout-btn",
-                  onClick: function () {
-                    localStorage.removeItem("token"),
-                      localStorage.removeItem("user"),
-                      (window.location.href = "/");
-                  },
-                },
+                { className: "logout-btn", onClick: B },
                 "Cerrar sesión"
               )
             ),
@@ -14138,7 +14198,7 @@
                   })
                 )
               ),
-              F &&
+              $ &&
                 t.createElement(
                   "div",
                   { className: "usuario-wod-hoy" },
@@ -14151,21 +14211,21 @@
                       null,
                       t.createElement("strong", null, "🏋️ Descripción:"),
                       " ",
-                      F.descripcion || F.wod_descripcion || "-"
+                      $.descripcion || $.wod_descripcion || "-"
                     ),
                     t.createElement(
                       "p",
                       null,
                       t.createElement("strong", null, "🔥 Cómo lo realizaste:"),
                       " ",
-                      F.como_realizo || F.wod_como_realizo || "-"
+                      $.como_realizo || $.wod_como_realizo || "-"
                     ),
                     t.createElement(
                       "p",
                       null,
                       t.createElement("strong", null, "❤️ Sentimiento:"),
                       " ",
-                      F.sentimiento || F.wod_sentimiento || "-"
+                      $.sentimiento || $.wod_sentimiento || "-"
                     )
                   )
                 ),
@@ -14194,7 +14254,7 @@
                     return b(e.target.value);
                   },
                 }),
-                t.createElement("button", { onClick: $ }, "Guardar WOD")
+                t.createElement("button", { onClick: U }, "Guardar WOD")
               )
             ),
             t.createElement(
@@ -14230,7 +14290,7 @@
             t.createElement(
               "div",
               { className: "usuarios-conectados-card" },
-              t.createElement("h4", null, "Usuarios registrados 🟣"),
+              t.createElement("h4", null, "Usuarios registrados"),
               t.createElement(
                 "p",
                 { className: "usuario-total" },
@@ -14249,7 +14309,7 @@
               t.createElement(
                 "ul",
                 null,
-                j.map(function (e) {
+                z.map(function (e) {
                   var r,
                     o,
                     a =
@@ -14300,7 +14360,7 @@
                       s
                     ),
                     t.createElement("div", {
-                      className: e.id % 2 == 0 ? "dot-online" : "dot-offline",
+                      className: e.is_online ? "dot-online" : "dot-offline",
                     })
                   );
                 })
@@ -14334,11 +14394,14 @@
                                   return (
                                     (t.prev = 0),
                                     (t.next = 3),
-                                    fetch("http://localhost:3001/api/usuario", {
-                                      headers: {
-                                        Authorization: "Bearer ".concat(e),
-                                      },
-                                    })
+                                    fetch(
+                                      "https://forceteam.onrender.com/api/usuario",
+                                      {
+                                        headers: {
+                                          Authorization: "Bearer ".concat(e),
+                                        },
+                                      }
+                                    )
                                   );
                                 case 3:
                                   if ((n = t.sent).ok) {
@@ -14470,16 +14533,21 @@
                               C(!0),
                               (t.prev = 5),
                               (t.next = 8),
-                              fetch("http://localhost:3001/api/register", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                  name: r,
-                                  last_name: i,
-                                  email: c,
-                                  password: f,
-                                }),
-                              })
+                              fetch(
+                                "https://forceteam.onrender.com/api/register",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    name: r,
+                                    last_name: i,
+                                    email: c,
+                                    password: f,
+                                  }),
+                                }
+                              )
                             );
                           case 8:
                             return (o = t.sent), (t.next = 11), o.json();
@@ -14698,7 +14766,7 @@
                               (e.prev = 2),
                               (e.next = 5),
                               fetch(
-                                "http://localhost:3001/api/planificacion?fecha=".concat(
+                                "https://forceteam.onrender.com/api/planificacion?fecha=".concat(
                                   t
                                 ),
                                 {
@@ -14789,14 +14857,17 @@
                               u(!0),
                               (e.prev = 4),
                               (e.next = 7),
-                              fetch("http://localhost:3001/api/planificacion", {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  Authorization: "Bearer ".concat(d),
-                                },
-                                body: JSON.stringify({ fecha: r, plan: i }),
-                              })
+                              fetch(
+                                "https://forceteam.onrender.com/api/planificacion",
+                                {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer ".concat(d),
+                                  },
+                                  body: JSON.stringify({ fecha: r, plan: i }),
+                                }
+                              )
                             );
                           case 7:
                             return (n = e.sent), (e.next = 10), n.json();
@@ -14888,7 +14959,7 @@
                               (e.prev = 8),
                               (e.next = 11),
                               fetch(
-                                "http://localhost:3001/api/planificacion?fecha=".concat(
+                                "https://forceteam.onrender.com/api/planificacion?fecha=".concat(
                                   r
                                 ),
                                 {
@@ -15136,7 +15207,7 @@
                                     (t.prev = 0),
                                     (t.next = 3),
                                     fetch(
-                                      "http://localhost:3001/api/users/".concat(
+                                      "https://forceteam.onrender.com/api/users/".concat(
                                         c.id,
                                         "/pesos"
                                       ),
@@ -15195,7 +15266,7 @@
                             (e.prev = 0),
                             (e.next = 3),
                             fetch(
-                              "http://localhost:3001/api/users/".concat(
+                              "https://forceteam.onrender.com/api/users/".concat(
                                 c.id,
                                 "/pesos"
                               ),
@@ -15298,7 +15369,7 @@
                                       (n.Authorization = "Bearer ".concat(s)),
                                     (t.next = 5),
                                     fetch(
-                                      "http://localhost:3001/api/planificacion?fecha="
+                                      "https://forceteam.onrender.com/api/planificacion?fecha="
                                         .concat(x, "&tipo=")
                                         .concat(S),
                                       { headers: n, signal: e.signal }
@@ -15410,6 +15481,7 @@
                       t.createElement("th", null, "55%"),
                       t.createElement("th", null, "65%"),
                       t.createElement("th", null, "70%"),
+                      t.createElement("th", null, "75%"),
                       t.createElement("th", null, "80%"),
                       t.createElement("th", null, "85%"),
                       t.createElement("th", null, "90%"),
@@ -15435,13 +15507,12 @@
                         r = (function (e) {
                           return !e || isNaN(e)
                             ? {}
-                            : [45, 55, 65, 70, 80, 85, 90, 95].reduce(function (
-                                t,
-                                n
-                              ) {
-                                return (t[n] = Math.round((e * n) / 100)), t;
-                              },
-                              {});
+                            : [45, 55, 65, 70, 75, 80, 85, 90, 95].reduce(
+                                function (t, n) {
+                                  return (t[n] = Math.round((e * n) / 100)), t;
+                                },
+                                {}
+                              );
                         })(n);
                       return t.createElement(
                         "tr",
@@ -15471,7 +15542,7 @@
                             className: "input-peso",
                           })
                         ),
-                        [45, 55, 65, 70, 80, 85, 90, 95].map(function (e) {
+                        [45, 55, 65, 70, 75, 80, 85, 90, 95].map(function (e) {
                           return t.createElement("td", { key: e }, r[e] || "-");
                         })
                       );
@@ -15485,7 +15556,9 @@
                           { className: "fila-calculo" },
                           t.createElement("td", null, "Back Squat Olímpico"),
                           t.createElement("td", null, w.backSquatOlimpico),
-                          [45, 55, 65, 70, 80, 85, 90, 95].map(function (e) {
+                          [45, 55, 65, 70, 75, 80, 85, 90, 95].map(function (
+                            e
+                          ) {
                             return t.createElement(
                               "td",
                               { key: e },
@@ -15498,7 +15571,9 @@
                           { className: "fila-calculo" },
                           t.createElement("td", null, "Front Squat Olímpico"),
                           t.createElement("td", null, w.frontSquatOlimpico),
-                          [45, 55, 65, 70, 80, 85, 90, 95].map(function (e) {
+                          [45, 55, 65, 70, 75, 80, 85, 90, 95].map(function (
+                            e
+                          ) {
                             return t.createElement(
                               "td",
                               { key: e },
@@ -15566,16 +15641,16 @@
                                     var t = {
                                         "clean & jerk": "Clean & Jerk",
                                         "clean and jerk": "Clean & Jerk",
+                                        clean: "Clean",
                                         "hang power clean": "Hang Power Clean",
                                         "hang squat clean": "Hang Squat Clean",
                                         "hang clean": "Hang Power Clean",
-                                        clean: "Clean",
+                                        snatch: "Snatch",
                                         "hang power snatch":
                                           "Hang Power Snatch",
                                         "hang squat snatch":
                                           "Hang Squat Snatch",
                                         "hang snatch": "Hang Power Snatch",
-                                        snatch: "Snatch",
                                         "push jerk": "Push jerk",
                                         jerk: "Push jerk",
                                         deadlift: "Deadlift",
@@ -15589,42 +15664,52 @@
                                         "back squat": "Back Squat Olímpico",
                                         "front squat": "Front Squat Olímpico",
                                       },
-                                      n = e.split("\n"),
-                                      r = null,
-                                      o = function (e) {
-                                        var o = n[e]
+                                      n = Ct(
+                                        Ct({}, d),
+                                        {},
+                                        {
+                                          "Back Squat Olímpico":
+                                            w.backSquatOlimpico,
+                                          "Front Squat Olímpico":
+                                            w.frontSquatOlimpico,
+                                        }
+                                      ),
+                                      r = e.split("\n"),
+                                      o = null,
+                                      a = function (e) {
+                                        var a = r[e]
                                             .toLowerCase()
                                             .replace(
                                               /[^a-z0-9áéíóúüñ\s&]/gi,
                                               ""
                                             )
                                             .trim(),
-                                          a = Object.keys(t).find(function (e) {
-                                            return o.includes(e);
+                                          i = Object.keys(t).find(function (e) {
+                                            return a.includes(e);
                                           });
-                                        if ((a && (r = t[a]), !r))
+                                        if ((i && (o = t[i]), !o))
                                           return "continue";
-                                        var i = parseFloat(d[r]);
-                                        if (!i) return "continue";
-                                        n[e] = n[e].replace(
+                                        var l = parseFloat(n[o]);
+                                        if (!l) return "continue";
+                                        r[e] = r[e].replace(
                                           /(\d+)%/g,
                                           function (e, t) {
                                             var n = parseInt(t);
                                             return ""
                                               .concat(n, "% (")
                                               .concat(
-                                                Math.round((i * n) / 100),
+                                                Math.round((l * n) / 100),
                                                 "kg)"
                                               );
                                           }
                                         );
                                       },
-                                      a = 0;
-                                    a < n.length;
-                                    a++
+                                      i = 0;
+                                    i < r.length;
+                                    i++
                                   )
-                                    o(a);
-                                  return n.join("\n");
+                                    a(i);
+                                  return r.join("\n");
                                 })(e),
                                 r = /(https?:\/\/[^\s]+)/g;
                               return n.split(r).map(function (e, n) {
@@ -15725,7 +15810,7 @@
                               (e.prev = 4),
                               (e.next = 7),
                               fetch(
-                                "http://localhost:3001/api/forgot-password",
+                                "https://forceteam.onrender.com/api/forgot-password",
                                 {
                                   method: "POST",
                                   headers: {
@@ -15940,7 +16025,7 @@
                               (e.prev = 8),
                               (e.next = 11),
                               fetch(
-                                "http://localhost:3001/api/reset-password",
+                                "https://forceteam.onrender.com/api/reset-password",
                                 {
                                   method: "POST",
                                   headers: {
@@ -16128,7 +16213,7 @@
                             (e.prev = 2),
                             (e.next = 5),
                             fetch(
-                              "http://localhost:3001/api/planificacion?fecha=".concat(
+                              "https://forceteam.onrender.com/api/planificacion?fecha=".concat(
                                 t,
                                 "&tipo=corta"
                               ),
@@ -16218,18 +16303,21 @@
                             u(!0),
                             (e.prev = 4),
                             (e.next = 7),
-                            fetch("http://localhost:3001/api/planificacion", {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json",
-                                Authorization: "Bearer ".concat(d),
-                              },
-                              body: JSON.stringify({
-                                fecha: r,
-                                tipo: "corta",
-                                plan: i,
-                              }),
-                            })
+                            fetch(
+                              "https://forceteam.onrender.com/api/planificacion",
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                  Authorization: "Bearer ".concat(d),
+                                },
+                                body: JSON.stringify({
+                                  fecha: r,
+                                  tipo: "corta",
+                                  plan: i,
+                                }),
+                              }
+                            )
                           );
                         case 7:
                           e.sent.ok
@@ -16325,7 +16413,7 @@
                             (e.prev = 8),
                             (e.next = 11),
                             fetch(
-                              "http://localhost:3001/api/planificacion?fecha=".concat(
+                              "https://forceteam.onrender.com/api/planificacion?fecha=".concat(
                                 r,
                                 "&tipo=corta"
                               ),
@@ -16492,7 +16580,7 @@
         );
       };
       const Lt =
-        ((jt = function () {
+        ((zt = function () {
           return t.createElement(
             "div",
             null,
@@ -16590,11 +16678,11 @@
             t.createElement(
               et.Provider,
               { value: { store: r, actions: i } },
-              t.createElement(jt, e)
+              t.createElement(zt, e)
             )
           );
         });
-      var jt;
+      var zt;
       r.render(t.createElement(Lt, null), document.querySelector("#app"));
     })();
 })();
