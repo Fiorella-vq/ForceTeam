@@ -142,10 +142,22 @@ export const Usuario = ({ user, token }) => {
     fetchData();
   }, [user, token]);
 
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/";
+  const cerrarSesion = async () => {
+    try {
+      await fetch("http://localhost:3001/api/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (e) {
+      console.error("Error en logout:", e);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("usuario");
+      window.location.href = "/";
+    }
   };
 
   const guardarPeso = async (ejercicio, valor) => {
@@ -440,7 +452,7 @@ export const Usuario = ({ user, token }) => {
                 </span>
 
                 <div
-                  className={u.id % 2 === 0 ? "dot-online" : "dot-offline"}
+                  className={u.is_online ? "dot-online" : "dot-offline"}
                 />
               </li>
             );

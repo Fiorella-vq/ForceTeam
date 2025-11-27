@@ -80,7 +80,7 @@ export const PlanificacionViewer = () => {
 
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
-    const porcents = [45, 55, 65, 70, 80, 85, 90, 95];
+    const porcents = [45, 55, 65, 70, 75, 80, 85, 90, 95];
 
     return porcents.reduce((acc, p) => {
       acc[p] = Math.round((peso * p) / 100);
@@ -132,15 +132,17 @@ export const PlanificacionViewer = () => {
       "clean & jerk": "Clean & Jerk",
       "clean and jerk": "Clean & Jerk",
 
+      clean: "Clean",
+
       "hang power clean": "Hang Power Clean",
       "hang squat clean": "Hang Squat Clean",
       "hang clean": "Hang Power Clean",
-      clean: "Clean",
+
+      snatch: "Snatch",
 
       "hang power snatch": "Hang Power Snatch",
       "hang squat snatch": "Hang Squat Snatch",
       "hang snatch": "Hang Power Snatch",
-      snatch: "Snatch",
 
       "push jerk": "Push jerk",
       jerk: "Push jerk",
@@ -155,6 +157,12 @@ export const PlanificacionViewer = () => {
       "front squat olímpico": "Front Squat Olímpico",
       "back squat": "Back Squat Olímpico",
       "front squat": "Front Squat Olímpico",
+    };
+
+    const pesosExtendidos = {
+      ...pesos,
+      "Back Squat Olímpico": squats.backSquatOlimpico,
+      "Front Squat Olímpico": squats.frontSquatOlimpico,
     };
 
     let lineas = texto.split("\n");
@@ -173,7 +181,7 @@ export const PlanificacionViewer = () => {
       if (encontrado) ejActual = ejerciciosMap[encontrado];
       if (!ejActual) continue;
 
-      const max = parseFloat(pesos[ejActual]);
+      const max = parseFloat(pesosExtendidos[ejActual]);
       if (!max) continue;
 
       lineas[i] = lineas[i].replace(/(\d+)%/g, (match, porc) => {
@@ -277,6 +285,7 @@ export const PlanificacionViewer = () => {
               <th>55%</th>
               <th>65%</th>
               <th>70%</th>
+              <th>75%</th>
               <th>80%</th>
               <th>85%</th>
               <th>90%</th>
@@ -314,7 +323,7 @@ export const PlanificacionViewer = () => {
                     />
                   </td>
 
-                  {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+                  {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
                     <td key={p}>{porcentajes[p] || "-"}</td>
                   ))}
                 </tr>
@@ -326,7 +335,7 @@ export const PlanificacionViewer = () => {
                 <tr className="fila-calculo">
                   <td>Back Squat Olímpico</td>
                   <td>{squats.backSquatOlimpico}</td>
-                  {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+                  {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
                     <td key={p}>
                       {Math.round((squats.backSquatOlimpico * p) / 100)}
                     </td>
@@ -336,7 +345,7 @@ export const PlanificacionViewer = () => {
                 <tr className="fila-calculo">
                   <td>Front Squat Olímpico</td>
                   <td>{squats.frontSquatOlimpico}</td>
-                  {[45, 55, 65, 70, 80, 85, 90, 95].map((p) => (
+                  {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
                     <td key={p}>
                       {Math.round((squats.frontSquatOlimpico * p) / 100)}
                     </td>

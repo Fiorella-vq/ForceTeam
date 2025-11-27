@@ -18,12 +18,13 @@ class User(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     role = db.Column(db.String(20), nullable=False, default="user")
+    is_online = db.Column(db.Boolean, default=False)
+    last_online = db.Column(db.DateTime, default=datetime.utcnow)
+
  
-
-
-    # Relaciones
     logs = db.relationship("UserLog", backref="user", lazy=True, cascade="all, delete-orphan")
     wods = db.relationship("UserWod", backref="user", lazy=True, cascade="all, delete-orphan")
+    pesos = db.relationship("UserPeso", backref="user", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User {self.email}>"
@@ -43,8 +44,7 @@ class User(db.Model):
             "role": self.role,
             "logs": [log.serialize() for log in self.logs] if self.logs else [],
             "wods": [wod.serialize() for wod in self.wods] if self.wods else [],
-       
-
+            "last_active": self.last_active.isoformat() if self.last_active else None,
         }
 
 
@@ -136,16 +136,22 @@ class UserPeso(db.Model):
     __tablename__ = "user_peso"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
-    ejercicio = db.Column(db.String(50), nullable=False)
-    valor = db.Column(db.Float, nullable=True)
-    fecha = db.Column(db.String(10), default=lambda: datetime.utcnow().strftime("%Y-%m-%d"))
-
-    __table_args__ = (
-        db.UniqueConstraint('user_id', 'ejercicio', name='uix_user_ejercicio'),
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id", ondelete="CASCADE"),
+        nullable=False
     )
 
-    user = db.relationship("User", backref=db.backref("pesos", cascade="all, delete-orphan"))
+    ejercicio = db.Column(db.String(50), nullable=False)
+    valor = db.Column(db.Float, nullable=True)
+    fecha = db.Column(
+        db.String(10),
+        default=lambda: datetime.utcnow().strftime("%Y-%m-%d")
+    )
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "ejercicio", name="uix_user_ejercicio"),
+    )
 
     def serialize(self):
         return {

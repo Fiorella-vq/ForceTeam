@@ -22,7 +22,7 @@ export const PlanificacionCoach = () => {
   const token = localStorage.getItem("token")?.trim();
   const navigate = useNavigate();
 
-  // Cargar planificación al cambiar la fecha
+  
   const fetchPlanificacion = async (fechaParam) => {
     if (!fechaParam || !token) return;
 
@@ -152,7 +152,6 @@ export const PlanificacionCoach = () => {
         </button>
       </div>
 
-      {/* FORMULARIO DEL COACH */}
       <form className="planificacion-form" onSubmit={handleSubmit}>
         {["A", "B", "C", "D", "E"].map((bloque) => (
           <div key={bloque}>

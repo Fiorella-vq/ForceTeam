@@ -25,10 +25,6 @@ def after_request(response):
     return response
 
 
-
-# ======================================
-# Autenticación y JWT
-# ======================================
 SECRET_KEY = os.getenv('SECRET_KEY', 'mi_clave_secreta_super_segura')
 
 
@@ -65,9 +61,6 @@ def admin_required(f):
     return wrapper
 
 
-# ======================================
-# Utilidades
-# ======================================
 def generate_token(length=32):
     chars = string.ascii_letters + string.digits
     return ''.join(random.choice(chars) for _ in range(length))
@@ -117,9 +110,6 @@ def send_async_email(destino, asunto, mensaje):
     Thread(target=send).start()
 
 
-# ======================================
-# Registro y Login
-# ======================================
 @api.route('/register', methods=['POST'])
 def register():
     try:
@@ -171,6 +161,10 @@ def login():
         if not user or not user.check_password(password):
             return jsonify({"error": "Credenciales inválidas"}), 401
 
+        user.is_online = True
+        user.last_online = datetime.utcnow()
+        db.session.commit()
+
         payload = {
             'user_id': user.id,
             'email': user.email,
@@ -182,6 +176,28 @@ def login():
     except Exception as e:
         current_app.logger.error(f"Error en login: {e}")
         return jsonify({"error": "Error en el servidor"}), 500
+
+
+@api.route('/logout', methods=['POST'])
+def logout():
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return jsonify({"error": "Token faltante o mal formado"}), 401
+
+    token = auth_header[7:]
+    decoded = verificar_jwt(token)
+    if not decoded:
+        return jsonify({"error": "Token inválido o expirado"}), 401
+
+    user_id = decoded.get('user_id')
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    user.is_online = False
+    db.session.commit()
+
+    return jsonify({"message": "Sesión cerrada"}), 200
 
 
 @api.route('/usuario', methods=['GET'])
@@ -200,12 +216,13 @@ def usuario():
     if not user:
         return jsonify({'error': 'Usuario no encontrado'}), 404
 
+    user.is_online = True
+    user.last_online = datetime.utcnow()
+    db.session.commit()
+
     return jsonify({'user': user.serialize()}), 200
 
 
-# ======================================
-# Subir foto de usuario
-# ======================================
 @api.route('/users/<int:user_id>/foto', methods=['POST'])
 def subir_foto(user_id):
     user = User.query.get_or_404(user_id)
@@ -238,9 +255,6 @@ def subir_foto(user_id):
     }), 200
 
 
-# ======================================
-# Planificación
-# ======================================
 @api.route('/planificacion', methods=['POST'])
 @admin_required
 def crear_o_actualizar_planificacion():
@@ -314,9 +328,6 @@ def eliminar_planificacion():
     return jsonify({"message": "Planificación eliminada exitosamente"}), 200
 
 
-# ======================================
-# LOGS DE LEVANTAMIENTOS
-# ======================================
 @api.route('/users/<int:user_id>/logs', methods=['GET'])
 def get_user_logs(user_id):
     user = User.query.get_or_404(user_id)
@@ -349,9 +360,6 @@ def delete_user_log(user_id, log_id):
     return jsonify({"message": "Log eliminado"}), 200
 
 
-# ======================================
-# WODS
-# ======================================
 @api.route('/users/<int:user_id>/wods', methods=['GET'])
 def get_user_wods(user_id):
     user = User.query.get_or_404(user_id)
@@ -412,9 +420,6 @@ def update_user_wod(user_id, wod_id):
         return jsonify({"error": "Error al actualizar el WOD"}), 500
 
 
-# ======================================
-# PESOS (AUTOSAVE FUNCIONAL)
-# ======================================
 @api.route('/users/<int:user_id>/pesos', methods=['GET', 'PATCH'])
 def user_pesos_handler(user_id):
     user = User.query.get_or_404(user_id)
@@ -455,9 +460,6 @@ def user_pesos_handler(user_id):
         return jsonify({"message": "Peso guardado correctamente"}), 200
 
 
-# ======================================
-# Recuperación de contraseña
-# ======================================
 @api.route('/forgot-password', methods=['POST'])
 def forgot_password():
     data = request.get_json() or {}
@@ -520,9 +522,6 @@ def test_email():
     return jsonify({"success": success, "info": info})
 
 
-# =======================
-# USUARIOS (ADMIN)
-# =======================
 @api.route('/usuarios', methods=['GET'])
 def obtener_usuarios():
     users = User.query.all()
