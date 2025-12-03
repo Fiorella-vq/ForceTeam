@@ -27,14 +27,11 @@ export const PlanificacionViewer = () => {
   const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
 
-  
-  const [fecha, setFecha] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [fecha] = useState(new Date().toISOString().split("T")[0]);
   const [planificacion, setPlanificacion] = useState(null);
   const [tipo] = useState("normal");
 
-  
+  // ✅ Cargar usuario seguro
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
@@ -53,7 +50,7 @@ export const PlanificacionViewer = () => {
     setUser(parsedUser);
   }, [token, navigate]);
 
-  
+  // ✅ Cargar pesos
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -75,7 +72,7 @@ export const PlanificacionViewer = () => {
       .catch((err) => console.error(err));
   }, [user?.id, token]);
 
- 
+  // ✅ Cargar planificación
   useEffect(() => {
     if (!token) return;
 
@@ -86,12 +83,18 @@ export const PlanificacionViewer = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setPlanificacion(data?.plan ? data : null);
+        const plan =
+          data?.plan?.[0] ||
+          data?.plan ||
+          data ||
+          null;
+
+        setPlanificacion(plan);
       })
       .catch((err) => console.error(err));
   }, [fecha, tipo, token]);
 
-
+  // ✅ Guardar peso
   const guardarPeso = async (ejercicio, valor) => {
     if (!user?.id || !token) return;
 
@@ -109,6 +112,7 @@ export const PlanificacionViewer = () => {
     }
   };
 
+  // ✅ Auto-guardado
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -146,18 +150,37 @@ export const PlanificacionViewer = () => {
     <div className="plani-viewer-container">
       <h2>Porcentajes de levantamientos</h2>
 
-    
+      {/* ✅ PLANIFICACIÓN */}
       {planificacion && (
-        <div className="planificacion-card">
+        <div className="plan-content">
           <h3>Planificación del día ({fecha})</h3>
-          <p><strong>A:</strong> {planificacion.bloque_a}</p>
-          <p><strong>B:</strong> {planificacion.bloque_b}</p>
-          <p><strong>C:</strong> {planificacion.bloque_c}</p>
-          <p><strong>D:</strong> {planificacion.bloque_d}</p>
-          <p><strong>E:</strong> {planificacion.bloque_e}</p>
+
+          <ul>
+            <li className="bloque-A">
+              <span className="bloque-titulo">Bloque A</span>
+              <span className="bloque-texto">{planificacion.bloque_a || "-"}</span>
+            </li>
+            <li className="bloque-B">
+              <span className="bloque-titulo">Bloque B</span>
+              <span className="bloque-texto">{planificacion.bloque_b || "-"}</span>
+            </li>
+            <li className="bloque-C">
+              <span className="bloque-titulo">Bloque C</span>
+              <span className="bloque-texto">{planificacion.bloque_c || "-"}</span>
+            </li>
+            <li className="bloque-D">
+              <span className="bloque-titulo">Bloque D</span>
+              <span className="bloque-texto">{planificacion.bloque_d || "-"}</span>
+            </li>
+            <li className="bloque-E">
+              <span className="bloque-titulo">Bloque E</span>
+              <span className="bloque-texto">{planificacion.bloque_e || "-"}</span>
+            </li>
+          </ul>
         </div>
       )}
 
+      {/* ✅ TABLA DE PESOS ÚNICA */}
       <table className="tabla-porcentajes">
         <thead>
           <tr>
