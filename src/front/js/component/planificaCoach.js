@@ -24,6 +24,10 @@ export const PlanificacionCoach = () => {
   const token = localStorage.getItem("token")?.trim();
   const navigate = useNavigate();
 
+  if (!token) {
+    return null;
+  }
+
   const fetchPlanificacion = async (fechaParam) => {
     if (!fechaParam || !token) return;
 

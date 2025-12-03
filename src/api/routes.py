@@ -422,6 +422,18 @@ def update_user_wod(user_id, wod_id):
 
 @api.route('/users/<int:user_id>/pesos', methods=['GET', 'PATCH'])
 def user_pesos_handler(user_id):
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return jsonify({"error": "Token faltante"}), 401
+
+    token = auth_header[7:]
+    decoded = verificar_jwt(token)
+    if not decoded:
+        return jsonify({"error": "Token inválido o expirado"}), 401
+
+    if decoded.get("user_id") != user_id and decoded.get("role") != "admin":
+        return jsonify({"error": "No autorizado"}), 403
+
     user = User.query.get_or_404(user_id)
 
     if request.method == 'GET':

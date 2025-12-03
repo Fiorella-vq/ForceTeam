@@ -63,11 +63,13 @@ export const Usuario = ({ user, token }) => {
 
   const [fraseMotivacional, setFraseMotivacional] = useState("");
 
+  // Frase motivacional
   useEffect(() => {
     const f = frases[Math.floor(Math.random() * frases.length)];
     setFraseMotivacional(f);
   }, []);
 
+  // Usuarios registrados
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -80,6 +82,7 @@ export const Usuario = ({ user, token }) => {
     fetchUsers();
   }, []);
 
+  // Logs, WODs y pesos del usuario
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -114,7 +117,7 @@ export const Usuario = ({ user, token }) => {
     };
 
     fetchData();
-  }, [user, token]);
+  }, [user?.id, token]);
 
   const guardarPeso = async (ejercicio, valor) => {
     try {
@@ -126,21 +129,26 @@ export const Usuario = ({ user, token }) => {
         },
         body: JSON.stringify({ ejercicio, valor }),
       });
-    } catch {}
+    } catch {
+      // silencioso
+    }
   };
 
+  // Autoguardar pesos
   useEffect(() => {
     if (!user?.id || !token) return;
 
     const timer = setTimeout(() => {
       ejerciciosDisponibles.forEach((ej) => {
         const val = pesos[ej];
-        if (val !== "" && !isNaN(val)) guardarPeso(ej, parseFloat(val));
+        if (val !== "" && !isNaN(val)) {
+          guardarPeso(ej, parseFloat(val));
+        }
       });
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [pesos, user, token]);
+  }, [pesos, user?.id, token]);
 
   const wodDeHoy = wods.find(
     (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
@@ -227,6 +235,15 @@ export const Usuario = ({ user, token }) => {
     }
   };
 
+  // Render de carga si por algún motivo no llegó el user
+  if (!user || !user.id || !token) {
+    return (
+      <div className="usuario-container">
+        <p>Cargando usuario...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="usuario-container">
       <div className="usuario-welcome-card">
@@ -238,14 +255,6 @@ export const Usuario = ({ user, token }) => {
         </p>
       </div>
 
-      <div className="usuario-header">
-        <h2>
-          Atleta: {user.name} {user.last_name}
-        </h2>
-        <button className="logout-btn" onClick={cerrarSesion}>
-          Cerrar sesión
-        </button>
-      </div>
       <div className="usuario-header">
         <h2>
           Atleta: {user.name} {user.last_name}

@@ -24,18 +24,22 @@ const getState = ({ getStore, getActions, setStore }) => {
         getActions().changeColor(0, "green");
       },
 
+    
       loginUser: (user, token) => {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);
         setStore({ user, token });
       },
 
+     
       logoutUser: () => {
-        localStorage.clear();
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
         setStore({ user: null, token: null });
         window.location.href = "/";
       },
 
+     
       loadUserFromToken: async () => {
         const token = localStorage.getItem("token");
         if (!token) return;
@@ -45,9 +49,14 @@ const getState = ({ getStore, getActions, setStore }) => {
             headers: { Authorization: `Bearer ${token}` },
           });
 
+          if (!res.ok) {
+            getActions().logoutUser();
+            return;
+          }
+
           const data = await res.json();
 
-          if (res.ok && data.user) {
+          if (data.user) {
             setStore({ user: data.user, token });
             localStorage.setItem("user", JSON.stringify(data.user));
           } else {
@@ -59,6 +68,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
+     
       loginFetch: async (email, password) => {
         try {
           const response = await fetch(`${BACKEND}/login`, {
@@ -67,13 +77,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             body: JSON.stringify({ email, password }),
           });
 
-          const data = await response.json();
+          const data = await response.json().catch(() => ({}));
 
           if (response.ok) {
             getActions().loginUser(data.user, data.token);
             window.location.href = "/usuarioPages";
           } else {
-            alert(data.error || "Error en login");
+            alert(data.error || data.message || "Error en login");
           }
         } catch (error) {
           console.error("Error en login:", error);

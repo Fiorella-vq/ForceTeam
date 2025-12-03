@@ -26,6 +26,8 @@ export const ResetPassword = () => {
       return Swal.fire("Error", "Las contraseñas no coinciden", "error");
     }
 
+    const token = searchParams.get("token");
+
     if (!token) {
       return Swal.fire("Error", "Token inválido o faltante", "error");
     }
