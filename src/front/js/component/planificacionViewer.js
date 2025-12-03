@@ -7,7 +7,8 @@ const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
 export const PlanificacionViewer = () => {
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
   const token = localStorage.getItem("token");
 
   const ejerciciosDisponibles = [
@@ -25,28 +26,23 @@ export const PlanificacionViewer = () => {
 
   const [pesos, setPesos] = useState({});
 
-  
   useEffect(() => {
-    if (!user?.id || !token) {
-      navigate("/");
-      return;
-    }
+    if (!token) return;
 
-    fetch(`${BACKEND}/users/${user.id}/pesos`, {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+
+    const parsedUser = JSON.parse(storedUser);
+    if (!parsedUser?.id) return;
+
+    fetch(`${BACKEND}/users/${parsedUser.id}/pesos`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => {
-        if (data && typeof data === "object") {
-          setPesos(data);
-        } else {
-          setPesos({});
-        }
-      })
-      .catch((err) => console.error("Error cargando pesos:", err));
-  }, [user?.id, token, navigate]);
+      .then((data) => setPesos(data || {}))
+      .catch((err) => console.error(err));
+  }, [token]);
 
-  
   const guardarPeso = async (ejercicio, valor) => {
     try {
       await fetch(`${BACKEND}/users/${user.id}/pesos`, {
@@ -62,7 +58,6 @@ export const PlanificacionViewer = () => {
     }
   };
 
- 
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -77,7 +72,6 @@ export const PlanificacionViewer = () => {
     return () => clearTimeout(timer);
   }, [pesos, user?.id, token]);
 
- 
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
     const porcents = [45, 55, 65, 70, 75, 80, 85, 90, 95];
