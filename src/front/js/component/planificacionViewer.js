@@ -24,7 +24,6 @@ export const PlanificacionViewer = () => {
     "Clean & Jerk",
   ];
 
-  // ✅ Cargar usuario de forma SEGURA
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser || !token) {
@@ -42,7 +41,6 @@ export const PlanificacionViewer = () => {
     setUser(parsedUser);
   }, [token, navigate]);
 
-  // ✅ Fetch de pesos SOLO cuando user ya existe
   useEffect(() => {
     if (!user?.id || !token) return;
 

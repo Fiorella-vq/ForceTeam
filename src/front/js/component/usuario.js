@@ -82,7 +82,6 @@ export const Usuario = ({ user, token }) => {
     fetchUsers();
   }, []);
 
-  // Logs, WODs y pesos del usuario
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -120,6 +119,8 @@ export const Usuario = ({ user, token }) => {
   }, [user?.id, token]);
 
   const guardarPeso = async (ejercicio, valor) => {
+    if (!user || !user.id || !token) return;
+
     try {
       await fetch(`${BACKEND}/users/${user.id}/pesos`, {
         method: "PATCH",
@@ -129,14 +130,13 @@ export const Usuario = ({ user, token }) => {
         },
         body: JSON.stringify({ ejercicio, valor }),
       });
-    } catch {
-      // silencioso
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  // Autoguardar pesos
   useEffect(() => {
-    if (!user?.id || !token) return;
+    if (!user || !user.id || !token) return;
 
     const timer = setTimeout(() => {
       ejerciciosDisponibles.forEach((ej) => {
@@ -148,7 +148,7 @@ export const Usuario = ({ user, token }) => {
     }, 700);
 
     return () => clearTimeout(timer);
-  }, [pesos, user?.id, token]);
+  }, [pesos, user, token]);
 
   const wodDeHoy = wods.find(
     (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
@@ -235,7 +235,6 @@ export const Usuario = ({ user, token }) => {
     }
   };
 
-  // Render de carga si por algún motivo no llegó el user
   if (!user || !user.id || !token) {
     return (
       <div className="usuario-container">
