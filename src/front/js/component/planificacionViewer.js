@@ -7,8 +7,8 @@ const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
 export const PlanificacionViewer = () => {
   const navigate = useNavigate();
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const [pesos, setPesos] = useState({});
+  const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
 
   const ejerciciosDisponibles = [
@@ -24,26 +24,39 @@ export const PlanificacionViewer = () => {
     "Clean & Jerk",
   ];
 
-  const [pesos, setPesos] = useState({});
-
+  // ✅ Cargar usuario de forma SEGURA
   useEffect(() => {
-    if (!token) return;
-
     const storedUser = localStorage.getItem("user");
-    if (!storedUser) return;
+    if (!storedUser || !token) {
+      navigate("/");
+      return;
+    }
 
     const parsedUser = JSON.parse(storedUser);
-    if (!parsedUser?.id) return;
 
-    fetch(`${BACKEND}/users/${parsedUser.id}/pesos`, {
+    if (!parsedUser?.id) {
+      navigate("/");
+      return;
+    }
+
+    setUser(parsedUser);
+  }, [token, navigate]);
+
+  // ✅ Fetch de pesos SOLO cuando user ya existe
+  useEffect(() => {
+    if (!user?.id || !token) return;
+
+    fetch(`${BACKEND}/users/${user.id}/pesos`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => setPesos(data || {}))
       .catch((err) => console.error(err));
-  }, [token]);
+  }, [user?.id, token]);
 
   const guardarPeso = async (ejercicio, valor) => {
+    if (!user?.id || !token) return;
+
     try {
       await fetch(`${BACKEND}/users/${user.id}/pesos`, {
         method: "PATCH",
@@ -54,23 +67,21 @@ export const PlanificacionViewer = () => {
         body: JSON.stringify({ ejercicio, valor }),
       });
     } catch (err) {
-      console.error("Error guardando peso:", err);
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    if (!user?.id || !token) return;
+    if (!user?.id) return;
 
     const timer = setTimeout(() => {
       Object.entries(pesos).forEach(([ej, val]) => {
-        if (val !== "" && !isNaN(val)) {
-          guardarPeso(ej, Number(val));
-        }
+        if (val !== "" && !isNaN(val)) guardarPeso(ej, parseFloat(val));
       });
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [pesos, user?.id, token]);
+  }, [pesos, user?.id]);
 
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
@@ -116,16 +127,12 @@ export const PlanificacionViewer = () => {
                   <input
                     className="input-peso"
                     value={peso || ""}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (/^\d*\.?\d*$/.test(val)) {
-                        setPesos((prev) => ({
-                          ...prev,
-                          [ej]: val,
-                        }));
-                      }
-                    }}
-                    placeholder="Máx"
+                    onChange={(e) =>
+                      setPesos((prev) => ({
+                        ...prev,
+                        [ej]: e.target.value,
+                      }))
+                    }
                   />
                 </td>
 
