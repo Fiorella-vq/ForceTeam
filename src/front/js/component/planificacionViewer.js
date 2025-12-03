@@ -7,10 +7,6 @@ const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
 export const PlanificacionViewer = () => {
   const navigate = useNavigate();
 
-  const [pesos, setPesos] = useState({});
-  const [user, setUser] = useState(null);
-  const token = localStorage.getItem("token");
-
   const ejerciciosDisponibles = [
     "Push jerk",
     "Bench press",
@@ -24,8 +20,17 @@ export const PlanificacionViewer = () => {
     "Clean & Jerk",
   ];
 
+  const [pesos, setPesos] = useState(
+    ejerciciosDisponibles.reduce((acc, ej) => ({ ...acc, [ej]: "" }), {})
+  );
+
+  const [user, setUser] = useState(null);
+  const token = localStorage.getItem("token");
+
+  // ✅ Cargar usuario desde localStorage de forma segura
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+
     if (!storedUser || !token) {
       navigate("/");
       return;
@@ -48,7 +53,17 @@ export const PlanificacionViewer = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setPesos(data || {}))
+      .then((data) => {
+        const nuevosPesos = ejerciciosDisponibles.reduce(
+          (acc, ej) => ({
+            ...acc,
+            [ej]: data?.[ej] ?? "",
+          }),
+          {}
+        );
+
+        setPesos(nuevosPesos);
+      })
       .catch((err) => console.error(err));
   }, [user?.id, token]);
 
@@ -70,16 +85,19 @@ export const PlanificacionViewer = () => {
   };
 
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id || !token) return;
 
     const timer = setTimeout(() => {
-      Object.entries(pesos).forEach(([ej, val]) => {
-        if (val !== "" && !isNaN(val)) guardarPeso(ej, parseFloat(val));
+      ejerciciosDisponibles.forEach((ej) => {
+        const val = pesos[ej];
+        if (val !== "" && !isNaN(val)) {
+          guardarPeso(ej, parseFloat(val));
+        }
       });
-    }, 600);
+    }, 700);
 
     return () => clearTimeout(timer);
-  }, [pesos, user?.id]);
+  }, [pesos, user?.id, token]);
 
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
@@ -90,6 +108,14 @@ export const PlanificacionViewer = () => {
       return acc;
     }, {});
   };
+
+  if (!user || !user.id || !token) {
+    return (
+      <div className="plani-viewer-container">
+        <h3>Cargando usuario...</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="plani-viewer-container">
