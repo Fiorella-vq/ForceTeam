@@ -1,6 +1,3 @@
-/* ============================================================
-   🔥 CONTENEDOR PRINCIPAL PLANIFICACIÓN
-   ============================================================ */
 .planificacion-container {
   max-width: 800px;
   margin: 40px auto;
@@ -13,9 +10,6 @@
   text-align: center;
 }
 
-/* ============================================================
-   🔥 TITULOS
-   ============================================================ */
 .planificacion-container h2 {
   font-size: 1.2rem;
   margin-bottom: 20px;
@@ -24,9 +18,14 @@
   color: #fff;
 }
 
-/* ============================================================
-   🔥 INPUT DATE
-   ============================================================ */
+.planificacion-container .top-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
 .planificacion-container input[type="date"] {
   padding: 10px 12px;
   font-size: 0.9rem;
@@ -34,7 +33,7 @@
   border-radius: 8px;
   background-color: #1e1e1e;
   color: #f0f0f0;
-  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  transition: 0.3s ease;
   width: 100%;
   max-width: 280px;
 }
@@ -46,9 +45,6 @@
   background-color: #0d0d0d;
 }
 
-/* ============================================================
-   🔥 BOTONES GENERALES
-   ============================================================ */
 .button-atleta,
 .link-btn,
 .planificacion-form button,
@@ -60,12 +56,11 @@
   border: none;
   cursor: pointer;
   text-transform: uppercase;
-  transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  transition: 0.3s ease;
   background-color: #2a2a2a;
   color: #f0f0f0;
 }
 
-/* Hover general */
 .button-atleta:hover,
 .link-btn:hover,
 .planificacion-form button:hover:not(:disabled),
@@ -75,9 +70,12 @@
   box-shadow: 0 4px 12px rgba(79, 163, 255, 0.5);
 }
 
-/* ============================================================
-   🔥 TEXTAREAS
-   ============================================================ */
+.planificacion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .planificacion-form textarea {
   width: 100%;
   padding: 10px;
@@ -87,8 +85,7 @@
   background-color: #1e1e1e;
   color: #f0f0f0;
   resize: vertical;
-  margin-bottom: 5px;
-  transition: border 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .planificacion-form textarea:focus {
@@ -98,20 +95,15 @@
   background-color: #0d0d0d;
 }
 
-/* ============================================================
-   🔥 LINKS CON URLS
-   ============================================================ */
 .links-block a {
   display: block;
   color: #4fa3ff;
   text-decoration: underline;
-  margin-top: 2px;
+  margin-top: 4px;
   word-break: break-word;
+  font-size: 0.85rem;
 }
 
-/* ============================================================
-   🔥 BLOQUES PARA LECTURA (VISTA ATLETA)
-   ============================================================ */
 .planificacion-atleta .bloque-lectura {
   background-color: #1e1e1e;
   padding: 10px;
@@ -121,9 +113,6 @@
   border: 1px solid #222;
 }
 
-/* ============================================================
-   🔥 TARJETAS DE WODS (VISTA ATLETA)
-   ============================================================ */
 .wods-atleta .wod-card {
   background-color: #1e1e1e;
   padding: 12px;
@@ -134,11 +123,6 @@
   border: 1px solid #222;
 }
 
-/* ============================================================
-   🔥 MEDIA QUERIES RESPONSIVE
-   ============================================================ */
-
-/* Tablets */
 @media (max-width: 768px) {
   .planificacion-container {
     max-width: 90%;
@@ -150,9 +134,13 @@
     font-size: 1rem;
   }
 
-  .planificacion-form textarea,
+  .planificacion-container .top-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .planificacion-container input[type="date"] {
-    font-size: 0.85rem;
+    max-width: 100%;
   }
 
   .button-atleta,
@@ -160,17 +148,17 @@
   .planificacion-form button,
   .btn-eliminar {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 8px;
+  }
+
+  .planificacion-form textarea {
+    font-size: 0.85rem;
   }
 }
 
-/* Celulares */
 @media (max-width: 480px) {
   .planificacion-container {
     max-width: 95%;
-  }
-
-  .planificacion-container {
     padding: 20px 15px;
     margin: 20px auto;
   }
@@ -180,18 +168,18 @@
   }
 
   .planificacion-form textarea {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   .button-atleta,
   .link-btn,
   .planificacion-form button,
   .btn-eliminar {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     padding: 10px;
   }
 
   .wods-atleta .wod-card {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 }

@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { Context } from "../store/appContext";
 import "../../styles/register.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const Register = () => {
   const { actions } = useContext(Context);
   const [name, setName] = useState("");
@@ -26,7 +28,7 @@ export const Register = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("https://forceteam.onrender.com/api/register", {
+      const res = await fetch(`${BACKEND}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -93,6 +95,7 @@ export const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <div className="password-container">
           <input
             type={showPassword ? "text" : "password"}
@@ -109,6 +112,7 @@ export const Register = () => {
             onClick={() => setShowPassword(!showPassword)}
           ></i>
         </div>
+
         <div className="password-container">
           <input
             type={showRepeatPassword ? "text" : "password"}
@@ -125,6 +129,7 @@ export const Register = () => {
             onClick={() => setShowRepeatPassword(!showRepeatPassword)}
           ></i>
         </div>
+
         <button type="submit" disabled={loading}>
           {loading ? "Registrando..." : "Registrarse"}
         </button>

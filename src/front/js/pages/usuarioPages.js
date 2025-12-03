@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Usuario } from "../component/usuario";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const UsuarioPages = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -19,7 +21,7 @@ export const UsuarioPages = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("https://forceteam.onrender.com/api/usuario", {
+        const res = await fetch(`${BACKEND}/usuario`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
 
@@ -50,5 +52,6 @@ export const UsuarioPages = () => {
   };
 
   if (!user || !token) return null;
+
   return <Usuario user={user} token={token} onUserUpdate={handleUserUpdate} />;
 };

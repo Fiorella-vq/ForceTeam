@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import "../../styles/planifica.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 const extractUrls = (text) => {
   if (!text) return [];
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -27,7 +29,7 @@ export const PlanificaCorta = () => {
 
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}&tipo=corta`,
+        `${BACKEND}/planificacion?fecha=${fechaParam}&tipo=corta`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -50,13 +52,12 @@ export const PlanificaCorta = () => {
 
   useEffect(() => {
     fetchPlanificacion(fecha);
-  }, [fecha]);
+  }, [fecha, token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPlan((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,17 +71,14 @@ export const PlanificaCorta = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/planificacion",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ fecha, tipo: "corta", plan }),
-        }
-      );
+      const res = await fetch(`${BACKEND}/planificacion`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ fecha, tipo: "corta", plan }),
+      });
 
       if (res.ok) {
         Swal.fire({
@@ -109,7 +107,6 @@ export const PlanificaCorta = () => {
       setLoading(false);
     }
   };
-
   const handleDelete = async () => {
     if (!token)
       return Swal.fire({
@@ -136,7 +133,7 @@ export const PlanificaCorta = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=corta`,
+        `${BACKEND}/planificacion?fecha=${fecha}&tipo=corta`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
 

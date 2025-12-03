@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../styles/planiViewer.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const PlanificacionViewer = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,57 +15,6 @@ export const PlanificacionViewer = () => {
 
   const [pesos, setPesos] = useState({});
   const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
-
-  useEffect(() => {
-    if (!user?.id) return;
-
-    const controller = new AbortController();
-
-    const fetchPesos = async () => {
-      try {
-        const res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/pesos`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            signal: controller.signal,
-          }
-        );
-
-        const data = await res.json();
-        setPesos(data || {});
-      } catch (err) {
-        if (err.name !== "AbortError") console.error(err);
-      }
-    };
-
-    fetchPesos();
-    return () => controller.abort();
-  }, [user?.id]);
-
-  const guardarPeso = async (ejercicio, valor) => {
-    try {
-      await fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ ejercicio, valor }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      Object.entries(pesos).forEach(([ej, val]) => {
-        if (val !== "" && !isNaN(val)) guardarPeso(ej, parseFloat(val));
-      });
-    }, 700);
-
-    return () => clearTimeout(timer);
-  }, [pesos]);
 
   const ejerciciosDisponibles = [
     "Push jerk",
@@ -77,6 +28,58 @@ export const PlanificacionViewer = () => {
     "Hang Squat Snatch",
     "Clean & Jerk",
   ];
+
+  useEffect(() => {
+    if (!user?.id || !token) return;
+
+    const controller = new AbortController();
+
+    const fetchPesos = async () => {
+      try {
+        const res = await fetch(`${BACKEND}/users/${user.id}/pesos`, {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        });
+
+        const data = await res.json();
+        setPesos(data || {});
+      } catch (err) {
+        if (err.name !== "AbortError") console.error(err);
+      }
+    };
+
+    fetchPesos();
+    return () => controller.abort();
+  }, [user?.id, token]);
+
+  const guardarPeso = async (ejercicio, valor) => {
+    try {
+      await fetch(`${BACKEND}/users/${user.id}/pesos`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ ejercicio, valor }),
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (!user?.id || !token) return;
+
+    const timer = setTimeout(() => {
+      Object.entries(pesos).forEach(([ej, val]) => {
+        if (val !== "" && !isNaN(val)) {
+          guardarPeso(ej, parseFloat(val));
+        }
+      });
+    }, 700);
+
+    return () => clearTimeout(timer);
+  }, [pesos, user, token]);
 
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
@@ -110,7 +113,6 @@ export const PlanificacionViewer = () => {
   const initialFecha =
     location.state?.fecha || today.toISOString().split("T")[0];
   const [fecha, setFecha] = useState(initialFecha);
-
   const [tipo, setTipo] = useState("normal");
 
   const [planificacion, setPlanificacion] = useState(null);
@@ -125,104 +127,6 @@ export const PlanificacionViewer = () => {
     { id: 6, nombre: "Sábado" },
   ];
 
- 
-  const aplicarPesosAPlan = (texto) => {
-    if (!texto || !pesos) return texto;
-
-    const ejerciciosMap = {
-      "clean & jerk": "Clean & Jerk",
-      "clean and jerk": "Clean & Jerk",
-
-      clean: "Clean",
-
-      "hang power clean": "Hang Power Clean",
-      "hang squat clean": "Hang Squat Clean",
-      "hang clean": "Hang Power Clean",
-
-      snatch: "Snatch",
-
-      "hang power snatch": "Hang Power Snatch",
-      "hang squat snatch": "Hang Squat Snatch",
-      "hang snatch": "Hang Power Snatch",
-
-      "push jerk": "Push jerk",
-      jerk: "Push jerk",
-
-      deadlift: "Deadlift",
-      dl: "Deadlift",
-
-      "press banca": "Bench press",
-      "bench press": "Bench press",
-
-      "back squat olímpico": "Back Squat Olímpico",
-      "front squat olímpico": "Front Squat Olímpico",
-      "back squat": "Back Squat Olímpico",
-      "front squat": "Front Squat Olímpico",
-    };
-
-    const pesosExtendidos = {
-      ...pesos,
-      "Back Squat Olímpico": squats.backSquatOlimpico,
-      "Front Squat Olímpico": squats.frontSquatOlimpico,
-    };
-
-    let lineas = texto.split("\n");
-    let ejActual = null;
-
-    for (let i = 0; i < lineas.length; i++) {
-      const original = lineas[i]; 
-
-      const limpio = original.toLowerCase();
-
-      const encontrado = Object.keys(ejerciciosMap).find((key) =>
-        limpio.includes(key)
-      );
-
-      if (encontrado) ejActual = ejerciciosMap[encontrado];
-      if (!ejActual) continue;
-
-      const max = parseFloat(pesosExtendidos[ejActual]);
-      if (!max) continue;
-
-      // Reemplazo de porcentajes sin destruir el texto
-      lineas[i] = original.replace(/(\d+)%/g, (match, porc) => {
-        const por = parseInt(porc);
-        return `${por}% (${Math.round((max * por) / 100)}kg)`;
-      });
-    }
-
-    return lineas.join("\n");
-  };
-
-  const renderContenido = (texto) => {
-    if (!texto) return "Sin plan";
-    const conPesos = aplicarPesosAPlan(texto);
-
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const partes = conPesos.split(urlRegex);
-
-    return partes.map((parte, i) =>
-      urlRegex.test(parte) ? (
-        <a
-          key={i}
-          href={parte}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#4fa3ff" }}
-        >
-          {parte}
-        </a>
-      ) : (
-        parte.split("\n").map((l, j) => (
-          <React.Fragment key={`${i}-${j}`}>
-            {l}
-            <br />
-          </React.Fragment>
-        ))
-      )
-    );
-  };
-
   useEffect(() => {
     const controller = new AbortController();
 
@@ -232,7 +136,7 @@ export const PlanificacionViewer = () => {
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
         const response = await fetch(
-          `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}&tipo=${tipo}`,
+          `${BACKEND}/planificacion?fecha=${fecha}&tipo=${tipo}`,
           { headers, signal: controller.signal }
         );
 
@@ -250,7 +154,7 @@ export const PlanificacionViewer = () => {
 
     fetchPlanificacion();
     return () => controller.abort();
-  }, [fecha, tipo]);
+  }, [fecha, tipo, token]);
 
   return (
     <div className="plani-viewer-container">
@@ -330,60 +234,9 @@ export const PlanificacionViewer = () => {
                 </tr>
               );
             })}
-
-            {squats.totalOlimpico && (
-              <>
-                <tr className="fila-calculo">
-                  <td>Back Squat Olímpico</td>
-                  <td>{squats.backSquatOlimpico}</td>
-                  {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
-                    <td key={p}>
-                      {Math.round((squats.backSquatOlimpico * p) / 100)}
-                    </td>
-                  ))}
-                </tr>
-
-                <tr className="fila-calculo">
-                  <td>Front Squat Olímpico</td>
-                  <td>{squats.frontSquatOlimpico}</td>
-                  {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
-                    <td key={p}>
-                      {Math.round((squats.frontSquatOlimpico * p) / 100)}
-                    </td>
-                  ))}
-                </tr>
-              </>
-            )}
           </tbody>
         </table>
       </section>
-
-      {error && <p className="plani-error">{error}</p>}
-
-      {!error && planificacion && planificacion.plan ? (
-        <div className="plan-content">
-          <h3>
-            {`Planificación para ${fecha} - ${
-              diasSemana.find((d) => d.id === planificacion.dia)?.nombre || ""
-            }`}
-          </h3>
-
-          <ul>
-            {Object.entries(planificacion.plan).map(([bloque, contenido]) => {
-              const nombre = bloque.replace("bloque_", "").trim().toUpperCase();
-
-              return (
-                <li key={bloque} className={`bloque-item bloque-${nombre}`}>
-                  <strong className="bloque-titulo">Bloque {nombre}:</strong>
-                  <div className="bloque-texto">{renderContenido(contenido)}</div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ) : (
-        !error && <p>No hay planificación para esta fecha.</p>
-      )}
 
       <div className="link-coach">
         <button

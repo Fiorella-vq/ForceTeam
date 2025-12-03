@@ -1,5 +1,6 @@
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 const getState = ({ getStore, getActions, setStore }) => {
-  // Cargar usuario seguro desde localStorage
   const loadUserFromLocalStorage = () => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) return null;
@@ -19,38 +20,30 @@ const getState = ({ getStore, getActions, setStore }) => {
     },
 
     actions: {
-      // Ejemplo existente
       exampleFunction: () => {
         getActions().changeColor(0, "green");
       },
 
-      // --- Login exitoso ---
       loginUser: (user, token) => {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);
         setStore({ user, token });
       },
 
-      // --- Logout ---
       logoutUser: () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+        localStorage.clear();
         setStore({ user: null, token: null });
         window.location.href = "/";
       },
 
-      // --- Cargar usuario si hay token guardado ---
       loadUserFromToken: async () => {
         const token = localStorage.getItem("token");
         if (!token) return;
 
         try {
-          const res = await fetch(
-            "https://forceteam.onrender.com/api/usuario",
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
+          const res = await fetch(`${BACKEND}/usuario`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
           const data = await res.json();
 
@@ -66,23 +59,19 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // --- Función de login con fetch ---
       loginFetch: async (email, password) => {
         try {
-          const response = await fetch(
-            "https://forceteam.onrender.com/api/login",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password }),
-            }
-          );
+          const response = await fetch(`${BACKEND}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
 
           const data = await response.json();
 
           if (response.ok) {
             getActions().loginUser(data.user, data.token);
-            window.location.href = "/usuario";
+            window.location.href = "/usuarioPages";
           } else {
             alert(data.error || "Error en login");
           }

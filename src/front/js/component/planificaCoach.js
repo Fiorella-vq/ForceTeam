@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import "../../styles/planifica.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 const extractUrls = (text) => {
   if (!text) return [];
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -26,10 +28,9 @@ export const PlanificacionCoach = () => {
     if (!fechaParam || !token) return;
 
     try {
-      const res = await fetch(
-        `https://forceteam.onrender.com/api/planificacion?fecha=${fechaParam}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await fetch(`${BACKEND}/planificacion?fecha=${fechaParam}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (res.ok) {
         const data = await res.json();
@@ -44,7 +45,7 @@ export const PlanificacionCoach = () => {
 
   useEffect(() => {
     fetchPlanificacion(fecha);
-  }, [fecha]);
+  }, [fecha, token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,17 +59,14 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/planificacion",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ fecha, plan }),
-        }
-      );
+      const res = await fetch(`${BACKEND}/planificacion`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ fecha, plan }),
+      });
 
       const data = await res.json();
 
@@ -100,10 +98,10 @@ export const PlanificacionCoach = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://forceteam.onrender.com/api/planificacion?fecha=${fecha}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await fetch(`${BACKEND}/planificacion?fecha=${fecha}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const data = await res.json();
 

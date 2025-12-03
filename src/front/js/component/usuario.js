@@ -3,8 +3,11 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import "../../styles/usuario.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const Usuario = ({ user, token }) => {
   const navigate = useNavigate();
+
   const obtenerSaludo = () => {
     const h = new Date().getHours();
     if (h < 12) return "¡Buen día!";
@@ -68,7 +71,7 @@ export const Usuario = ({ user, token }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("https://forceteam.onrender.com/api/usuarios");
+        const res = await fetch(`${BACKEND}/usuarios`);
         setUsuariosRegistrados(await res.json());
       } catch (e) {
         console.error("Error cargando usuarios:", e);
@@ -77,48 +80,19 @@ export const Usuario = ({ user, token }) => {
     fetchUsers();
   }, []);
 
-  const eliminarWod = async (id) => {
-    try {
-      const res = await fetch(
-        `https://forceteam.onrender.com/api/users/${user.id}/wods/${id}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (!res.ok) throw new Error();
-
-      setWods((prev) => prev.filter((w) => w.id !== id));
-
-      Swal.fire({
-        icon: "success",
-        title: "WOD eliminado",
-        background: "#1e1e1e",
-        color: "#fff",
-        confirmButtonColor: "#4fa3ff",
-      });
-    } catch {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo eliminar el WOD.",
-        background: "#1e1e1e",
-        color: "#fff",
-      });
-    }
-  };
-
   useEffect(() => {
-    if (!user || !token) return;
+    if (!user?.id || !token) return;
 
     const fetchData = async () => {
       try {
         const [logsRes, wodsRes, pesosRes] = await Promise.all([
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/logs`, {
+          fetch(`${BACKEND}/users/${user.id}/logs`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/wods`, {
+          fetch(`${BACKEND}/users/${user.id}/wods`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+          fetch(`${BACKEND}/users/${user.id}/pesos`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -142,27 +116,9 @@ export const Usuario = ({ user, token }) => {
     fetchData();
   }, [user, token]);
 
-  const cerrarSesion = async () => {
-    try {
-      await fetch("https://forceteam.onrender.com/api/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (e) {
-      console.error("Error en logout:", e);
-    } finally {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("usuario");
-      window.location.href = "/";
-    }
-  };
-
   const guardarPeso = async (ejercicio, valor) => {
     try {
-      await fetch(`https://forceteam.onrender.com/api/users/${user.id}/pesos`, {
+      await fetch(`${BACKEND}/users/${user.id}/pesos`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -174,14 +130,17 @@ export const Usuario = ({ user, token }) => {
   };
 
   useEffect(() => {
+    if (!user?.id || !token) return;
+
     const timer = setTimeout(() => {
       ejerciciosDisponibles.forEach((ej) => {
         const val = pesos[ej];
         if (val !== "" && !isNaN(val)) guardarPeso(ej, parseFloat(val));
       });
     }, 700);
+
     return () => clearTimeout(timer);
-  }, [pesos]);
+  }, [pesos, user, token]);
 
   const wodDeHoy = wods.find(
     (w) => (w.fecha?.split?.("T")[0] || w.fecha || w.wod_fecha) === hoy
@@ -199,29 +158,23 @@ export const Usuario = ({ user, token }) => {
       let res;
 
       if (wodDeHoy) {
-        res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods/${wodDeHoy.id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
+        res = await fetch(`${BACKEND}/users/${user.id}/wods/${wodDeHoy.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
       } else {
-        res = await fetch(
-          `https://forceteam.onrender.com/api/users/${user.id}/wods`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
+        res = await fetch(`${BACKEND}/users/${user.id}/wods`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
       }
 
       if (!res.ok) throw new Error();
@@ -260,6 +213,20 @@ export const Usuario = ({ user, token }) => {
     }
   };
 
+  const cerrarSesion = async () => {
+    try {
+      await fetch(`${BACKEND}/logout`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } finally {
+      localStorage.clear();
+      window.location.href = "/";
+    }
+  };
+
   return (
     <div className="usuario-container">
       <div className="usuario-welcome-card">
@@ -271,6 +238,14 @@ export const Usuario = ({ user, token }) => {
         </p>
       </div>
 
+      <div className="usuario-header">
+        <h2>
+          Atleta: {user.name} {user.last_name}
+        </h2>
+        <button className="logout-btn" onClick={cerrarSesion}>
+          Cerrar sesión
+        </button>
+      </div>
       <div className="usuario-header">
         <h2>
           Atleta: {user.name} {user.last_name}

@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import ForceTeamLogo from "../../img/ForceTe.png";
 import "../../styles/home.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,7 +19,7 @@ export const ResetPassword = () => {
     e.preventDefault();
 
     if (!password || !confirmPassword) {
-      return Swal.fire("Error", "Por favor completa ambos campos", "warning");
+      return Swal.fire("Error", "Por favor completá ambos campos", "warning");
     }
 
     if (password !== confirmPassword) {
@@ -30,16 +32,17 @@ export const ResetPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/reset-password",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token, new_password: password }),
-        }
-      );
+      const res = await fetch(`${BACKEND}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          new_password: password,
+        }),
+      });
 
       const data = await res.json();
+
       if (res.ok) {
         await Swal.fire(
           "¡Éxito!",
@@ -66,6 +69,7 @@ export const ResetPassword = () => {
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
+
       <h2>Restablecer contraseña</h2>
 
       <form className="home-form" onSubmit={handleSubmit}>
@@ -76,6 +80,7 @@ export const ResetPassword = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
         <input
           type="password"
           placeholder="Confirmar contraseña"
@@ -88,6 +93,7 @@ export const ResetPassword = () => {
           <button type="submit" disabled={loading} className="login-button">
             {loading ? "Guardando..." : "Guardar contraseña"}
           </button>
+
           <button
             type="button"
             onClick={() => navigate("/")}

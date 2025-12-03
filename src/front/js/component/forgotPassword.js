@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import ForceTeamLogo from "../../img/ForceTe.png";
 import "../../styles/home.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,24 +22,24 @@ export const ForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!email) {
       return Swal.fire(
-        swalOptions("Error", "Por favor ingresa tu email", "warning")
+        swalOptions("Error", "Por favor ingresá tu email", "warning")
       );
     }
 
     setLoading(true);
+
     try {
-      const res = await fetch(
-        "https://forceteam.onrender.com/api/forgot-password",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const res = await fetch(`${BACKEND}/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
       const data = await res.json();
+
       if (res.ok) {
         await Swal.fire(
           swalOptions(
@@ -56,7 +58,7 @@ export const ForgotPassword = () => {
           )
         );
       }
-    } catch {
+    } catch (e) {
       Swal.fire(
         swalOptions("Error", "No se pudo conectar con el servidor", "error")
       );
@@ -70,6 +72,7 @@ export const ForgotPassword = () => {
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
+
       <h2>Recuperar contraseña</h2>
 
       <form className="home-form" onSubmit={handleSubmit}>
@@ -85,6 +88,7 @@ export const ForgotPassword = () => {
           <button type="submit" disabled={loading} className="login-button">
             {loading ? "Enviando..." : "Enviar correo"}
           </button>
+
           <button
             type="button"
             onClick={() => navigate("/")}

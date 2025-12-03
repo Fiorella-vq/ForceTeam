@@ -229,6 +229,7 @@ html, body {
 .usuario-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 12px;
   background: #171717;
   border-radius: 14px;
@@ -236,7 +237,10 @@ html, body {
   margin-bottom: 12px;
   gap: 12px;
   transition: 0.18s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 
 .usuario-item:hover {
   background: #1d1d1d;
@@ -245,6 +249,8 @@ html, body {
 .usuario-avatar {
   width: 46px;
   height: 46px;
+  min-width: 46px;
+  min-height: 46px;
   border-radius: 50%;
   background: #2b2b2b;
   display: flex;
@@ -255,10 +261,13 @@ html, body {
   box-sizing: border-box;
 }
 
+
 .admin-avatar {
   border: 2px solid #ffd700;
   box-shadow: 0 0 12px #ffd70099;
+  box-sizing: border-box;
 }
+
 
 .usuario-nombre {
   font-size: 1rem;
@@ -277,14 +286,44 @@ html, body {
 .dot-offline { background: #777; }
 
 @media (max-width: 768px) {
-  .usuario-container { max-width: 93%; padding: 26px; }
-  .usuario-header { flex-direction: column; gap: 16px; text-align: center; padding: 16px; }
-  .logout-btn { width: 100%; padding: 13px; }
-  .input-date-dark { padding: 12px 14px; }
-  .inputs-wods textarea { font-size: 0.9rem; padding: 14px; }
-  .inputs-wods button { padding: 13px; font-size: 0.95rem; }
-  .usuario-item { padding: 10px; gap: 10px; }
-  .usuario-buscador { padding: 10px; font-size: 0.9rem; }
-  .usuario-avatar { width: 42px; height: 42px; font-size: 0.85rem; }
-  .admin-avatar { box-shadow: 0 0 10px #ffd70088; }
+  .usuario-container {
+    max-width: 95%;
+    padding: 22px;
+  }
+
+  .usuario-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 13px;
+  }
+
+  .usuario-item {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .usuario-avatar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 0.85rem;
+  }
+
+  .admin-avatar {
+    box-shadow: 0 0 10px #ffd70088;
+  }
+}
+
+
+.usuario-container {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }

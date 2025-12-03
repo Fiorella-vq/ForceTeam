@@ -1,6 +1,4 @@
-/* ============================================================
-   🔥 ESTILOS GENERALES
-   ============================================================ */
+
 html,
 body {
   height: 100%;
@@ -11,9 +9,6 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ============================================================
-   🔥 CONTENEDOR PRINCIPAL DEL LOGIN
-   ============================================================ */
 .home-container {
   max-width: 400px;
   margin: 60px auto;
@@ -32,9 +27,7 @@ body {
   height: auto;
 }
 
-/* ============================================================
-   🔥 TITULOS
-   ============================================================ */
+
 h2 {
   margin-bottom: 20px;
   font-size: 1rem;
@@ -43,9 +36,7 @@ h2 {
   text-transform: uppercase;
 }
 
-/* ============================================================
-   🔥 FORMULARIO
-   ============================================================ */
+
 .home-form {
   display: flex;
   flex-direction: column;
@@ -70,9 +61,7 @@ h2 {
   background-color: #0d0d0d;
 }
 
-/* ============================================================
-   🔥 PASSWORD CON OJO
-   ============================================================ */
+
 .password-container {
   position: relative;
   width: 100%;
@@ -98,9 +87,7 @@ h2 {
   color: #fff;
 }
 
-/* ============================================================
-   🔥 BOTONES
-   ============================================================ */
+
 .button-group {
   display: flex;
   justify-content: space-between;
@@ -122,7 +109,6 @@ h2 {
   min-width: 120px;
 }
 
-/* BOTÓN LOGIN */
 .login-button {
   background: linear-gradient(135deg, #333, #000);
   color: #fff;
@@ -134,7 +120,7 @@ h2 {
   box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
 }
 
-/* BOTÓN REGISTRARSE */
+
 .register-button {
   background: #2a2a2a;
   color: #ddd;
@@ -147,16 +133,13 @@ h2 {
   box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
 }
 
-/* ESTADO DESHABILITADO */
+
 .login-button:disabled,
 .register-button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-/* ============================================================
-   🔥 RECORDAR CONTRASEÑA
-   ============================================================ */
 .remember-me {
   display: flex;
   align-items: center;
@@ -187,9 +170,7 @@ h2 {
   text-decoration: underline;
 }
 
-/* ============================================================
-   🔥 SweetAlert2 – Tema oscuro consistente con tu diseño
-   ============================================================ */
+
 .swal2-popup {
   background: #0d0d0d !important;
   color: #f0f0f0 !important;
@@ -210,7 +191,6 @@ h2 {
   text-align: left !important;
 }
 
-/* Botones del alert */
 .swal2-confirm,
 .swal2-cancel {
   background: linear-gradient(135deg, #333, #000) !important;
@@ -228,7 +208,7 @@ h2 {
   background: linear-gradient(135deg, #000, #333) !important;
 }
 
-/* Icono del alert */
+
 .swal2-icon {
   border-color: #555 !important;
 }
@@ -237,11 +217,6 @@ h2 {
   color: #ccc !important;
 }
 
-/* ============================================================
-   🔥 MEDIA QUERIES
-   ============================================================ */
-
-/* TABLETS */
 @media (max-width: 768px) {
   .home-container {
     max-width: 90%;
@@ -259,7 +234,7 @@ h2 {
   }
 }
 
-/* CELULARES */
+
 @media (max-width: 480px) {
   h2 {
     font-size: 0.9rem;
@@ -280,7 +255,7 @@ h2 {
     max-width: 220px;
   }
 
-  /* SweetAlert responsive */
+
   .swal2-popup {
     width: 90% !important;
     padding: 15px !important;

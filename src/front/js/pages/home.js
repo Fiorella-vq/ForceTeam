@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import ForceTeamLogo from "../../img/ForceTe.png";
 import "../../styles/home.css";
 
+const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
+
 export const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,12 +28,14 @@ export const Home = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://forceteam.onrender.com/api/login", {
+      const res = await fetch(`${BACKEND}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await res.json();
+
       if (res.ok) {
         localStorage.setItem("token", data.token);
 
@@ -57,7 +61,7 @@ export const Home = () => {
   };
 
   const handleForgotPassword = () => {
-    navigate("/forgot-password"); //
+    navigate("/forgot-password");
   };
 
   return (
@@ -65,6 +69,7 @@ export const Home = () => {
       <div className="logo-wrapper">
         <img src={ForceTeamLogo} alt="logo" className="logo-image" />
       </div>
+
       <h2>Planificación Martín Soria</h2>
 
       <form
@@ -98,7 +103,6 @@ export const Home = () => {
           ></i>
         </div>
 
-        {/* 🔹 Link de "Olvidé mi contraseña" */}
         <div className="forgot-password">
           <span onClick={handleForgotPassword}>¿Olvidaste tu contraseña?</span>
         </div>
@@ -118,6 +122,7 @@ export const Home = () => {
           <button type="submit" disabled={loading} className="login-button">
             Iniciar Sesión
           </button>
+
           <button
             type="button"
             onClick={handleRedirectToRegister}
