@@ -27,7 +27,14 @@ export const PlanificacionViewer = () => {
   const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
 
-  // ✅ Cargar usuario desde localStorage de forma segura
+  
+  const [fecha, setFecha] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [planificacion, setPlanificacion] = useState(null);
+  const [tipo] = useState("normal");
+
+  
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
@@ -46,6 +53,7 @@ export const PlanificacionViewer = () => {
     setUser(parsedUser);
   }, [token, navigate]);
 
+  
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -66,6 +74,23 @@ export const PlanificacionViewer = () => {
       })
       .catch((err) => console.error(err));
   }, [user?.id, token]);
+
+ 
+  useEffect(() => {
+    if (!token) return;
+
+    fetch(`${BACKEND}/planificacion?fecha=${fecha}&tipo=${tipo}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPlanificacion(data?.plan ? data : null);
+      })
+      .catch((err) => console.error(err));
+  }, [fecha, tipo, token]);
+
 
   const guardarPeso = async (ejercicio, valor) => {
     if (!user?.id || !token) return;
@@ -120,6 +145,18 @@ export const PlanificacionViewer = () => {
   return (
     <div className="plani-viewer-container">
       <h2>Porcentajes de levantamientos</h2>
+
+    
+      {planificacion && (
+        <div className="planificacion-card">
+          <h3>Planificación del día ({fecha})</h3>
+          <p><strong>A:</strong> {planificacion.bloque_a}</p>
+          <p><strong>B:</strong> {planificacion.bloque_b}</p>
+          <p><strong>C:</strong> {planificacion.bloque_c}</p>
+          <p><strong>D:</strong> {planificacion.bloque_d}</p>
+          <p><strong>E:</strong> {planificacion.bloque_e}</p>
+        </div>
+      )}
 
       <table className="tabla-porcentajes">
         <thead>
