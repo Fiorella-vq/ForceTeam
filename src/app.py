@@ -76,19 +76,6 @@ def uploaded_files(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
-with app.app_context():
-    from alembic import command
-    from alembic.config import Config
-    import os
-
-    try:
-        alembic_cfg = Config(os.path.join(os.getcwd(), "alembic.ini"))
-        command.upgrade(alembic_cfg, "head")
-        print("💚 Alembic migrations applied successfully!")
-    except Exception as e:
-        print("💥 Error applying migrations:", e)
-
-
 
 # ======================================
 # INICIO DEL SERVIDOR
