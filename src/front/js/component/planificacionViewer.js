@@ -23,9 +23,9 @@ export const PlanificacionViewer = () => {
   const [pesos, setPesos] = useState(
     Object.fromEntries(ejerciciosDisponibles.map((e) => [e, ""]))
   );
-
   const [planificacion, setPlanificacion] = useState(null);
   const [user, setUser] = useState(null);
+
   const token = localStorage.getItem("token");
   const fecha = new Date().toLocaleDateString("sv-SE");
   const tipo = "normal";
@@ -36,13 +36,11 @@ export const PlanificacionViewer = () => {
       navigate("/");
       return;
     }
-
     const parsedUser = JSON.parse(storedUser);
     if (!parsedUser?.id) {
       navigate("/");
       return;
     }
-
     setUser(parsedUser);
   }, [token, navigate]);
 
@@ -75,15 +73,14 @@ export const PlanificacionViewer = () => {
       });
   }, [fecha, tipo, token]);
 
-  const guardarPeso = async () => {
-  if (!user?.id || !token) return;
+  useEffect(() => {
+    if (!user?.id || !token) return;
 
-  try {
-    await Promise.all(
-      ejerciciosDisponibles.map((ej) => {
+    const timer = setTimeout(() => {
+      ejerciciosDisponibles.forEach((ej) => {
         const valor = Number(pesos[ej]);
         if (!isNaN(valor) && valor > 0) {
-          return fetch(`${BACKEND}/users/${user.id}/pesos`, {
+          fetch(`${BACKEND}/users/${user.id}/pesos`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -92,14 +89,11 @@ export const PlanificacionViewer = () => {
             body: JSON.stringify({ ejercicio: ej, valor }),
           });
         }
-        return null;
-      })
-    );
-  } catch (err) {
-    console.error(err);
-  }
-};
+      });
+    }, 800);
 
+    return () => clearTimeout(timer);
+  }, [pesos, user?.id, token]);
 
   const calcularPorcentajes = (peso) => {
     const base = Number(peso);
@@ -134,7 +128,6 @@ export const PlanificacionViewer = () => {
             ))}
           </tr>
         </thead>
-
         <tbody>
           {ejerciciosDisponibles.map((ej) => {
             const peso = pesos[ej] ?? "";
@@ -146,9 +139,9 @@ export const PlanificacionViewer = () => {
                 <td>
                   <input
                     className="input-peso"
-                    value={peso}
+                    value={peso ?? ""}
                     onChange={(e) => {
-                      const value = e.currentTarget.value;
+                      const value = e.target?.value || "";
                       setPesos((prev) => ({
                         ...prev,
                         [ej]: value,
@@ -156,7 +149,6 @@ export const PlanificacionViewer = () => {
                     }}
                   />
                 </td>
-
                 {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
                   <td key={p}>{porcentajes[p] || "-"}</td>
                 ))}
@@ -173,9 +165,7 @@ export const PlanificacionViewer = () => {
             {["A", "B", "C", "D", "E"].map((b) => (
               <li key={b} className={`bloque-${b}`}>
                 <span className="bloque-titulo">Bloque {b}</span>
-                <span className="bloque-texto">
-                  {planificacion?.[b] || "-"}
-                </span>
+                <span className="bloque-texto">{planificacion[b] || "-"}</span>
               </li>
             ))}
           </ul>
