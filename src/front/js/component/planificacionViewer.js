@@ -27,19 +27,17 @@ export const PlanificacionViewer = () => {
   const [planificacion, setPlanificacion] = useState(null);
   const [user, setUser] = useState(null);
   const token = localStorage.getItem("token");
-  const fecha = new Date().toISOString().split("T")[0];
+  const fecha = new Date().toLocaleDateString("sv-SE");
   const tipo = "normal";
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-
     if (!storedUser || !token) {
       navigate("/");
       return;
     }
 
     const parsedUser = JSON.parse(storedUser);
-
     if (!parsedUser?.id) {
       navigate("/");
       return;
@@ -57,14 +55,11 @@ export const PlanificacionViewer = () => {
       .then((res) => res.json())
       .then((data) => {
         const nuevos = {};
-
         ejerciciosDisponibles.forEach((ej) => {
           nuevos[ej] = data?.[ej] ?? "";
         });
-
         setPesos(nuevos);
-      })
-      .catch((err) => console.error(err));
+      });
   }, [user?.id, token]);
 
   useEffect(() => {
@@ -75,30 +70,22 @@ export const PlanificacionViewer = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data?.bloque_a) {
-          setPlanificacion(data);
-        } else {
-          setPlanificacion(null);
-        }
-      })
-      .catch((err) => console.error(err));
+        if (data?.plan) setPlanificacion(data.plan);
+        else setPlanificacion(null);
+      });
   }, [fecha, tipo, token]);
 
   const guardarPeso = async (ejercicio, valor) => {
     if (!user?.id || !token) return;
 
-    try {
-      await fetch(`${BACKEND}/users/${user.id}/pesos`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ ejercicio, valor }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
+    await fetch(`${BACKEND}/users/${user.id}/pesos`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ ejercicio, valor }),
+    });
   };
 
   useEffect(() => {
@@ -152,7 +139,7 @@ export const PlanificacionViewer = () => {
 
         <tbody>
           {ejerciciosDisponibles.map((ej) => {
-            const peso = pesos[ej] || "";
+            const peso = pesos[ej] ?? "";
             const porcentajes = calcularPorcentajes(peso);
 
             return (
@@ -162,12 +149,13 @@ export const PlanificacionViewer = () => {
                   <input
                     className="input-peso"
                     value={peso}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.currentTarget.value;
                       setPesos((prev) => ({
                         ...prev,
-                        [ej]: e.target.value ?? "",
-                      }))
-                    }
+                        [ej]: value,
+                      }));
+                    }}
                   />
                 </td>
 
@@ -184,11 +172,11 @@ export const PlanificacionViewer = () => {
         <div className="plan-content">
           <h3>Planificación del día</h3>
           <ul>
-            {["a", "b", "c", "d", "e"].map((b) => (
-              <li key={b} className={`bloque-${b.toUpperCase()}`}>
-                <span className="bloque-titulo">Bloque {b.toUpperCase()}</span>
+            {["A", "B", "C", "D", "E"].map((b) => (
+              <li key={b} className={`bloque-${b}`}>
+                <span className="bloque-titulo">Bloque {b}</span>
                 <span className="bloque-texto">
-                  {planificacion[`bloque_${b}`] || "-"}
+                  {planificacion?.[b] || "-"}
                 </span>
               </li>
             ))}
