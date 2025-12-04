@@ -7,10 +7,6 @@ const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
 export const PlanificacionViewer = () => {
   const navigate = useNavigate();
 
-  const [pesos, setPesos] = useState({});
-  const [user, setUser] = useState(null);
-  const token = localStorage.getItem("token");
-
   const ejerciciosDisponibles = [
     "Push jerk",
     "Bench press",
@@ -24,7 +20,16 @@ export const PlanificacionViewer = () => {
     "Clean & Jerk",
   ];
 
-  // ✅ Cargar usuario y validar sesión
+  const [pesos, setPesos] = useState(
+    Object.fromEntries(ejerciciosDisponibles.map((e) => [e, ""]))
+  );
+
+  const [planificacion, setPlanificacion] = useState(null);
+  const [user, setUser] = useState(null);
+  const token = localStorage.getItem("token");
+  const fecha = new Date().toISOString().split("T")[0];
+  const tipo = "normal";
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
@@ -43,7 +48,6 @@ export const PlanificacionViewer = () => {
     setUser(parsedUser);
   }, [token, navigate]);
 
-  // ✅ Traer pesos cuando existe user
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -51,11 +55,35 @@ export const PlanificacionViewer = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setPesos(data || {}))
+      .then((data) => {
+        const nuevos = {};
+
+        ejerciciosDisponibles.forEach((ej) => {
+          nuevos[ej] = data?.[ej] ?? "";
+        });
+
+        setPesos(nuevos);
+      })
       .catch((err) => console.error(err));
   }, [user?.id, token]);
 
-  // ✅ Guardado individual
+  useEffect(() => {
+    if (!token) return;
+
+    fetch(`${BACKEND}/planificacion?fecha=${fecha}&tipo=${tipo}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.bloque_a) {
+          setPlanificacion(data);
+        } else {
+          setPlanificacion(null);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [fecha, tipo, token]);
+
   const guardarPeso = async (ejercicio, valor) => {
     if (!user?.id || !token) return;
 
@@ -73,32 +101,39 @@ export const PlanificacionViewer = () => {
     }
   };
 
-  // ✅ Autosave con debounce
   useEffect(() => {
-    if (!user?.id) return;
+    if (!user?.id || !token) return;
 
     const timer = setTimeout(() => {
-      Object.entries(pesos).forEach(([ej, val]) => {
-        if (val !== "" && !isNaN(val)) {
-          guardarPeso(ej, parseFloat(val));
+      ejerciciosDisponibles.forEach((ej) => {
+        const val = Number(pesos[ej]);
+        if (!isNaN(val) && val > 0) {
+          guardarPeso(ej, val);
         }
       });
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [pesos, user?.id]);
+  }, [pesos, user?.id, token]);
 
-  // ✅ Cálculo de porcentajes
   const calcularPorcentajes = (peso) => {
-    if (!peso || isNaN(peso)) return {};
-
+    const base = Number(peso);
+    if (!base) return {};
     const porcents = [45, 55, 65, 70, 75, 80, 85, 90, 95];
 
     return porcents.reduce((acc, p) => {
-      acc[p] = Math.round((peso * p) / 100);
+      acc[p] = Math.round((base * p) / 100);
       return acc;
     }, {});
   };
+
+  if (!user || !user.id || !token) {
+    return (
+      <div className="plani-viewer-container">
+        <h3>Cargando usuario...</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="plani-viewer-container">
@@ -117,21 +152,20 @@ export const PlanificacionViewer = () => {
 
         <tbody>
           {ejerciciosDisponibles.map((ej) => {
-            const peso = pesos[ej];
+            const peso = pesos[ej] || "";
             const porcentajes = calcularPorcentajes(peso);
 
             return (
               <tr key={ej}>
                 <td>{ej}</td>
-
                 <td>
                   <input
                     className="input-peso"
-                    value={peso || ""}
+                    value={peso}
                     onChange={(e) =>
                       setPesos((prev) => ({
                         ...prev,
-                        [ej]: e.target.value,
+                        [ej]: e.target.value ?? "",
                       }))
                     }
                   />
@@ -145,6 +179,22 @@ export const PlanificacionViewer = () => {
           })}
         </tbody>
       </table>
+
+      {planificacion && (
+        <div className="plan-content">
+          <h3>Planificación del día</h3>
+          <ul>
+            {["a", "b", "c", "d", "e"].map((b) => (
+              <li key={b} className={`bloque-${b.toUpperCase()}`}>
+                <span className="bloque-titulo">Bloque {b.toUpperCase()}</span>
+                <span className="bloque-texto">
+                  {planificacion[`bloque_${b}`] || "-"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="link-coach">
         <button className="link-btn" onClick={() => navigate("/usuarioPages")}>
