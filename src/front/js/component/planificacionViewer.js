@@ -7,6 +7,10 @@ const BACKEND = process.env.BACKEND_URL || "https://forceteam.onrender.com/api";
 export const PlanificacionViewer = () => {
   const navigate = useNavigate();
 
+  const [pesos, setPesos] = useState({});
+  const [user, setUser] = useState(null);
+  const token = localStorage.getItem("token");
+
   const ejerciciosDisponibles = [
     "Push jerk",
     "Bench press",
@@ -20,18 +24,7 @@ export const PlanificacionViewer = () => {
     "Clean & Jerk",
   ];
 
-  const [pesos, setPesos] = useState(
-    ejerciciosDisponibles.reduce((acc, ej) => ({ ...acc, [ej]: "" }), {})
-  );
-
-  const [user, setUser] = useState(null);
-  const token = localStorage.getItem("token");
-
-  const [fecha] = useState(new Date().toISOString().split("T")[0]);
-  const [planificacion, setPlanificacion] = useState(null);
-  const [tipo] = useState("normal");
-
-  // ✅ Cargar usuario seguro
+  // ✅ Cargar usuario y validar sesión
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
@@ -50,7 +43,7 @@ export const PlanificacionViewer = () => {
     setUser(parsedUser);
   }, [token, navigate]);
 
-  // ✅ Cargar pesos
+  // ✅ Traer pesos cuando existe user
   useEffect(() => {
     if (!user?.id || !token) return;
 
@@ -58,43 +51,11 @@ export const PlanificacionViewer = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => {
-        const nuevosPesos = ejerciciosDisponibles.reduce(
-          (acc, ej) => ({
-            ...acc,
-            [ej]: data?.[ej] ?? "",
-          }),
-          {}
-        );
-
-        setPesos(nuevosPesos);
-      })
+      .then((data) => setPesos(data || {}))
       .catch((err) => console.error(err));
   }, [user?.id, token]);
 
-  // ✅ Cargar planificación
-  useEffect(() => {
-    if (!token) return;
-
-    fetch(`${BACKEND}/planificacion?fecha=${fecha}&tipo=${tipo}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const plan =
-          data?.plan?.[0] ||
-          data?.plan ||
-          data ||
-          null;
-
-        setPlanificacion(plan);
-      })
-      .catch((err) => console.error(err));
-  }, [fecha, tipo, token]);
-
-  // ✅ Guardar peso
+  // ✅ Guardado individual
   const guardarPeso = async (ejercicio, valor) => {
     if (!user?.id || !token) return;
 
@@ -112,24 +73,25 @@ export const PlanificacionViewer = () => {
     }
   };
 
-  // ✅ Auto-guardado
+  // ✅ Autosave con debounce
   useEffect(() => {
-    if (!user?.id || !token) return;
+    if (!user?.id) return;
 
     const timer = setTimeout(() => {
-      ejerciciosDisponibles.forEach((ej) => {
-        const val = pesos[ej];
+      Object.entries(pesos).forEach(([ej, val]) => {
         if (val !== "" && !isNaN(val)) {
           guardarPeso(ej, parseFloat(val));
         }
       });
-    }, 700);
+    }, 600);
 
     return () => clearTimeout(timer);
-  }, [pesos, user?.id, token]);
+  }, [pesos, user?.id]);
 
+  // ✅ Cálculo de porcentajes
   const calcularPorcentajes = (peso) => {
     if (!peso || isNaN(peso)) return {};
+
     const porcents = [45, 55, 65, 70, 75, 80, 85, 90, 95];
 
     return porcents.reduce((acc, p) => {
@@ -138,63 +100,18 @@ export const PlanificacionViewer = () => {
     }, {});
   };
 
-  if (!user || !user.id || !token) {
-    return (
-      <div className="plani-viewer-container">
-        <h3>Cargando usuario...</h3>
-      </div>
-    );
-  }
-
   return (
     <div className="plani-viewer-container">
       <h2>Porcentajes de levantamientos</h2>
 
-      {/* ✅ PLANIFICACIÓN */}
-      {planificacion && (
-        <div className="plan-content">
-          <h3>Planificación del día ({fecha})</h3>
-
-          <ul>
-            <li className="bloque-A">
-              <span className="bloque-titulo">Bloque A</span>
-              <span className="bloque-texto">{planificacion.bloque_a || "-"}</span>
-            </li>
-            <li className="bloque-B">
-              <span className="bloque-titulo">Bloque B</span>
-              <span className="bloque-texto">{planificacion.bloque_b || "-"}</span>
-            </li>
-            <li className="bloque-C">
-              <span className="bloque-titulo">Bloque C</span>
-              <span className="bloque-texto">{planificacion.bloque_c || "-"}</span>
-            </li>
-            <li className="bloque-D">
-              <span className="bloque-titulo">Bloque D</span>
-              <span className="bloque-texto">{planificacion.bloque_d || "-"}</span>
-            </li>
-            <li className="bloque-E">
-              <span className="bloque-titulo">Bloque E</span>
-              <span className="bloque-texto">{planificacion.bloque_e || "-"}</span>
-            </li>
-          </ul>
-        </div>
-      )}
-
-      {/* ✅ TABLA DE PESOS ÚNICA */}
       <table className="tabla-porcentajes">
         <thead>
           <tr>
             <th>Ejercicio</th>
             <th>Máx</th>
-            <th>45%</th>
-            <th>55%</th>
-            <th>65%</th>
-            <th>70%</th>
-            <th>75%</th>
-            <th>80%</th>
-            <th>85%</th>
-            <th>90%</th>
-            <th>95%</th>
+            {[45, 55, 65, 70, 75, 80, 85, 90, 95].map((p) => (
+              <th key={p}>{p}%</th>
+            ))}
           </tr>
         </thead>
 
