@@ -75,33 +75,31 @@ export const PlanificacionViewer = () => {
       });
   }, [fecha, tipo, token]);
 
-  const guardarPeso = async (ejercicio, valor) => {
-    if (!user?.id || !token) return;
+  const guardarPeso = async () => {
+  if (!user?.id || !token) return;
 
-    await fetch(`${BACKEND}/users/${user.id}/pesos`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ ejercicio, valor }),
-    });
-  };
-
-  useEffect(() => {
-    if (!user?.id || !token) return;
-
-    const timer = setTimeout(() => {
-      ejerciciosDisponibles.forEach((ej) => {
-        const val = Number(pesos[ej]);
-        if (!isNaN(val) && val > 0) {
-          guardarPeso(ej, val);
+  try {
+    await Promise.all(
+      ejerciciosDisponibles.map((ej) => {
+        const valor = Number(pesos[ej]);
+        if (!isNaN(valor) && valor > 0) {
+          return fetch(`${BACKEND}/users/${user.id}/pesos`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ ejercicio: ej, valor }),
+          });
         }
-      });
-    }, 600);
+        return null;
+      })
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-    return () => clearTimeout(timer);
-  }, [pesos, user?.id, token]);
 
   const calcularPorcentajes = (peso) => {
     const base = Number(peso);
